@@ -1,0 +1,289 @@
+Estoy realizando el nodo de navegacion node_swarm_manager que gestionara la agregacion de un robot a un conjunto de robots donde cada robot es detectado con una pelota circular que tendra encima el robot navegara usando unicamente la camara y algunos sensores, el script del nodo node_swarm_manager estara junto a una carpeta utils donde tendre funciones que realizaran tareas especificas del pipeline que te mostrare en una imagen, el nodo debe estar conjuntamente con otros nodos en el launcher que te mostrare de forma tal que este en lugar del teleomp donde se estableceran las velocidades
+El nodo tendra un unico parametro is_sim donde se establecera si los topics de los sensores y la camara son optenidos de gazebo los recibidos por sensors_fast_listener_node o sensors_reliable_listener_node
+Y tendra el siguiente topics output (simplementa haz un remaping a cmd_vel_robot de command_talker)
+/cmd_swarm_out
+
+OBS QUE DEBES TENER EN CUENTA:
+- El nodo puede cambiar entre simulacion y enorno real cambiando simplemente los topics leidos cuyos nombres seran almacenados en 
+hw_config que tendra todas las constantes y los nombres de los topics, de forma tal que si el parametro 
+
+Si is_sim es true el manager se subscribira a
+TOPIC_GZ_IMU_GIR_ACC = "/sensor/raw_data/magnetometer" del tipo sensor_msgs/msg/MagneticFiels
+TOPIC_GZ_IMU_MAG = "/sensor/raw_data/imu" del tipo sensor_msgs/msg/Imu
+TOPIC_GZ_GPS = "/sensor/raw_data/magnetometer" del tipo sensor_msgs/msg/
+TOPIC_GZ_CAMERA = "/camera/image_raw" del tipo image_raw
+TOPIC_GZ_IR1 = "/sensor/raw_data/ir_left_sensor" del tipo std_msgs/msg/Bool
+TOPIC_GZ_IR2 = "/sensor/raw_data/ir_right_sensor" del tipo std_msgs/msg/Bool
+TOPIC_GZ_ULTRASONIC = "/sensor/raw_data/ultrasonic" del tipo sensor_msgs/msg/Range
+
+Si is_sim es false el manager se subscribira a
+TOPIC_PI_IMU_GIR_ACC = "/pi/sensor/imu_data" del tipo sensor_msgs/msg/MagneticFiels
+TOPIC_PI_IMU_MAG = "/pi/sensor/imu_mag"del tipo sensor_msgs/msg/Imu
+TOPIC_PI_GPS = "/pi/sensor/gps_fix" del tipo sensor_msgs/msg/
+TOPIC_PI_CAMERA = "/pi/camera/image_raw" del tipo image_raw
+TOPIC_PI_IR1 = "/pi/sensor/ir1" del tipo std_msgs/msg/Bool
+TOPIC_PI_IR2 = "/pi/sensor/ir2" del tipo std_msgs/msg/Bool
+TOPIC_PI_ULTRASONIC = "/pi/sensor/ultrasonic_read" del tipo sensor_msgs/msg/Range
+
+Observaciones importantes
+- En hw_config tambien almacenara constantes como y
+- Si lo ves necesario pudes modular el nodo en otros subnodos que realicen tareas independientes, pero creo que basta con que sean scripts llamados desde nodo, escoge la opcion que optimice el codigo y no estanque el algoritmo teniendo en cuenta de que es un entorno de ROS
+- Todo el pipeline lo tendras en algunas ecuaciones e imagenes que tengo en papel y anexo a este mensaje
+- Cuando el nodo manager inicia debe aguarda que todos los sensores esten disponibles, esto quiza puedas hacerlo verificando que todos los nodos tengan publisher
+- Para cada etapa del pipeline muestra una guarda .csvs para realizar posteriormente un analisis de performance
+>> Para mapping sector haz un g de que va de thita - 60 a thita + 60 de los robots detectados a medida que es realizado el barrido, ademas recuerda que este algoritmo debe estimar la parte faltante del objeto detectado para definir su centro (siempre son esferas con colores caracteristicos) ya que la pelota puede ser detectada parcialmente sin centro o por completo en la imagen, si la imagen se 
+>> 
+
+
+#!/usr/bin/env python3
+import os
+
+from ament_index_python.packages import get_package_share_directory
+
+from launch import LaunchDescription
+from launch.actions import (
+    IncludeLaunchDescription,
+    DeclareLaunchArgument,
+    ExecuteProcess,
+    RegisterEventHandler
+)
+from launch.event_handlers import OnProcessExit
+from launch.launch_description_sources import PythonLaunchDescriptionSource
+from launch.substitutions import LaunchConfiguration
+
+from launch_ros.actions import Node
+
+
+def generate_launch_description():
+
+    package_name = "articubot_three"
+
+    # =====================================================
+    # LIMPIEZA PREVIA
+    # =====================================================
+    cleanup = ExecuteProcess(
+        cmd=[
+            "bash", "-c",
+            "pkill -f sensors_fast_listener_node.py || true; "
+            "pkill -f sensors_reliable_listener_node.py || true; "
+            "pkill -f command_talker_node.py || true; "
+            "pkill -f monitor_node_pc.py || true; "
+            "pkill -f teleop_twist_keyboard || true; "
+            "pkill -f cmd_vel_relay_node.py || true"
+        ],
+        output="screen"
+    )
+
+    # =====================================================
+    # SIMULACIÓN
+    # =====================================================
+    rsp = IncludeLaunchDescription(
+        PythonLaunchDescriptionSource(
+            os.path.join(
+                get_package_share_directory(package_name),
+                "launch",
+                "rsp.launch.py"
+            )
+        ),
+        launch_arguments={
+            "use_sim_time": "true",
+            "use_ros2_control": "true"
+        }.items(),
+    )
+
+    joystick = IncludeLaunchDescription(
+        PythonLaunchDescriptionSource(
+            os.path.join(
+                get_package_share_directory(package_name),
+                "launch",
+                "joystick.launch.py"
+            )
+        ),
+        launch_arguments={"use_sim_time": "true"}.items(),
+    )
+
+    # (Se mantiene tu twist_mux, aunque ya no es crítico para mover)
+    twist_mux_params = os.path.join(
+        get_package_share_directory(package_name),
+        "config",
+        "twist_mux.yaml"
+    )
+
+    twist_mux = Node(
+        package="twist_mux",
+        executable="twist_mux",
+        parameters=[twist_mux_params, {"use_sim_time": True}],
+        output="screen",
+    )
+
+    # =====================================================
+    # GAZEBO
+    # =====================================================
+    default_world = os.path.join(
+        get_package_share_directory(package_name),
+        "worlds",
+        "green_space.world"
+    )
+
+    world = LaunchConfiguration("world")
+
+    world_arg = DeclareLaunchArgument(
+        "world",
+        default_value=default_world,
+    )
+
+    gazebo = IncludeLaunchDescription(
+        PythonLaunchDescriptionSource(
+            os.path.join(
+                get_package_share_directory("ros_gz_sim"),
+                "launch",
+                "gz_sim.launch.py"
+            )
+        ),
+        launch_arguments={
+            "gz_args": ["-r -v4 ", world],
+            "on_exit_shutdown": "true"
+        }.items(),
+    )
+
+    spawn_entity = Node(
+        package="ros_gz_sim",
+        executable="create",
+        arguments=[
+            "-topic", "robot_description",
+            "-name", "articubot_three",
+            "-z", "0.1"
+        ],
+        output="screen",
+    )
+
+    diff_drive_spawner = Node(
+        package="controller_manager",
+        executable="spawner",
+        arguments=["diff_cont"],
+        output="screen",
+    )
+
+    joint_broad_spawner = Node(
+        package="controller_manager",
+        executable="spawner",
+        arguments=["joint_broad"],
+        output="screen",
+    )
+
+    # =====================================================
+    # TELEOP (UNA SOLA TERMINAL)
+    # Publica en /cmd_vel (default)
+    # =====================================================
+    teleop = Node(
+        package="teleop_twist_keyboard",
+        executable="teleop_twist_keyboard",
+        name="teleop",
+        output="screen",
+        prefix=["xterm -hold -e"],
+        # sin remaps: teleop publica /cmd_vel
+    )
+
+    # =====================================================
+    # RELAY: /cmd_vel  ->  /cmd_vel_robot  y  /diff_cont/cmd_vel_unstamped
+    # (ESTO ES LO QUE TE FALTABA: copiar datos realmente)
+    # =====================================================
+    cmd_vel_relay = Node(
+        package="articubot_three",
+        executable="cmd_vel_relay_node.py",
+        name="cmd_vel_relay",
+        output="screen",
+        parameters=[{
+            "input_topic": "/cmd_vel",
+            "out_robot_topic": "/cmd_vel_robot",
+            "out_sim_topic": "/diff_cont/cmd_vel_unstamped",
+        }],
+    )
+
+    # =====================================================
+    # COMUNICACIÓN (CONTROL DEVICE)
+    # =====================================================
+    sensors_fast_listener = Node(
+        package="articubot_three",
+        executable="sensors_fast_listener_node.py",
+        name="sensors_fast_listener",
+        output="screen",
+        parameters=[{
+            "qos_reliability": "best_effort",
+            "qos_depth": 10,
+        }],
+    )
+
+    sensors_reliable_listener = Node(
+        package="articubot_three",
+        executable="sensors_reliable_listener_node.py",
+        name="sensors_reliable_listener",
+        output="screen",
+        parameters=[{
+            "qos_reliability": "reliable",
+            "qos_depth": 10,
+        }],
+    )
+
+    command_talker = Node(
+        package="articubot_three",
+        executable="command_talker_node.py",
+        name="command_talker",
+        output="screen",
+        parameters=[{
+            "qos_reliability": "reliable",
+            "qos_depth": 10,
+        }],
+        # command_talker escucha cfg.TOPIC_CMD_VEL_ROBOT (típicamente /cmd_vel_robot)
+        # Si en tu hw_config fuese distinto, aquí lo remapeás.
+        # remappings=[(cfg.TOPIC_CMD_VEL_ROBOT, "/cmd_vel_robot")],
+    )
+
+    monitor = Node(
+        package="articubot_three",
+        executable="monitor_node_pc.py",
+        name="monitor_node_pc",
+        output="screen",
+        prefix=["xterm -hold -e"],
+        parameters=[{
+            "qos_reliability": "best_effort",
+            "qos_depth": 10,
+            "monitor_imu_accel": True,
+            "monitor_imu_mag": True,
+            "monitor_imu_compass": True,
+            "monitor_gps": True,
+            "monitor_cmd_serial": True,
+        }],
+    )
+
+    # =====================================================
+    # EVENTO: LANZAR COMUNICACIÓN CUANDO EL ROBOT YA EXISTE
+    # =====================================================
+    start_comm_after_spawn = RegisterEventHandler(
+        event_handler=OnProcessExit(
+            target_action=spawn_entity,
+            on_exit=[
+                sensors_fast_listener,
+                sensors_reliable_listener,
+                command_talker,
+                monitor,
+                teleop,
+                cmd_vel_relay,   # <- IMPORTANTE
+            ],
+        )
+    )
+
+    return LaunchDescription([
+        cleanup,
+
+        rsp,
+        joystick,
+        twist_mux,
+        world_arg,
+        gazebo,
+        spawn_entity,
+        diff_drive_spawner,
+        joint_broad_spawner,
+
+        start_comm_after_spawn,
+    ])

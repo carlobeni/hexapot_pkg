@@ -1,0 +1,86 @@
+[0.008s] Invoking command in '/home/carlobeni/ros2_projects/ros2_robot_ws4/src/articubot_three/build/articubot_three': CMAKE_PREFIX_PATH=${CMAKE_PREFIX_PATH}:/opt/ros/rolling DEBUGINFOD_URLS=https://debuginfod.ubuntu.com /usr/bin/cmake /home/carlobeni/ros2_projects/ros2_robot_ws4/src/articubot_three -DAMENT_CMAKE_SYMLINK_INSTALL=1 -DCMAKE_INSTALL_PREFIX=/home/carlobeni/ros2_projects/ros2_robot_ws4/src/articubot_three/install/articubot_three
+[0.058s] -- The C compiler identification is GNU 13.3.0
+[0.108s] -- The CXX compiler identification is GNU 13.3.0
+[0.124s] -- Detecting C compiler ABI info
+[0.225s] -- Detecting C compiler ABI info - done
+[0.231s] -- Check for working C compiler: /usr/bin/cc - skipped
+[0.232s] -- Detecting C compile features
+[0.232s] -- Detecting C compile features - done
+[0.239s] -- Detecting CXX compiler ABI info
+[0.328s] -- Detecting CXX compiler ABI info - done
+[0.334s] -- Check for working CXX compiler: /usr/bin/c++ - skipped
+[0.334s] -- Detecting CXX compile features
+[0.334s] -- Detecting CXX compile features - done
+[0.337s] -- Found ament_cmake: 2.8.4 (/opt/ros/rolling/share/ament_cmake/cmake)
+[0.461s] -- Found Python3: /usr/bin/python3 (found version "3.12.3") found components: Interpreter 
+[0.513s] -- Override CMake install command with custom implementation using symlinks instead of copying resources
+[0.538s] -- Found rclpy: 10.0.2 (/opt/ros/rolling/share/rclpy/cmake)
+[0.540s] -- Found std_msgs: 5.9.1 (/opt/ros/rolling/share/std_msgs/cmake)
+[0.572s] -- Found rosidl_generator_c: 5.1.1 (/opt/ros/rolling/share/rosidl_generator_c/cmake)
+[0.588s] -- Found rosidl_generator_cpp: 5.1.1 (/opt/ros/rolling/share/rosidl_generator_cpp/cmake)
+[0.601s] -- Using all available rosidl_typesupport_c: rosidl_typesupport_fastrtps_c;rosidl_typesupport_introspection_c
+[0.611s] -- Using all available rosidl_typesupport_cpp: rosidl_typesupport_fastrtps_cpp;rosidl_typesupport_introspection_cpp
+[0.631s] -- Found sensor_msgs: 5.9.1 (/opt/ros/rolling/share/sensor_msgs/cmake)
+[0.668s] -- Found ament_lint_auto: 0.20.3 (/opt/ros/rolling/share/ament_lint_auto/cmake)
+[0.747s] -- Added test 'copyright' to check source files copyright and LICENSE
+[0.754s] -- Added test 'cppcheck' to perform static code analysis on C / C++ code
+[0.754s] -- Configured cppcheck include dirs: 
+[0.754s] -- Configured cppcheck exclude dirs and/or files: 
+[0.761s] -- Added test 'cpplint' to check C / C++ code against the Google style
+[0.761s] -- Configured cpplint exclude dirs and/or files: 
+[0.762s] -- Added test 'flake8' to check Python code syntax and style conventions
+[0.762s] -- Configured 'flake8' exclude dirs and/or files: 
+[0.764s] -- Added test 'lint_cmake' to check CMake code style
+[0.765s] -- Added test 'pep257' to check Python code against some of the docstring style conventions in PEP 257
+[0.772s] -- Added test 'uncrustify' to check C / C++ code style
+[0.772s] -- Configured uncrustify additional arguments: 
+[0.773s] -- Added test 'xmllint' to check XML markup files
+[0.774s] -- Configuring done (0.8s)
+[0.776s] -- Generating done (0.0s)
+[0.777s] -- Build files have been written to: /home/carlobeni/ros2_projects/ros2_robot_ws4/src/articubot_three/build/articubot_three
+[0.783s] Invoked command in '/home/carlobeni/ros2_projects/ros2_robot_ws4/src/articubot_three/build/articubot_three' returned '0': CMAKE_PREFIX_PATH=${CMAKE_PREFIX_PATH}:/opt/ros/rolling DEBUGINFOD_URLS=https://debuginfod.ubuntu.com /usr/bin/cmake /home/carlobeni/ros2_projects/ros2_robot_ws4/src/articubot_three -DAMENT_CMAKE_SYMLINK_INSTALL=1 -DCMAKE_INSTALL_PREFIX=/home/carlobeni/ros2_projects/ros2_robot_ws4/src/articubot_three/install/articubot_three
+[0.784s] Invoking command in '/home/carlobeni/ros2_projects/ros2_robot_ws4/src/articubot_three/build/articubot_three': CMAKE_PREFIX_PATH=${CMAKE_PREFIX_PATH}:/opt/ros/rolling DEBUGINFOD_URLS=https://debuginfod.ubuntu.com /usr/bin/cmake --build /home/carlobeni/ros2_projects/ros2_robot_ws4/src/articubot_three/build/articubot_three -- -j16 -l16
+[0.817s] Invoked command in '/home/carlobeni/ros2_projects/ros2_robot_ws4/src/articubot_three/build/articubot_three' returned '0': CMAKE_PREFIX_PATH=${CMAKE_PREFIX_PATH}:/opt/ros/rolling DEBUGINFOD_URLS=https://debuginfod.ubuntu.com /usr/bin/cmake --build /home/carlobeni/ros2_projects/ros2_robot_ws4/src/articubot_three/build/articubot_three -- -j16 -l16
+[0.828s] Invoking command in '/home/carlobeni/ros2_projects/ros2_robot_ws4/src/articubot_three/build/articubot_three': CMAKE_PREFIX_PATH=${CMAKE_PREFIX_PATH}:/opt/ros/rolling DEBUGINFOD_URLS=https://debuginfod.ubuntu.com /usr/bin/cmake --install /home/carlobeni/ros2_projects/ros2_robot_ws4/src/articubot_three/build/articubot_three
+[0.836s] -- Install configuration: ""
+[0.837s] -- Execute custom install script
+[0.837s] -- Symlinking: /home/carlobeni/ros2_projects/ros2_robot_ws4/src/articubot_three/install/articubot_three/share/articubot_three/launch/articubot_three.launch.py
+[0.845s] -- Symlinking: /home/carlobeni/ros2_projects/ros2_robot_ws4/src/articubot_three/install/articubot_three/share/articubot_three/launch/ball_tracker.launch.py
+[0.851s] -- Symlinking: /home/carlobeni/ros2_projects/ros2_robot_ws4/src/articubot_three/install/articubot_three/share/articubot_three/launch/camera.launch.py
+[0.858s] -- Symlinking: /home/carlobeni/ros2_projects/ros2_robot_ws4/src/articubot_three/install/articubot_three/share/articubot_three/launch/joystick.launch.py
+[0.866s] -- Symlinking: /home/carlobeni/ros2_projects/ros2_robot_ws4/src/articubot_three/install/articubot_three/share/articubot_three/launch/launch_robot.launch.py
+[0.877s] -- Symlinking: /home/carlobeni/ros2_projects/ros2_robot_ws4/src/articubot_three/install/articubot_three/share/articubot_three/launch/launch_sim.launch.py
+[0.885s] -- Symlinking: /home/carlobeni/ros2_projects/ros2_robot_ws4/src/articubot_three/install/articubot_three/share/articubot_three/launch/localization_launch.py
+[0.893s] -- Symlinking: /home/carlobeni/ros2_projects/ros2_robot_ws4/src/articubot_three/install/articubot_three/share/articubot_three/launch/navigation_launch.py
+[0.902s] -- Symlinking: /home/carlobeni/ros2_projects/ros2_robot_ws4/src/articubot_three/install/articubot_three/share/articubot_three/launch/online_async_launch.py
+[0.910s] -- Symlinking: /home/carlobeni/ros2_projects/ros2_robot_ws4/src/articubot_three/install/articubot_three/share/articubot_three/launch/rplidar.launch.py
+[0.918s] -- Symlinking: /home/carlobeni/ros2_projects/ros2_robot_ws4/src/articubot_three/install/articubot_three/share/articubot_three/launch/rsp.launch.py
+[0.927s] -- Symlinking: /home/carlobeni/ros2_projects/ros2_robot_ws4/src/articubot_three/install/articubot_three/lib/articubot_three/sensors_fast_listener_node.py
+[0.934s] -- Symlinking: /home/carlobeni/ros2_projects/ros2_robot_ws4/src/articubot_three/install/articubot_three/lib/articubot_three/sensors_reliable_listener_node.py
+[0.940s] -- Symlinking: /home/carlobeni/ros2_projects/ros2_robot_ws4/src/articubot_three/install/articubot_three/lib/articubot_three/imu_cache_node.py
+[0.947s] -- Symlinking: /home/carlobeni/ros2_projects/ros2_robot_ws4/src/articubot_three/install/articubot_three/lib/articubot_three/gps_cache_node.py
+[0.956s] -- Symlinking: /home/carlobeni/ros2_projects/ros2_robot_ws4/src/articubot_three/install/articubot_three/lib/articubot_three/cmd_publisher_node.py
+[0.962s] -- Symlinking: /home/carlobeni/ros2_projects/ros2_robot_ws4/src/articubot_three/install/articubot_three/lib/articubot_three/monitor_node.py
+[0.971s] -- Symlinking: /home/carlobeni/ros2_projects/ros2_robot_ws4/src/articubot_three/install/articubot_three/lib/python/site-packages/articubot_three/cache/gps_cache_node.py
+[0.978s] -- Symlinking: /home/carlobeni/ros2_projects/ros2_robot_ws4/src/articubot_three/install/articubot_three/lib/python/site-packages/articubot_three/cache/imu_cache_node.py
+[0.986s] -- Symlinking: /home/carlobeni/ros2_projects/ros2_robot_ws4/src/articubot_three/install/articubot_three/lib/python/site-packages/articubot_three/command/cmd_publisher_node.py
+[0.993s] -- Symlinking: /home/carlobeni/ros2_projects/ros2_robot_ws4/src/articubot_three/install/articubot_three/lib/python/site-packages/articubot_three/hw_config.py
+[1.003s] -- Symlinking: /home/carlobeni/ros2_projects/ros2_robot_ws4/src/articubot_three/install/articubot_three/lib/python/site-packages/articubot_three/listeners/sensors_fast_listener_node.py
+[1.009s] -- Symlinking: /home/carlobeni/ros2_projects/ros2_robot_ws4/src/articubot_three/install/articubot_three/lib/python/site-packages/articubot_three/listeners/sensors_reliable_listener_node.py
+[1.016s] -- Symlinking: /home/carlobeni/ros2_projects/ros2_robot_ws4/src/articubot_three/install/articubot_three/lib/python/site-packages/articubot_three/monitor/monitor_node.py
+[1.022s] -- Symlinking: /home/carlobeni/ros2_projects/ros2_robot_ws4/src/articubot_three/install/articubot_three/share/ament_index/resource_index/package_run_dependencies/articubot_three
+[1.029s] -- Symlinking: /home/carlobeni/ros2_projects/ros2_robot_ws4/src/articubot_three/install/articubot_three/share/ament_index/resource_index/parent_prefix_path/articubot_three
+[1.037s] -- Symlinking: /home/carlobeni/ros2_projects/ros2_robot_ws4/src/articubot_three/install/articubot_three/share/articubot_three/environment/ament_prefix_path.sh
+[1.044s] -- Symlinking: /home/carlobeni/ros2_projects/ros2_robot_ws4/src/articubot_three/install/articubot_three/share/articubot_three/environment/ament_prefix_path.dsv
+[1.052s] -- Symlinking: /home/carlobeni/ros2_projects/ros2_robot_ws4/src/articubot_three/install/articubot_three/share/articubot_three/environment/path.sh
+[1.059s] -- Symlinking: /home/carlobeni/ros2_projects/ros2_robot_ws4/src/articubot_three/install/articubot_three/share/articubot_three/environment/path.dsv
+[1.067s] -- Symlinking: /home/carlobeni/ros2_projects/ros2_robot_ws4/src/articubot_three/install/articubot_three/share/articubot_three/local_setup.bash
+[1.073s] -- Symlinking: /home/carlobeni/ros2_projects/ros2_robot_ws4/src/articubot_three/install/articubot_three/share/articubot_three/local_setup.sh
+[1.083s] -- Symlinking: /home/carlobeni/ros2_projects/ros2_robot_ws4/src/articubot_three/install/articubot_three/share/articubot_three/local_setup.zsh
+[1.091s] -- Symlinking: /home/carlobeni/ros2_projects/ros2_robot_ws4/src/articubot_three/install/articubot_three/share/articubot_three/local_setup.dsv
+[1.101s] -- Symlinking: /home/carlobeni/ros2_projects/ros2_robot_ws4/src/articubot_three/install/articubot_three/share/articubot_three/package.dsv
+[1.113s] -- Symlinking: /home/carlobeni/ros2_projects/ros2_robot_ws4/src/articubot_three/install/articubot_three/share/ament_index/resource_index/packages/articubot_three
+[1.123s] -- Symlinking: /home/carlobeni/ros2_projects/ros2_robot_ws4/src/articubot_three/install/articubot_three/share/articubot_three/cmake/articubot_threeConfig.cmake
+[1.136s] -- Symlinking: /home/carlobeni/ros2_projects/ros2_robot_ws4/src/articubot_three/install/articubot_three/share/articubot_three/cmake/articubot_threeConfig-version.cmake
+[1.148s] -- Symlinking: /home/carlobeni/ros2_projects/ros2_robot_ws4/src/articubot_three/install/articubot_three/share/articubot_three/package.xml
+[1.158s] Invoked command in '/home/carlobeni/ros2_projects/ros2_robot_ws4/src/articubot_three/build/articubot_three' returned '0': CMAKE_PREFIX_PATH=${CMAKE_PREFIX_PATH}:/opt/ros/rolling DEBUGINFOD_URLS=https://debuginfod.ubuntu.com /usr/bin/cmake --install /home/carlobeni/ros2_projects/ros2_robot_ws4/src/articubot_three/build/articubot_three

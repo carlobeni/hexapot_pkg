@@ -1,0 +1,80 @@
+-- The C compiler identification is GNU 13.3.0
+-- The CXX compiler identification is GNU 13.3.0
+-- Detecting C compiler ABI info
+-- Detecting C compiler ABI info - done
+-- Check for working C compiler: /usr/bin/cc - skipped
+-- Detecting C compile features
+-- Detecting C compile features - done
+-- Detecting CXX compiler ABI info
+-- Detecting CXX compiler ABI info - done
+-- Check for working CXX compiler: /usr/bin/c++ - skipped
+-- Detecting CXX compile features
+-- Detecting CXX compile features - done
+-- Found ament_cmake: 2.8.4 (/opt/ros/rolling/share/ament_cmake/cmake)
+-- Found Python3: /usr/bin/python3 (found version "3.12.3") found components: Interpreter 
+-- Override CMake install command with custom implementation using symlinks instead of copying resources
+-- Found rclpy: 10.0.2 (/opt/ros/rolling/share/rclpy/cmake)
+-- Found std_msgs: 5.9.1 (/opt/ros/rolling/share/std_msgs/cmake)
+-- Found rosidl_generator_c: 5.1.1 (/opt/ros/rolling/share/rosidl_generator_c/cmake)
+-- Found rosidl_generator_cpp: 5.1.1 (/opt/ros/rolling/share/rosidl_generator_cpp/cmake)
+-- Using all available rosidl_typesupport_c: rosidl_typesupport_fastrtps_c;rosidl_typesupport_introspection_c
+-- Using all available rosidl_typesupport_cpp: rosidl_typesupport_fastrtps_cpp;rosidl_typesupport_introspection_cpp
+-- Found sensor_msgs: 5.9.1 (/opt/ros/rolling/share/sensor_msgs/cmake)
+-- Found ament_lint_auto: 0.20.3 (/opt/ros/rolling/share/ament_lint_auto/cmake)
+-- Added test 'copyright' to check source files copyright and LICENSE
+-- Added test 'cppcheck' to perform static code analysis on C / C++ code
+-- Configured cppcheck include dirs: 
+-- Configured cppcheck exclude dirs and/or files: 
+-- Added test 'cpplint' to check C / C++ code against the Google style
+-- Configured cpplint exclude dirs and/or files: 
+-- Added test 'flake8' to check Python code syntax and style conventions
+-- Configured 'flake8' exclude dirs and/or files: 
+-- Added test 'lint_cmake' to check CMake code style
+-- Added test 'pep257' to check Python code against some of the docstring style conventions in PEP 257
+-- Added test 'uncrustify' to check C / C++ code style
+-- Configured uncrustify additional arguments: 
+-- Added test 'xmllint' to check XML markup files
+-- Configuring done (0.8s)
+-- Generating done (0.0s)
+-- Build files have been written to: /home/carlobeni/ros2_projects/ros2_robot_ws4/src/articubot_three/build/articubot_three
+-- Install configuration: ""
+-- Execute custom install script
+-- Symlinking: /home/carlobeni/ros2_projects/ros2_robot_ws4/src/articubot_three/install/articubot_three/share/articubot_three/launch/articubot_three.launch.py
+-- Symlinking: /home/carlobeni/ros2_projects/ros2_robot_ws4/src/articubot_three/install/articubot_three/share/articubot_three/launch/ball_tracker.launch.py
+-- Symlinking: /home/carlobeni/ros2_projects/ros2_robot_ws4/src/articubot_three/install/articubot_three/share/articubot_three/launch/camera.launch.py
+-- Symlinking: /home/carlobeni/ros2_projects/ros2_robot_ws4/src/articubot_three/install/articubot_three/share/articubot_three/launch/joystick.launch.py
+-- Symlinking: /home/carlobeni/ros2_projects/ros2_robot_ws4/src/articubot_three/install/articubot_three/share/articubot_three/launch/launch_robot.launch.py
+-- Symlinking: /home/carlobeni/ros2_projects/ros2_robot_ws4/src/articubot_three/install/articubot_three/share/articubot_three/launch/launch_sim.launch.py
+-- Symlinking: /home/carlobeni/ros2_projects/ros2_robot_ws4/src/articubot_three/install/articubot_three/share/articubot_three/launch/localization_launch.py
+-- Symlinking: /home/carlobeni/ros2_projects/ros2_robot_ws4/src/articubot_three/install/articubot_three/share/articubot_three/launch/navigation_launch.py
+-- Symlinking: /home/carlobeni/ros2_projects/ros2_robot_ws4/src/articubot_three/install/articubot_three/share/articubot_three/launch/online_async_launch.py
+-- Symlinking: /home/carlobeni/ros2_projects/ros2_robot_ws4/src/articubot_three/install/articubot_three/share/articubot_three/launch/rplidar.launch.py
+-- Symlinking: /home/carlobeni/ros2_projects/ros2_robot_ws4/src/articubot_three/install/articubot_three/share/articubot_three/launch/rsp.launch.py
+-- Symlinking: /home/carlobeni/ros2_projects/ros2_robot_ws4/src/articubot_three/install/articubot_three/lib/articubot_three/sensors_fast_listener_node.py
+-- Symlinking: /home/carlobeni/ros2_projects/ros2_robot_ws4/src/articubot_three/install/articubot_three/lib/articubot_three/sensors_reliable_listener_node.py
+-- Symlinking: /home/carlobeni/ros2_projects/ros2_robot_ws4/src/articubot_three/install/articubot_three/lib/articubot_three/imu_cache_node.py
+-- Symlinking: /home/carlobeni/ros2_projects/ros2_robot_ws4/src/articubot_three/install/articubot_three/lib/articubot_three/gps_cache_node.py
+-- Symlinking: /home/carlobeni/ros2_projects/ros2_robot_ws4/src/articubot_three/install/articubot_three/lib/articubot_three/cmd_publisher_node.py
+-- Symlinking: /home/carlobeni/ros2_projects/ros2_robot_ws4/src/articubot_three/install/articubot_three/lib/articubot_three/monitor_node.py
+-- Symlinking: /home/carlobeni/ros2_projects/ros2_robot_ws4/src/articubot_three/install/articubot_three/lib/python/site-packages/articubot_three/cache/gps_cache_node.py
+-- Symlinking: /home/carlobeni/ros2_projects/ros2_robot_ws4/src/articubot_three/install/articubot_three/lib/python/site-packages/articubot_three/cache/imu_cache_node.py
+-- Symlinking: /home/carlobeni/ros2_projects/ros2_robot_ws4/src/articubot_three/install/articubot_three/lib/python/site-packages/articubot_three/command/cmd_publisher_node.py
+-- Symlinking: /home/carlobeni/ros2_projects/ros2_robot_ws4/src/articubot_three/install/articubot_three/lib/python/site-packages/articubot_three/hw_config.py
+-- Symlinking: /home/carlobeni/ros2_projects/ros2_robot_ws4/src/articubot_three/install/articubot_three/lib/python/site-packages/articubot_three/listeners/sensors_fast_listener_node.py
+-- Symlinking: /home/carlobeni/ros2_projects/ros2_robot_ws4/src/articubot_three/install/articubot_three/lib/python/site-packages/articubot_three/listeners/sensors_reliable_listener_node.py
+-- Symlinking: /home/carlobeni/ros2_projects/ros2_robot_ws4/src/articubot_three/install/articubot_three/lib/python/site-packages/articubot_three/monitor/monitor_node.py
+-- Symlinking: /home/carlobeni/ros2_projects/ros2_robot_ws4/src/articubot_three/install/articubot_three/share/ament_index/resource_index/package_run_dependencies/articubot_three
+-- Symlinking: /home/carlobeni/ros2_projects/ros2_robot_ws4/src/articubot_three/install/articubot_three/share/ament_index/resource_index/parent_prefix_path/articubot_three
+-- Symlinking: /home/carlobeni/ros2_projects/ros2_robot_ws4/src/articubot_three/install/articubot_three/share/articubot_three/environment/ament_prefix_path.sh
+-- Symlinking: /home/carlobeni/ros2_projects/ros2_robot_ws4/src/articubot_three/install/articubot_three/share/articubot_three/environment/ament_prefix_path.dsv
+-- Symlinking: /home/carlobeni/ros2_projects/ros2_robot_ws4/src/articubot_three/install/articubot_three/share/articubot_three/environment/path.sh
+-- Symlinking: /home/carlobeni/ros2_projects/ros2_robot_ws4/src/articubot_three/install/articubot_three/share/articubot_three/environment/path.dsv
+-- Symlinking: /home/carlobeni/ros2_projects/ros2_robot_ws4/src/articubot_three/install/articubot_three/share/articubot_three/local_setup.bash
+-- Symlinking: /home/carlobeni/ros2_projects/ros2_robot_ws4/src/articubot_three/install/articubot_three/share/articubot_three/local_setup.sh
+-- Symlinking: /home/carlobeni/ros2_projects/ros2_robot_ws4/src/articubot_three/install/articubot_three/share/articubot_three/local_setup.zsh
+-- Symlinking: /home/carlobeni/ros2_projects/ros2_robot_ws4/src/articubot_three/install/articubot_three/share/articubot_three/local_setup.dsv
+-- Symlinking: /home/carlobeni/ros2_projects/ros2_robot_ws4/src/articubot_three/install/articubot_three/share/articubot_three/package.dsv
+-- Symlinking: /home/carlobeni/ros2_projects/ros2_robot_ws4/src/articubot_three/install/articubot_three/share/ament_index/resource_index/packages/articubot_three
+-- Symlinking: /home/carlobeni/ros2_projects/ros2_robot_ws4/src/articubot_three/install/articubot_three/share/articubot_three/cmake/articubot_threeConfig.cmake
+-- Symlinking: /home/carlobeni/ros2_projects/ros2_robot_ws4/src/articubot_three/install/articubot_three/share/articubot_three/cmake/articubot_threeConfig-version.cmake
+-- Symlinking: /home/carlobeni/ros2_projects/ros2_robot_ws4/src/articubot_three/install/articubot_three/share/articubot_three/package.xml

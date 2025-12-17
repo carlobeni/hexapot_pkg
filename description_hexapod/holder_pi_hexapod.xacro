@@ -12,7 +12,7 @@
         <visual>
           <origin xyz="0 0 0" rpy="0 0 0" />
           <geometry>
-            <mesh filename="$(find phantom_uttubot)/meshes/holder_pi_uttu.STL"  scale="0.0012 0.0012 0.0012"/>
+            <mesh filename="$(find hexapot_pkg)/meshes/holder_pi_uttu.STL"  scale="0.0012 0.0012 0.0012"/>
           </geometry>
           <material name="Grey">
             <color rgba="0.20 0.20 0.20 1.0"/>

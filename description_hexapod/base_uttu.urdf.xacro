@@ -15,7 +15,7 @@
         <visual>
           <origin xyz="0 0 0" rpy="0 0 0" />
           <geometry>
-            <mesh filename="$(find phantom_uttubot)/meshes/body.STL"  scale="1 1 1"/>
+            <mesh filename="$(find hexapot_pkg)/meshes/body.STL"  scale="1 1 1"/>
           </geometry>
           <material name="Grey">
             <color rgba="0.20 0.20 0.20 1.0"/>
@@ -23,7 +23,7 @@
         </visual>
 	  <collision>
 		<geometry>
-		  <mesh filename="$(find phantom_uttubot)/meshes/body_coll.STL"/>
+		  <mesh filename="$(find hexapot_pkg)/meshes/body_coll.STL"/>
 		</geometry>
 	  </collision>
         <inertial>

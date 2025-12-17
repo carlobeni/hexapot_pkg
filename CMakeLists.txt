@@ -50,6 +50,7 @@ install(
     description_hexapod
     launch
     worlds
+    meshes
   DESTINATION share/${PROJECT_NAME}
 )
 

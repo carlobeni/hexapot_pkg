@@ -1,0 +1,19 @@
+material Asphalt
+{
+  technique
+  {
+    pass
+    {
+      lighting on
+      diffuse 1 1 1 1
+      ambient 1 1 1 1
+      specular 0.1 0.1 0.1 1 10
+
+      texture_unit
+      {
+        texture textura-del-asfalto.jpg
+        scale 20 20   # tiling (MUY importante)
+      }
+    }
+  }
+}

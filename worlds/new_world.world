@@ -1,0 +1,116 @@
+<?xml version="1.0"?>
+
+<sdf version="1.6">
+  <world name="Edifice">
+
+```
+<!-- ================= SCENE ================= -->
+<scene>
+  <ambient>0.3 0.3 0.3</ambient>
+  <background>0.8 0.8 0.8</background>
+  <grid>false</grid>
+</scene>
+
+<!-- ================= PHYSICS ================= -->
+<physics name="1ms" type="ignored">
+  <max_step_size>0.002</max_step_size>
+  <real_time_factor>1.0</real_time_factor>
+</physics>
+
+<!-- ================= SYSTEMS ================= -->
+<plugin filename="ignition-gazebo-physics-system"
+        name="ignition::gazebo::systems::Physics"/>
+
+<plugin filename="ignition-gazebo-sensors-system"
+        name="ignition::gazebo::systems::Sensors">
+  <render_engine>ogre2</render_engine>
+</plugin>
+
+<plugin filename="ignition-gazebo-user-commands-system"
+        name="ignition::gazebo::systems::UserCommands"/>
+
+<plugin filename="ignition-gazebo-scene-broadcaster-system"
+        name="ignition::gazebo::systems::SceneBroadcaster"/>
+
+<!-- ================= GUI ================= -->
+<gui>
+
+  <plugin filename="GzScene3D" name="3D View">
+    <ignition-gui>
+      <title>3D View</title>
+      <property type="bool" key="showTitleBar">false</property>
+      <property type="string" key="state">docked</property>
+    </ignition-gui>
+    <engine>ogre2</engine>
+    <scene>scene</scene>
+    <ambient_light>0.4 0.4 0.4</ambient_light>
+    <background_color>0.85 0.85 0.85</background_color>
+    <camera_pose>-14 0 3 0 0.15 0</camera_pose>
+  </plugin>
+
+  <plugin filename="WorldControl" name="World control">
+    <ignition-gui>
+      <property key="showTitleBar" type="bool">false</property>
+      <property key="state" type="string">floating</property>
+    </ignition-gui>
+    <play_pause>true</play_pause>
+    <step>true</step>
+    <start_paused>true</start_paused>
+  </plugin>
+
+  <plugin filename="WorldStats" name="World stats">
+    <ignition-gui>
+      <property key="showTitleBar" type="bool">false</property>
+      <property key="state" type="string">floating</property>
+    </ignition-gui>
+    <sim_time>true</sim_time>
+    <real_time>true</real_time>
+    <real_time_factor>true</real_time_factor>
+  </plugin>
+
+  <plugin filename="EntityTree" name="Entity tree">
+    <ignition-gui>
+      <property type="string" key="state">docked</property>
+    </ignition-gui>
+  </plugin>
+
+</gui>
+
+<!-- ================= LIGHT ================= -->
+<light type="directional" name="sun">
+  <pose>0 0 10 0 0 0</pose>
+  <direction>-0.5 0.1 -1</direction>
+  <diffuse>1 1 1 1</diffuse>
+  <specular>0.2 0.2 0.2 1</specular>
+  <cast_shadows>true</cast_shadows>
+</light>
+
+<!-- ================= WORLD MODELS ================= -->
+<include>
+  <uri>https://fuel.ignitionrobotics.org/1.0/OpenRobotics/models/Depot</uri>
+</include>
+
+<include>
+  <pose>-9.4 1.6 0 0 0 -0.5</pose>
+  <uri>https://fuel.ignitionrobotics.org/1.0/OpenRobotics/models/Mecanum lift</uri>
+</include>
+
+<include>
+  <pose>-9.0 -1.8 1.038 0 0 0</pose>
+  <uri>https://fuel.ignitionrobotics.org/1.0/OpenRobotics/models/Panda with Ignition position controller model</uri>
+</include>
+
+<include>
+  <pose>-9.0 -2.4 0 0 0 1.57</pose>
+  <uri>https://fuel.ignitionrobotics.org/1.0/OpenRobotics/models/Reflective table</uri>
+</include>
+
+<include>
+  <pose>-13.2 -6.0 0 0 0 1.57</pose>
+  <uri>https://fuel.ignitionrobotics.org/1.0/OpenRobotics/models/Rescue Randy Sitting</uri>
+</include>
+
+
+
+  </world>
+</sdf>

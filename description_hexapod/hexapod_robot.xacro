@@ -13,7 +13,7 @@
   <xacro:include filename="ir_left_distance_sensor_hexapod.xacro" /> 
   <xacro:include filename="ir_right_distance_sensor_hexapod.xacro" /> 
 
-  <!--<xacro:include filename="holder_pi_hexapod.xacro" /> >
+  <!--<xacro:include filename="holder_pi_hexapod.xacro" /> >mix-->
 
   <xacro:property name="M_PI" value="3.14159274"/>
 

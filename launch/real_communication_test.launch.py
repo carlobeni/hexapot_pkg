@@ -11,7 +11,7 @@ from launch.actions import ExecuteProcess, TimerAction
 
 def generate_launch_description():
 
-    package_name = "articubot_three"
+    package_name = "hexapot_pkg"
 
     # =====================================================
     # LIMPIEZA PREVIA
@@ -71,7 +71,7 @@ def generate_launch_description():
 
                 # ===== FAST LISTENER =====
                 Node(
-                    package="articubot_three",
+                    package="hexapot_pkg",
                     executable="sensors_fast_listener_node.py",
                     name="sensors_fast_listener",
                     output="screen",
@@ -84,7 +84,7 @@ def generate_launch_description():
 
                 # ===== RELIABLE LISTENER =====
                 Node(
-                    package="articubot_three",
+                    package="hexapot_pkg",
                     executable="sensors_reliable_listener_node.py",
                     name="sensors_reliable_listener",
                     output="screen",
@@ -97,7 +97,7 @@ def generate_launch_description():
 
                 # ===== COMMAND TALKER =====
                 Node(
-                    package="articubot_three",
+                    package="hexapot_pkg",
                     executable="command_talker_node.py",
                     name="command_talker",
                     output="screen",
@@ -123,7 +123,7 @@ def generate_launch_description():
                 # (ESTO ES LO QUE TE FALTABA: copiar datos realmente)
                 # =====================================================
                 Node(
-                    package="articubot_three",
+                    package="hexapot_pkg",
                     executable="cmd_vel_relay_node.py",
                     name="cmd_vel_relay",
                     output="screen",
@@ -136,7 +136,7 @@ def generate_launch_description():
 
                 # ===== MONITOR =====
                 Node(
-                    package="articubot_three",
+                    package="hexapot_pkg",
                     executable="monitor_node_pc.py",
                     name="monitor_node_pc",
                     output="screen",

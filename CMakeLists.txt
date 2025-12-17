@@ -1,5 +1,5 @@
 cmake_minimum_required(VERSION 3.5)
-project(articubot_three)
+project(hexapot_pkg)
 
 # Default to C99
 if(NOT CMAKE_C_STANDARD)
@@ -56,7 +56,7 @@ install(
 # Install hw_config.py
 # =====================================================
 install(
-  FILES articubot_three/communication/hw_config.py
+  FILES hexapot_pkg/communication/hw_config.py
   DESTINATION lib/${PROJECT_NAME}
 )
 
@@ -65,16 +65,16 @@ install(
 # =====================================================
 install(PROGRAMS
   # Nodos de comunicacion
-  articubot_three/communication/sensors_fast_listener_node.py
-  articubot_three/communication/sensors_reliable_listener_node.py
-  articubot_three/communication/command_talker_node.py
-  articubot_three/communication/monitor_node_pc.py
+  hexapot_pkg/communication/sensors_fast_listener_node.py
+  hexapot_pkg/communication/sensors_reliable_listener_node.py
+  hexapot_pkg/communication/command_talker_node.py
+  hexapot_pkg/communication/monitor_node_pc.py
 
   # Nodos manager
 
   # Nodos utils
-  articubot_three/utils/cmd_vel_relay_node.py # nodo para difusion de robot+gazebo
-  articubot_three/communication/heading_estimator_node.py # nodo para estimation de heading
+  hexapot_pkg/utils/cmd_vel_relay_node.py # nodo para difusion de robot+gazebo
+  hexapot_pkg/communication/heading_estimator_node.py # nodo para estimation de heading
   DESTINATION lib/${PROJECT_NAME}
 )
 ament_package()

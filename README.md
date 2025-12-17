@@ -7,7 +7,7 @@ cd ~/ros2_robot_ws4
 ```
 ## 2. Clonar repositorio en src
 ```bash
-git clone https://github.com/carlobeni/articubot_three.git
+git clone https://github.com/carlobeni/hexapot_pkg.git
 ```
 
 ## 3. Agregar twist_stamper y twist_mux
@@ -48,12 +48,12 @@ source ~/ros2_robot_ws4/install/setup.bash # verificar el path correcto
 # 2. Simulacion con Gazebo
 Terminal 1: Correr empty world
 ```bash
-ros2 launch articubot_three launch_sim.launch.py
+ros2 launch hexapot_pkg launch_sim.launch.py
 ```
 
 Terminal 2: Cargar world preguardado, ejemplo con obstacles.world
 ```bash
-ros2 launch articubot_three launch_sim.launch.py world:=./src/articubot_three/worlds/obstacles.world
+ros2 launch hexapot_pkg launch_sim.launch.py world:=./src/hexapot_pkg/worlds/obstacles.world
 ```
 # 3.Lectura de topics en Gazebo
 ## 1. Ver lista de Topics de Gazebo
@@ -70,7 +70,7 @@ ros2 run rviz2 rviz2
 ``` 
 ## 2. Correr launch
 ```bash
-ros2 launch articubot_three launch_sim.launch.py
+ros2 launch hexapot_pkg launch_sim.launch.py
 ```
 ## 3. Agregar las fuentes de RViz
 1. En Global Options, agregar las fuentes de RViz con Fixed Frame: /base_link

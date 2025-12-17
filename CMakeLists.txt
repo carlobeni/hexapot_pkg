@@ -47,6 +47,7 @@ install(
   DIRECTORY 
     config 
     description 
+    description_hexapod
     launch
     worlds
   DESTINATION share/${PROJECT_NAME}

@@ -106,8 +106,6 @@ install(PROGRAMS
   hexapot_pkg/master_nodes/control_master_hexapod.py 
   hexapot_pkg/localization_nodes/noise_compute_heading.py
   hexapot_pkg/localization_nodes/noise_gps_to_local_xy.py 
- 
-
 
   DESTINATION lib/${PROJECT_NAME}
 )

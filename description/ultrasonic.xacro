@@ -1,0 +1,50 @@
+<?xml version="1.0"?>
+<robot xmlns:xacro="http://www.ros.org/wiki/xacro">
+
+  <!-- Articulación fija del sensor -->
+  <joint name="ultrasonic_joint" type="fixed">
+    <parent link="chassis"/>
+    <child link="ultrasonic_link"/>
+    <origin xyz="0.32 0 0.144" rpy="0 0 0"/>
+  </joint>
+
+  <!-- Link del sensor -->
+  <link name="ultrasonic_link">
+    <visual>
+      <geometry>
+        <box size="0.03 0.03 0.01"/>
+      </geometry>
+      <material name="black"/>
+    </visual>
+  </link>
+
+  <gazebo reference="ultrasonic_link">
+    <selfCollide>false</selfCollide>
+  </gazebo>
+
+  <!-- Sensor de tipo ray (ultrasonico) con plugin de Gazebo Sim -->
+  <gazebo reference="ultrasonic_link">
+    <sensor name="ultrasonic" type="ray">
+      <topic>ultrasonic</topic>
+      <update_rate>20</update_rate>
+
+      <ray>
+        <scan>
+          <horizontal>
+            <samples>1</samples>
+            <resolution>1</resolution>
+            <min_angle>0</min_angle>
+            <max_angle>0</max_angle>
+          </horizontal>
+        </scan>
+
+        <range>
+          <min>0.05</min>
+          <max>2.0</max>
+          <resolution>0.01</resolution>
+        </range>
+      </ray>
+    </sensor>
+  </gazebo>
+
+</robot>

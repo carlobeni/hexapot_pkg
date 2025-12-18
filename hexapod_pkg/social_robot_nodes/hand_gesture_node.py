@@ -139,7 +139,7 @@ class HandGestureNode(Node):
         HandLandmarkerOptions = mp.tasks.vision.HandLandmarkerOptions
         VisionRunningMode = mp.tasks.vision.RunningMode
 
-        pkg_share = get_package_share_directory("hexapot_pkg")
+        pkg_share = get_package_share_directory("hexapod_pkg")
         model_path = os.path.join(
             pkg_share,
             "scripts",

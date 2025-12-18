@@ -10,7 +10,7 @@ from launch.actions import DeclareLaunchArgument
 
 def generate_launch_description():
 
-    my_package_name='hexapot_pkg'
+    my_package_name='hexapod_pkg'
     sim_mode = LaunchConfiguration('sim_mode')
     sim_mode_dec = DeclareLaunchArgument('sim_mode', default_value='false')
 

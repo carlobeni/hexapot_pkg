@@ -19,7 +19,7 @@ from launch_ros.actions import Node
 
 def generate_launch_description():
 
-    package_name = "hexapot_pkg"
+    package_name = "hexapod_pkg"
 
     # =====================================================
     # LIMPIEZA PREVIA
@@ -115,7 +115,7 @@ def generate_launch_description():
         executable="create",
         arguments=[
             "-topic", "robot_description",
-            "-name", "hexapot_pkg",
+            "-name", "hexapod_pkg",
             "-z", "0.1"
         ],
         output="screen",
@@ -152,7 +152,7 @@ def generate_launch_description():
     # RELAY: /cmd_vel  ->  /cmd_vel_robot  y  /diff_cont/cmd_vel_unstamped
     # =====================================================
     cmd_vel_relay = Node(
-        package="hexapot_pkg",
+        package="hexapod_pkg",
         executable="cmd_vel_relay_node.py",
         name="cmd_vel_relay",
         output="screen",
@@ -167,7 +167,7 @@ def generate_launch_description():
     # COMUNICACIÓN (CONTROL DEVICE)
     # =====================================================
     sensors_fast_listener = Node(
-        package="hexapot_pkg",
+        package="hexapod_pkg",
         executable="sensors_fast_listener_node.py",
         name="sensors_fast_listener",
         output="screen",
@@ -178,7 +178,7 @@ def generate_launch_description():
     )
 
     sensors_reliable_listener = Node(
-        package="hexapot_pkg",
+        package="hexapod_pkg",
         executable="sensors_reliable_listener_node.py",
         name="sensors_reliable_listener",
         output="screen",
@@ -189,7 +189,7 @@ def generate_launch_description():
     )
 
     command_talker = Node(
-        package="hexapot_pkg",
+        package="hexapod_pkg",
         executable="command_talker_node.py",
         name="command_talker",
         output="screen",
@@ -200,7 +200,7 @@ def generate_launch_description():
     )
 
     est_heading_compass = Node(
-        package="hexapot_pkg",
+        package="hexapod_pkg",
         executable="heading_estimator_node.py",
         name="heading_estimator",
         output="screen",
@@ -211,7 +211,7 @@ def generate_launch_description():
     )
 
     monitor = Node(
-        package="hexapot_pkg",
+        package="hexapod_pkg",
         executable="monitor_node_pc.py",
         name="monitor_node_pc",
         output="screen",

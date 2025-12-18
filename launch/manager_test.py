@@ -22,7 +22,7 @@ from launch_ros.actions import Node
 
 def generate_launch_description():
 
-    package_name='hexapot_pkg' 
+    package_name='hexapod_pkg' 
 
     # =====================================================
     # LIMPIEZA PREVIA
@@ -79,7 +79,7 @@ def generate_launch_description():
     # Run the spawner node from the ros_gz_sim package. The entity name doesn't really matter if you only have a single robot.
     spawn_entity = Node(package='ros_gz_sim', executable='create',
                         arguments=['-topic', 'robot_description',
-                                   '-name', 'hexapot_pkg',
+                                   '-name', 'hexapod_pkg',
                                    '-z', '0.1'],
                         output='screen')
 
@@ -161,7 +161,7 @@ def generate_launch_description():
     # RELAY: /cmd_vel  ->  /cmd_vel_robot  y  /diff_cont/cmd_vel_unstamped
     # =====================================================
     cmd_vel_relay = Node(
-        package="hexapot_pkg",
+        package="hexapod_pkg",
         executable="cmd_vel_relay_node.py",
         name="cmd_vel_relay",
         output="screen",

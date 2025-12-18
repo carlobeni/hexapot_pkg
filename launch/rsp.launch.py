@@ -17,7 +17,7 @@ def generate_launch_description():
     use_ros2_control = LaunchConfiguration('use_ros2_control')
 
     # Process the URDF file
-    pkg_path = os.path.join(get_package_share_directory('hexapot_pkg'))
+    pkg_path = os.path.join(get_package_share_directory('hexapod_pkg'))
     #xacro_file = os.path.join(pkg_path,'description','robot.urdf.xacro')
 
     xacro_file = os.path.join(pkg_path,'description_hexapod','hexapod_robot.xacro')

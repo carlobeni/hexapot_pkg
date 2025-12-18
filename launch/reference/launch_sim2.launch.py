@@ -18,7 +18,7 @@ def generate_launch_description():
     # Include the robot_state_publisher launch file, provided by our own package. Force sim time to be enabled
     # !!! MAKE SURE YOU SET THE PACKAGE NAME CORRECTLY !!!
 
-    package_name='hexapot_pkg' #<--- CHANGE ME
+    package_name='hexapod_pkg' #<--- CHANGE ME
 
     rsp = IncludeLaunchDescription(
                 PythonLaunchDescriptionSource([os.path.join(
@@ -67,7 +67,7 @@ def generate_launch_description():
     # Run the spawner node from the ros_gz_sim package. The entity name doesn't really matter if you only have a single robot.
     spawn_entity = Node(package='ros_gz_sim', executable='create',
                         arguments=['-topic', 'robot_description',
-                                   '-name', 'hexapot_pkg',
+                                   '-name', 'hexapod_pkg',
                                    '-z', '0.02'],
                         output='screen')
 

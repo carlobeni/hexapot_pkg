@@ -18,7 +18,7 @@ def generate_launch_description():
     # Include the robot_state_publisher launch file, provided by our own package. Force sim time to be enabled
     # !!! MAKE SURE YOU SET THE PACKAGE NAME CORRECTLY !!!
 
-    package_name='phantom_uttubot' #<--- CHANGE ME
+    package_name='hexapod_pkg' #<--- CHANGE ME
 
     rsp = IncludeLaunchDescription(
                 PythonLaunchDescriptionSource([os.path.join(
@@ -67,7 +67,7 @@ def generate_launch_description():
     # Run the spawner node from the ros_gz_sim package. The entity name doesn't really matter if you only have a single robot.
     spawn_entity = Node(package='ros_gz_sim', executable='create',
                         arguments=['-topic', 'robot_description',
-                                   '-name', 'phantom_uttubot',
+                                   '-name', 'hexapod_pkg',
                                    '-z', '0.02'],
                         output='screen')
 
@@ -106,7 +106,7 @@ def generate_launch_description():
 
 
     heading_estimator = Node(
-    package='phantom_uttubot',
+    package='hexapod_pkg',
     executable='noise_compute_heading.py',
     name='heading_estimator',
     output='screen',
@@ -114,7 +114,7 @@ def generate_launch_description():
     # OBS: Calcula el heading
 
     gps_to_local_xy = Node(
-    package='phantom_uttubot',
+    package='hexapod_pkg',
     executable='noise_gps_to_local_xy.py',
     name='gps_to_local_xy',
     output='screen',
@@ -123,7 +123,7 @@ def generate_launch_description():
 
 
     corrected_stimate_xy = Node(
-    package='phantom_uttubot',
+    package='hexapod_pkg',
     executable='corrected_stimate_xy.py',
     name='corrected_stimate_xy',
     output='screen',
@@ -132,7 +132,7 @@ def generate_launch_description():
 
     # cinematica inversa
     hexapod_low_level_control = Node(
-    package='phantom_uttubot',
+    package='hexapod_pkg',
     executable='hexapod_low_level_control.py',
     name='hexapod_low_level_control',
     output='screen'
@@ -140,7 +140,7 @@ def generate_launch_description():
     # OBS: El robot se mueve publicando en hl/cmd tipic de control
 
     ultrasonic_range = Node(
-    package='phantom_uttubot',
+    package='hexapod_pkg',
     executable='ultrasonic_range.py',
     name='ultrasonic_range',
     output='screen'
@@ -148,7 +148,7 @@ def generate_launch_description():
     # OBS: Transorma del RANGE a longitudes del ultrasonico en m, si no detecta nada manda -1
 
     ir_emulator = Node(
-    package='phantom_uttubot',
+    package='hexapod_pkg',
     executable='ir_gazebo_ros_emulator.py',
     name='ir_emulator',
     output='screen'

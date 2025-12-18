@@ -36,45 +36,45 @@
 -- Added test 'xmllint' to check XML markup files
 -- Configuring done (0.8s)
 -- Generating done (0.0s)
--- Build files have been written to: /home/carlobeni/ros2_projects/ros2_robot_ws4/src/hexapot_pkg/build/hexapot_pkg
+-- Build files have been written to: /home/carlobeni/ros2_projects/ros2_robot_ws4/src/hexapod_pkg/build/hexapod_pkg
 -- Install configuration: ""
 -- Execute custom install script
--- Symlinking: /home/carlobeni/ros2_projects/ros2_robot_ws4/src/hexapot_pkg/install/hexapot_pkg/share/hexapot_pkg/launch/hexapot_pkg.launch.py
--- Symlinking: /home/carlobeni/ros2_projects/ros2_robot_ws4/src/hexapot_pkg/install/hexapot_pkg/share/hexapot_pkg/launch/ball_tracker.launch.py
--- Symlinking: /home/carlobeni/ros2_projects/ros2_robot_ws4/src/hexapot_pkg/install/hexapot_pkg/share/hexapot_pkg/launch/camera.launch.py
--- Symlinking: /home/carlobeni/ros2_projects/ros2_robot_ws4/src/hexapot_pkg/install/hexapot_pkg/share/hexapot_pkg/launch/joystick.launch.py
--- Symlinking: /home/carlobeni/ros2_projects/ros2_robot_ws4/src/hexapot_pkg/install/hexapot_pkg/share/hexapot_pkg/launch/launch_robot.launch.py
--- Symlinking: /home/carlobeni/ros2_projects/ros2_robot_ws4/src/hexapot_pkg/install/hexapot_pkg/share/hexapot_pkg/launch/launch_sim.launch.py
--- Symlinking: /home/carlobeni/ros2_projects/ros2_robot_ws4/src/hexapot_pkg/install/hexapot_pkg/share/hexapot_pkg/launch/localization_launch.py
--- Symlinking: /home/carlobeni/ros2_projects/ros2_robot_ws4/src/hexapot_pkg/install/hexapot_pkg/share/hexapot_pkg/launch/navigation_launch.py
--- Symlinking: /home/carlobeni/ros2_projects/ros2_robot_ws4/src/hexapot_pkg/install/hexapot_pkg/share/hexapot_pkg/launch/online_async_launch.py
--- Symlinking: /home/carlobeni/ros2_projects/ros2_robot_ws4/src/hexapot_pkg/install/hexapot_pkg/share/hexapot_pkg/launch/rplidar.launch.py
--- Symlinking: /home/carlobeni/ros2_projects/ros2_robot_ws4/src/hexapot_pkg/install/hexapot_pkg/share/hexapot_pkg/launch/rsp.launch.py
--- Symlinking: /home/carlobeni/ros2_projects/ros2_robot_ws4/src/hexapot_pkg/install/hexapot_pkg/lib/hexapot_pkg/sensors_fast_listener_node.py
--- Symlinking: /home/carlobeni/ros2_projects/ros2_robot_ws4/src/hexapot_pkg/install/hexapot_pkg/lib/hexapot_pkg/sensors_reliable_listener_node.py
--- Symlinking: /home/carlobeni/ros2_projects/ros2_robot_ws4/src/hexapot_pkg/install/hexapot_pkg/lib/hexapot_pkg/imu_cache_node.py
--- Symlinking: /home/carlobeni/ros2_projects/ros2_robot_ws4/src/hexapot_pkg/install/hexapot_pkg/lib/hexapot_pkg/gps_cache_node.py
--- Symlinking: /home/carlobeni/ros2_projects/ros2_robot_ws4/src/hexapot_pkg/install/hexapot_pkg/lib/hexapot_pkg/cmd_publisher_node.py
--- Symlinking: /home/carlobeni/ros2_projects/ros2_robot_ws4/src/hexapot_pkg/install/hexapot_pkg/lib/hexapot_pkg/monitor_node.py
--- Symlinking: /home/carlobeni/ros2_projects/ros2_robot_ws4/src/hexapot_pkg/install/hexapot_pkg/lib/python/site-packages/hexapot_pkg/cache/gps_cache_node.py
--- Symlinking: /home/carlobeni/ros2_projects/ros2_robot_ws4/src/hexapot_pkg/install/hexapot_pkg/lib/python/site-packages/hexapot_pkg/cache/imu_cache_node.py
--- Symlinking: /home/carlobeni/ros2_projects/ros2_robot_ws4/src/hexapot_pkg/install/hexapot_pkg/lib/python/site-packages/hexapot_pkg/command/cmd_publisher_node.py
--- Symlinking: /home/carlobeni/ros2_projects/ros2_robot_ws4/src/hexapot_pkg/install/hexapot_pkg/lib/python/site-packages/hexapot_pkg/hw_config.py
--- Symlinking: /home/carlobeni/ros2_projects/ros2_robot_ws4/src/hexapot_pkg/install/hexapot_pkg/lib/python/site-packages/hexapot_pkg/listeners/sensors_fast_listener_node.py
--- Symlinking: /home/carlobeni/ros2_projects/ros2_robot_ws4/src/hexapot_pkg/install/hexapot_pkg/lib/python/site-packages/hexapot_pkg/listeners/sensors_reliable_listener_node.py
--- Symlinking: /home/carlobeni/ros2_projects/ros2_robot_ws4/src/hexapot_pkg/install/hexapot_pkg/lib/python/site-packages/hexapot_pkg/monitor/monitor_node.py
--- Symlinking: /home/carlobeni/ros2_projects/ros2_robot_ws4/src/hexapot_pkg/install/hexapot_pkg/share/ament_index/resource_index/package_run_dependencies/hexapot_pkg
--- Symlinking: /home/carlobeni/ros2_projects/ros2_robot_ws4/src/hexapot_pkg/install/hexapot_pkg/share/ament_index/resource_index/parent_prefix_path/hexapot_pkg
--- Symlinking: /home/carlobeni/ros2_projects/ros2_robot_ws4/src/hexapot_pkg/install/hexapot_pkg/share/hexapot_pkg/environment/ament_prefix_path.sh
--- Symlinking: /home/carlobeni/ros2_projects/ros2_robot_ws4/src/hexapot_pkg/install/hexapot_pkg/share/hexapot_pkg/environment/ament_prefix_path.dsv
--- Symlinking: /home/carlobeni/ros2_projects/ros2_robot_ws4/src/hexapot_pkg/install/hexapot_pkg/share/hexapot_pkg/environment/path.sh
--- Symlinking: /home/carlobeni/ros2_projects/ros2_robot_ws4/src/hexapot_pkg/install/hexapot_pkg/share/hexapot_pkg/environment/path.dsv
--- Symlinking: /home/carlobeni/ros2_projects/ros2_robot_ws4/src/hexapot_pkg/install/hexapot_pkg/share/hexapot_pkg/local_setup.bash
--- Symlinking: /home/carlobeni/ros2_projects/ros2_robot_ws4/src/hexapot_pkg/install/hexapot_pkg/share/hexapot_pkg/local_setup.sh
--- Symlinking: /home/carlobeni/ros2_projects/ros2_robot_ws4/src/hexapot_pkg/install/hexapot_pkg/share/hexapot_pkg/local_setup.zsh
--- Symlinking: /home/carlobeni/ros2_projects/ros2_robot_ws4/src/hexapot_pkg/install/hexapot_pkg/share/hexapot_pkg/local_setup.dsv
--- Symlinking: /home/carlobeni/ros2_projects/ros2_robot_ws4/src/hexapot_pkg/install/hexapot_pkg/share/hexapot_pkg/package.dsv
--- Symlinking: /home/carlobeni/ros2_projects/ros2_robot_ws4/src/hexapot_pkg/install/hexapot_pkg/share/ament_index/resource_index/packages/hexapot_pkg
--- Symlinking: /home/carlobeni/ros2_projects/ros2_robot_ws4/src/hexapot_pkg/install/hexapot_pkg/share/hexapot_pkg/cmake/hexapot_pkgConfig.cmake
--- Symlinking: /home/carlobeni/ros2_projects/ros2_robot_ws4/src/hexapot_pkg/install/hexapot_pkg/share/hexapot_pkg/cmake/hexapot_pkgConfig-version.cmake
--- Symlinking: /home/carlobeni/ros2_projects/ros2_robot_ws4/src/hexapot_pkg/install/hexapot_pkg/share/hexapot_pkg/package.xml
+-- Symlinking: /home/carlobeni/ros2_projects/ros2_robot_ws4/src/hexapod_pkg/install/hexapod_pkg/share/hexapod_pkg/launch/hexapod_pkg.launch.py
+-- Symlinking: /home/carlobeni/ros2_projects/ros2_robot_ws4/src/hexapod_pkg/install/hexapod_pkg/share/hexapod_pkg/launch/ball_tracker.launch.py
+-- Symlinking: /home/carlobeni/ros2_projects/ros2_robot_ws4/src/hexapod_pkg/install/hexapod_pkg/share/hexapod_pkg/launch/camera.launch.py
+-- Symlinking: /home/carlobeni/ros2_projects/ros2_robot_ws4/src/hexapod_pkg/install/hexapod_pkg/share/hexapod_pkg/launch/joystick.launch.py
+-- Symlinking: /home/carlobeni/ros2_projects/ros2_robot_ws4/src/hexapod_pkg/install/hexapod_pkg/share/hexapod_pkg/launch/launch_robot.launch.py
+-- Symlinking: /home/carlobeni/ros2_projects/ros2_robot_ws4/src/hexapod_pkg/install/hexapod_pkg/share/hexapod_pkg/launch/launch_sim.launch.py
+-- Symlinking: /home/carlobeni/ros2_projects/ros2_robot_ws4/src/hexapod_pkg/install/hexapod_pkg/share/hexapod_pkg/launch/localization_launch.py
+-- Symlinking: /home/carlobeni/ros2_projects/ros2_robot_ws4/src/hexapod_pkg/install/hexapod_pkg/share/hexapod_pkg/launch/navigation_launch.py
+-- Symlinking: /home/carlobeni/ros2_projects/ros2_robot_ws4/src/hexapod_pkg/install/hexapod_pkg/share/hexapod_pkg/launch/online_async_launch.py
+-- Symlinking: /home/carlobeni/ros2_projects/ros2_robot_ws4/src/hexapod_pkg/install/hexapod_pkg/share/hexapod_pkg/launch/rplidar.launch.py
+-- Symlinking: /home/carlobeni/ros2_projects/ros2_robot_ws4/src/hexapod_pkg/install/hexapod_pkg/share/hexapod_pkg/launch/rsp.launch.py
+-- Symlinking: /home/carlobeni/ros2_projects/ros2_robot_ws4/src/hexapod_pkg/install/hexapod_pkg/lib/hexapod_pkg/sensors_fast_listener_node.py
+-- Symlinking: /home/carlobeni/ros2_projects/ros2_robot_ws4/src/hexapod_pkg/install/hexapod_pkg/lib/hexapod_pkg/sensors_reliable_listener_node.py
+-- Symlinking: /home/carlobeni/ros2_projects/ros2_robot_ws4/src/hexapod_pkg/install/hexapod_pkg/lib/hexapod_pkg/imu_cache_node.py
+-- Symlinking: /home/carlobeni/ros2_projects/ros2_robot_ws4/src/hexapod_pkg/install/hexapod_pkg/lib/hexapod_pkg/gps_cache_node.py
+-- Symlinking: /home/carlobeni/ros2_projects/ros2_robot_ws4/src/hexapod_pkg/install/hexapod_pkg/lib/hexapod_pkg/cmd_publisher_node.py
+-- Symlinking: /home/carlobeni/ros2_projects/ros2_robot_ws4/src/hexapod_pkg/install/hexapod_pkg/lib/hexapod_pkg/monitor_node.py
+-- Symlinking: /home/carlobeni/ros2_projects/ros2_robot_ws4/src/hexapod_pkg/install/hexapod_pkg/lib/python/site-packages/hexapod_pkg/cache/gps_cache_node.py
+-- Symlinking: /home/carlobeni/ros2_projects/ros2_robot_ws4/src/hexapod_pkg/install/hexapod_pkg/lib/python/site-packages/hexapod_pkg/cache/imu_cache_node.py
+-- Symlinking: /home/carlobeni/ros2_projects/ros2_robot_ws4/src/hexapod_pkg/install/hexapod_pkg/lib/python/site-packages/hexapod_pkg/command/cmd_publisher_node.py
+-- Symlinking: /home/carlobeni/ros2_projects/ros2_robot_ws4/src/hexapod_pkg/install/hexapod_pkg/lib/python/site-packages/hexapod_pkg/hw_config.py
+-- Symlinking: /home/carlobeni/ros2_projects/ros2_robot_ws4/src/hexapod_pkg/install/hexapod_pkg/lib/python/site-packages/hexapod_pkg/listeners/sensors_fast_listener_node.py
+-- Symlinking: /home/carlobeni/ros2_projects/ros2_robot_ws4/src/hexapod_pkg/install/hexapod_pkg/lib/python/site-packages/hexapod_pkg/listeners/sensors_reliable_listener_node.py
+-- Symlinking: /home/carlobeni/ros2_projects/ros2_robot_ws4/src/hexapod_pkg/install/hexapod_pkg/lib/python/site-packages/hexapod_pkg/monitor/monitor_node.py
+-- Symlinking: /home/carlobeni/ros2_projects/ros2_robot_ws4/src/hexapod_pkg/install/hexapod_pkg/share/ament_index/resource_index/package_run_dependencies/hexapod_pkg
+-- Symlinking: /home/carlobeni/ros2_projects/ros2_robot_ws4/src/hexapod_pkg/install/hexapod_pkg/share/ament_index/resource_index/parent_prefix_path/hexapod_pkg
+-- Symlinking: /home/carlobeni/ros2_projects/ros2_robot_ws4/src/hexapod_pkg/install/hexapod_pkg/share/hexapod_pkg/environment/ament_prefix_path.sh
+-- Symlinking: /home/carlobeni/ros2_projects/ros2_robot_ws4/src/hexapod_pkg/install/hexapod_pkg/share/hexapod_pkg/environment/ament_prefix_path.dsv
+-- Symlinking: /home/carlobeni/ros2_projects/ros2_robot_ws4/src/hexapod_pkg/install/hexapod_pkg/share/hexapod_pkg/environment/path.sh
+-- Symlinking: /home/carlobeni/ros2_projects/ros2_robot_ws4/src/hexapod_pkg/install/hexapod_pkg/share/hexapod_pkg/environment/path.dsv
+-- Symlinking: /home/carlobeni/ros2_projects/ros2_robot_ws4/src/hexapod_pkg/install/hexapod_pkg/share/hexapod_pkg/local_setup.bash
+-- Symlinking: /home/carlobeni/ros2_projects/ros2_robot_ws4/src/hexapod_pkg/install/hexapod_pkg/share/hexapod_pkg/local_setup.sh
+-- Symlinking: /home/carlobeni/ros2_projects/ros2_robot_ws4/src/hexapod_pkg/install/hexapod_pkg/share/hexapod_pkg/local_setup.zsh
+-- Symlinking: /home/carlobeni/ros2_projects/ros2_robot_ws4/src/hexapod_pkg/install/hexapod_pkg/share/hexapod_pkg/local_setup.dsv
+-- Symlinking: /home/carlobeni/ros2_projects/ros2_robot_ws4/src/hexapod_pkg/install/hexapod_pkg/share/hexapod_pkg/package.dsv
+-- Symlinking: /home/carlobeni/ros2_projects/ros2_robot_ws4/src/hexapod_pkg/install/hexapod_pkg/share/ament_index/resource_index/packages/hexapod_pkg
+-- Symlinking: /home/carlobeni/ros2_projects/ros2_robot_ws4/src/hexapod_pkg/install/hexapod_pkg/share/hexapod_pkg/cmake/hexapod_pkgConfig.cmake
+-- Symlinking: /home/carlobeni/ros2_projects/ros2_robot_ws4/src/hexapod_pkg/install/hexapod_pkg/share/hexapod_pkg/cmake/hexapod_pkgConfig-version.cmake
+-- Symlinking: /home/carlobeni/ros2_projects/ros2_robot_ws4/src/hexapod_pkg/install/hexapod_pkg/share/hexapod_pkg/package.xml

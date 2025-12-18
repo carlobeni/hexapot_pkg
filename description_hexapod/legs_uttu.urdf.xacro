@@ -35,7 +35,7 @@
       <visual>
         <origin xyz="0 -0.0252 0"/>
         <geometry>
-          <mesh filename="$(find hexapot_pkg)/meshes/connect.STL"/>
+          <mesh filename="$(find hexapod_pkg)/meshes/connect.STL"/>
         </geometry>
           <material name="Blue">
             <color rgba="0.0 0.0 0.2 1.0"/>
@@ -45,7 +45,7 @@
       <collision>
         <origin xyz="0 -${connect_offset} 0"/>
         <geometry>
-          <mesh filename="$(find hexapot_pkg)/meshes/connect_coll.STL"/>
+          <mesh filename="$(find hexapod_pkg)/meshes/connect_coll.STL"/>
         </geometry>
       </collision>
     </link>
@@ -72,7 +72,7 @@
     <visual>
       <origin xyz="0 -0.0252 0"/>
       <geometry>
-        <mesh filename="$(find hexapot_pkg)/meshes/connect.STL"/>
+        <mesh filename="$(find hexapod_pkg)/meshes/connect.STL"/>
       </geometry>
           <material name="Blue">
             <color rgba="0.0 0.0 0.2 1.0"/>
@@ -82,7 +82,7 @@
     <collision>
         <origin xyz="0 -${connect_offset} 0"/>
         <geometry>
-          <mesh filename="$(find hexapot_pkg)/meshes/connect_coll.STL"/>
+          <mesh filename="$(find hexapod_pkg)/meshes/connect_coll.STL"/>
         </geometry>
       </collision>
     </link>
@@ -111,7 +111,7 @@
       <visual>
         <origin xyz="0 0 0"/>
         <geometry>
-          <mesh filename="$(find hexapot_pkg)/meshes/thigh_l.STL"/>
+          <mesh filename="$(find hexapod_pkg)/meshes/thigh_l.STL"/>
         </geometry>
           <material name="Grey">
             <color rgba="0.20 0.20 0.20 1.0"/>
@@ -121,7 +121,7 @@
       <collision>
         <origin xyz="0 0 0"/>
         <geometry>
-          <mesh filename="$(find hexapot_pkg)/meshes/thigh_l_coll.STL"/>
+          <mesh filename="$(find hexapod_pkg)/meshes/thigh_l_coll.STL"/>
         </geometry>
       </collision>
     </link>
@@ -150,7 +150,7 @@
       <visual>
         <origin xyz="0 0 0"/>
         <geometry>
-          <mesh filename="$(find hexapot_pkg)/meshes/tibia_l.STL"/>
+          <mesh filename="$(find hexapod_pkg)/meshes/tibia_l.STL"/>
         </geometry>
           <material name="Blue">
             <color rgba="0.0 0.0 0.2 1.0"/>
@@ -160,7 +160,7 @@
       <collision>
         <origin xyz="0 0 0"/>
         <geometry>
-          <mesh filename="$(find hexapot_pkg)/meshes/tibia_l_coll.STL"/>
+          <mesh filename="$(find hexapod_pkg)/meshes/tibia_l_coll.STL"/>
         </geometry>
       </collision>
     </link>

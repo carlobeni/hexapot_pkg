@@ -10,7 +10,7 @@ from std_msgs.msg import Float32
 class UltrasonicRangeFast(Node):
 
     def __init__(self):
-        super().__init__('ultrasonic_range_fast')
+        super().__init__('sensor_ultrasonic')
 
         # ================= PARÁMETROS =================
         self.min_valid = 0.02    # 2 cm

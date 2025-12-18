@@ -72,8 +72,8 @@ def generate_launch_description():
                 # ===== FAST LISTENER =====
                 Node(
                     package="hexapod_pkg",
-                    executable="sensors_fast_listener_node.py",
-                    name="sensors_fast_listener",
+                    executable="dds_sensors_fast_listener.py",
+                    name="dds_sensors_fast_listener",
                     output="screen",
                     parameters=[{
                         "qos_reliability": "best_effort",
@@ -85,8 +85,8 @@ def generate_launch_description():
                 # ===== RELIABLE LISTENER =====
                 Node(
                     package="hexapod_pkg",
-                    executable="sensors_reliable_listener_node.py",
-                    name="sensors_reliable_listener",
+                    executable="dds_sensors_reliable_listener.py",
+                    name="dds_sensors_reliable_listener",
                     output="screen",
                     parameters=[{
                         "qos_reliability": "reliable",
@@ -98,8 +98,8 @@ def generate_launch_description():
                 # ===== COMMAND TALKER =====
                 Node(
                     package="hexapod_pkg",
-                    executable="command_talker_node.py",
-                    name="command_talker",
+                    executable="dds_cmd_talker.py",
+                    name="dds_cmd_talker",
                     output="screen",
                     parameters=[{
                         "qos_reliability": "reliable",
@@ -137,8 +137,8 @@ def generate_launch_description():
                 # ===== MONITOR =====
                 Node(
                     package="hexapod_pkg",
-                    executable="monitor_node_pc.py",
-                    name="monitor_node_pc",
+                    executable="dds_monitor_pc.py",
+                    name="dds_monitor_pc",
                     output="screen",
                     prefix=["xterm -hold -e"],
                     parameters=[{

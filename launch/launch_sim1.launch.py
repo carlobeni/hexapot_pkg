@@ -41,7 +41,10 @@ def generate_launch_description():
             parameters=[twist_mux_params, {'use_sim_time': True}],
             remappings=[('/cmd_vel_out','/diff_cont/cmd_vel_unstamped')]
         )
-
+    
+    # =====================================================
+    # NODOS Y PRELAUNCHERS DE GAZEBO
+    # =====================================================
 
     default_world = os.path.join(
         get_package_share_directory(package_name),
@@ -71,7 +74,6 @@ def generate_launch_description():
                                    '-z', '0.02'],
                         output='screen')
 
-
     joint_state_broadcaster_spawner = Node(
         package="controller_manager",
         executable="spawner",
@@ -83,9 +85,6 @@ def generate_launch_description():
         executable="spawner",
         arguments=["joint_trajectory_controller"],
     )
-
-
-
 
     bridge_params = os.path.join(get_package_share_directory(package_name),'config','gz_bridge.yaml')
     ros_gz_bridge = Node(
@@ -104,63 +103,86 @@ def generate_launch_description():
         arguments=["/camera/image_raw"]
     )
 
-
-    heading_estimator = Node(
+    # Emula y gestiona el sensor IR de la simulacion
+    gz_ir_emulator = Node(
     package='hexapod_pkg',
-    executable='noise_compute_heading.py',
-    name='heading_estimator',
-    output='screen',
-    )
-    # OBS: Calcula el heading
-
-    gps_to_local_xy = Node(
-    package='hexapod_pkg',
-    executable='noise_gps_to_local_xy.py',
-    name='gps_to_local_xy',
-    output='screen',
-    )
-    # OBS: Coordenadas metricas respecto al LAR donde la X+ es el polo magnetico con +Y
-
-
-    corrected_stimate_xy = Node(
-    package='hexapod_pkg',
-    executable='corrected_stimate_xy.py',
-    name='corrected_stimate_xy',
-    output='screen',
-    )
-    # OBS: Partiendo de una posicion inicial, calcula la posicion actual en (x,y)
-
-    # cinematica inversa
-    hexapod_low_level_control = Node(
-    package='hexapod_pkg',
-    executable='hexapod_low_level_control.py',
-    name='hexapod_low_level_control',
+    executable='gz_ir_emulator.py',
+    name='gz_ir_emulator',
     output='screen'
     )
-    # OBS: El robot se mueve publicando en hl/cmd tipic de control
 
-    ultrasonic_range = Node(
+    # Gestiona la cinematica inversa del hexapodo de la simulacion
+    # subsbriver topics:
+    # pubbrizer topics:
+    gz_hexapod_inverse_kinematics = Node(
     package='hexapod_pkg',
-    executable='ultrasonic_range.py',
-    name='ultrasonic_range',
+    executable='gz_hexapod_inv_kinematics.py',
+    name='gz_hexapod_inv_kinematics',
     output='screen'
     )
-    # OBS: Transorma del RANGE a longitudes del ultrasonico en m, si no detecta nada manda -1
 
-    ir_emulator = Node(
+    # =====================================================
+    # NODOS DE GESTION DE LAS SENSORES
+    # =====================================================
+    # Gestiona el sensor ultrasonico con
+    # -1: no detecta nada
+    # valor positivo: distancia a la que se le asigna el rango
+    # subsbriver topics:
+    # pubbrizer topics:
+    sensor_ultrasonic = Node(
     package='hexapod_pkg',
-    executable='ir_gazebo_ros_emulator.py',
-    name='ir_emulator',
+    executable='sensor_ultrasonic.py',
+    name='sensor_ultrasonic',
     output='screen'
     )
-    # OBS: Emula los sensores IR y publica sus estados
 
+    # =====================================================
+    # NODOS DE COMPUTO
+    # =====================================================
 
+    # Calcula la posicion del robot respecto a un punto definido
+    #empleando unicamente el GPS
+    # subsbriver topics:
+    # pubbrizer topics:
+    compute_gps_to_local_xy = Node(
+    package='hexapod_pkg',
+    executable='compute_gps_to_local_xy.py',
+    name='compute_gps_to_local_xy',
+    output='screen',
+    )
+
+    # Calcula la posicion de un robot respecto a un punto definido
+    #empleando el GPS de la posicion inical, el heading y una 
+    #velocidad constante
+    # subsbriver topics:
+    # pubbrizer topics:
+    compute_stimate_xy = Node(
+    package='hexapod_pkg',
+    executable='compute_stimate_xy.py',
+    name='compute_stimate_xy',
+    output='screen',
+    )
+
+    # Calcula el heading aplicando filtro Kalman
+    # subsbriver topics:
+    # pubbrizer topics:
+    compute_heading = Node(
+    package='hexapod_pkg',
+    executable='compute_heading.py',
+    name='compute_heading',
+    output='screen',
+    )
+
+    # =====================================================
+    # NODOS MANAGER
+    # =====================================================
+    # In developments
 
     # Launch them all!
     return LaunchDescription([
         rsp,
         joystick,
+
         twist_mux,
         world_arg,
         gazebo,
@@ -169,10 +191,12 @@ def generate_launch_description():
         joint_trajectory_controller_spawner,
         ros_gz_bridge,
         ros_gz_image_bridge,
-        heading_estimator,
-        gps_to_local_xy,
-        corrected_stimate_xy,
-        ultrasonic_range,
-        ir_emulator,
-        hexapod_low_level_control
+        gz_ir_emulator,
+        gz_hexapod_inverse_kinematics,
+
+        sensor_ultrasonic,
+
+        compute_heading,
+        compute_gps_to_local_xy,
+        compute_stimate_xy,
     ])

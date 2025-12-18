@@ -27,13 +27,14 @@ def generate_launch_description():
     cleanup = ExecuteProcess(
         cmd=[
             "bash", "-c",
-            "pkill -f sensors_fast_listener_node.py || true; "
-            "pkill -f sensors_reliable_listener_node.py || true; "
-            "pkill -f command_talker_node.py || true; "
-            "pkill -f monitor_node_pc.py || true; "
-            "pkill -f teleop_twist_keyboard || true; "
+            "pkill -f dds_sensors_fast_listener.py || true; "
+            "pkill -f dds_sensors_reliable_listener.py || true; "
+            "pkill -f dds_cmd_talker.py || true; "
+            "pkill -f dds_monitor_pc.py || true; "            
+            "pkill -f teleop_twist_keyboard || true; "            
             "pkill -f cmd_vel_relay_node.py || true"
-            "pkill -f heading_estimator_node.py || true"
+            "pkill -f compute_heading_kalman.py || true"
+            
         ],
         output="screen"
     )
@@ -168,8 +169,8 @@ def generate_launch_description():
     # =====================================================
     sensors_fast_listener = Node(
         package="hexapod_pkg",
-        executable="sensors_fast_listener_node.py",
-        name="sensors_fast_listener",
+        executable="dds_sensors_fast_listener.py",
+        name="dds_sensors_fast_listener",
         output="screen",
         parameters=[{
             "qos_reliability": "best_effort",
@@ -179,8 +180,8 @@ def generate_launch_description():
 
     sensors_reliable_listener = Node(
         package="hexapod_pkg",
-        executable="sensors_reliable_listener_node.py",
-        name="sensors_reliable_listener",
+        executable="dds_sensors_reliable_listener.py",
+        name="dds_sensors_reliable_listener",
         output="screen",
         parameters=[{
             "qos_reliability": "reliable",
@@ -190,8 +191,8 @@ def generate_launch_description():
 
     command_talker = Node(
         package="hexapod_pkg",
-        executable="command_talker_node.py",
-        name="command_talker",
+        executable="dds_cmd_talker.py",
+        name="dds_cmd_talker",
         output="screen",
         parameters=[{
             "qos_reliability": "reliable",
@@ -201,8 +202,8 @@ def generate_launch_description():
 
     est_heading_compass = Node(
         package="hexapod_pkg",
-        executable="heading_estimator_node.py",
-        name="heading_estimator",
+        executable="compute_heading_kalman.py",
+        name="compute_heading_kalman",
         output="screen",
         parameters=[{
             "qos_reliability": "reliable",
@@ -212,8 +213,8 @@ def generate_launch_description():
 
     monitor = Node(
         package="hexapod_pkg",
-        executable="monitor_node_pc.py",
-        name="monitor_node_pc",
+        executable="dds_monitor_pc.py",
+        name="dds_monitor_pc",
         output="screen",
         prefix=["xterm -hold -e"],
         parameters=[{

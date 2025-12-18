@@ -10,7 +10,7 @@ import time
 class IREmulator(Node):
 
     def __init__(self):
-        super().__init__("ir_emulator")
+        super().__init__("gz_ir_emulator")
 
         # ==============================
         # Parámetros del sensor IR

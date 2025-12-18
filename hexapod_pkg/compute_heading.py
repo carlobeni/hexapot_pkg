@@ -12,7 +12,7 @@ import math
 class HeadingEstimatorFast(Node):
 
     def __init__(self):
-        super().__init__('heading_estimator_fast')
+        super().__init__('compute_heading')
 
         # ================= PARÁMETROS =================
         self.declination_deg = -15.5       # declinación magnética

@@ -9,7 +9,7 @@ from rclpy.qos import qos_profile_sensor_data
 
 class PoseEstimator(Node):
     def __init__(self):
-        super().__init__('pose_estimator')
+        super().__init__('compute_stimate_xy')
 
         # ======================
         # Parámetros

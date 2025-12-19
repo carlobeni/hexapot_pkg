@@ -22,9 +22,10 @@ class CommandTalker(Node):
         self.declare_parameter("cmd_robot_topic", "/cmd_robot")
         self.declare_parameter("cmd_serial_topic", "/cmd_serial")
 
+        # valores por defecto, de hecho son establecidos en dds_base.launch.py
         self.declare_parameter("linear_speed", 60) # velocidad lineal
         self.declare_parameter("angular_speed", 5) # velocidad angular
-        self.declare_parameter("walk_yaw_trim", 0) # commpensation de movimiento lateral y lineal
+        self.declare_parameter("walk_yaw_trim", -3) # commpensation de movimiento lateral y lineal
 
         self.declare_parameter("qos_depth", 10)
 
@@ -100,10 +101,10 @@ class CommandTalker(Node):
 
         # ---- ROTACIÓN ----
         elif cmd == "turn_left":
-            serial_cmd = f"ROT 0 {self.v_ang} 0 0"
+            serial_cmd = f"WALK 0 0 {(self.v_ang+self.walk_yaw_trim)}"
 
         elif cmd == "turn_right":
-            serial_cmd = f"ROT 0 {-self.v_ang} 0 0"
+            serial_cmd = f"WALK 0 0 {-(self.v_ang+self.walk_yaw_trim)}"
 
         # ---- STOP ----
         elif cmd == "stop":

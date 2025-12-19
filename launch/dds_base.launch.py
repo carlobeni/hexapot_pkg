@@ -79,7 +79,7 @@ def generate_launch_description():
                         "cmd_serial_topic": cfg.TOPIC_CMD_SERIAL,
                         "linear_speed": 60,
                         "angular_speed": 5,
-                        "walk_yaw_trim": 0,
+                        "walk_yaw_trim": 3,
                     }],
                 ),
 

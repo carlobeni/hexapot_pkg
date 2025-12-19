@@ -49,42 +49,42 @@
   direction: GZ_TO_ROS
 
 # IMU
-- ros_topic_name: "sensor/raw_data/imu"
+- ros_topic_name: "/gz/sensor/imu_data"
   gz_topic_name: "/imu"
   ros_type_name: "sensor_msgs/msg/Imu"
   gz_type_name: "gz.msgs.IMU"
   direction: GZ_TO_ROS 
 
   # Magnetometer
-- ros_topic_name: "sensor/raw_data/magnetometer"
+- ros_topic_name: "/gz/sensor/imu_mag"
   gz_topic_name: "/magnetometer"
   ros_type_name: "sensor_msgs/msg/MagneticField"
   gz_type_name: "gz.msgs.Magnetometer"
   direction: GZ_TO_ROS
 
 # GPS
-- ros_topic_name: "sensor/raw_data/gps"
+- ros_topic_name: "/gz/sensor/gps_fix"
   gz_topic_name: "/nav_msgs"
   ros_type_name: "sensor_msgs/msg/NavSatFix"
   gz_type_name: "gz.msgs.NavSat"
   direction: GZ_TO_ROS 
 
 # Ultrasonic sensor 
-- ros_topic_name: "sensor/raw_data/ultrasonic"
+- ros_topic_name: "/gz/sensor/ultrasonic_read"
   gz_topic_name: "/ultrasonic/scan"
   ros_type_name: "sensor_msgs/msg/Range"
   gz_type_name: "gz.msgs.LaserScan"
   direction: GZ_TO_ROS
 
 # IR left sensor 
-- ros_topic_name: "sensor/simulation/raw_data/ir_left_sensor"
+- ros_topic_name: "/gz/sensor/IR_measure1"
   gz_topic_name: "/sensor/gazebo_ir_left_sensor"
   ros_type_name: "sensor_msgs/msg/Range"
   gz_type_name: "gz.msgs.LaserScan"
   direction: GZ_TO_ROS
 
 # IR right sensor 
-- ros_topic_name: "sensor/simulation/raw_data/ir_right_sensor"
+- ros_topic_name: "/gz/sensor/IR_measure2"
   gz_topic_name: "/sensor/gazebo_ir_right_sensor"
   ros_type_name: "sensor_msgs/msg/Range"
   gz_type_name: "gz.msgs.LaserScan"

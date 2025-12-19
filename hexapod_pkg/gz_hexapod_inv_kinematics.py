@@ -341,7 +341,7 @@ class LateralRightGait(LateralCrabBase):
 # ============================================================
 class HLHexapodBridge(Node):
     def __init__(self):
-        super().__init__("hl_hexapod_bridge")
+        super().__init__("gz_hexapod_inv_kinematics")
 
         self.create_subscription(String, "/hl_cmd", self.cb_cmd, 10)
 

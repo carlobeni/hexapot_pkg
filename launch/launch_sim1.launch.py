@@ -196,7 +196,7 @@ def generate_launch_description():
 
         sensor_ultrasonic,
 
-        compute_heading,
-        compute_gps_to_local_xy,
-        compute_stimate_xy,
+        #compute_heading,
+        #compute_gps_to_local_xy,
+        #compute_stimate_xy,
     ])

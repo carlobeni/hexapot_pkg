@@ -20,7 +20,7 @@ from rclpy.qos import (
     DurabilityPolicy
 )
 
-import hw_config as cfg
+import hexapod_pkg.hexapod_pkg.hw_config as cfg
 
 
 class MonitorNode(Node):

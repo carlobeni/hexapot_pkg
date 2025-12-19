@@ -7,7 +7,7 @@ from sensor_msgs.msg import Imu, MagneticField
 from sensor_msgs.msg import Range, CompressedImage
 from std_msgs.msg import Int32MultiArray, Float64
 from rclpy.qos import QoSProfile, ReliabilityPolicy, HistoryPolicy
-import hw_config as cfg
+import hexapod_pkg.hexapod_pkg.hw_config as cfg
 
 class SensorsFastListener(Node):
     def __init__(self):

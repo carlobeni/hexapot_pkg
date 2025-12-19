@@ -6,7 +6,7 @@ from rclpy.node import Node
 from sensor_msgs.msg import NavSatFix
 from std_msgs.msg import String
 from rclpy.qos import QoSProfile, ReliabilityPolicy, HistoryPolicy
-import hw_config as cfg
+import hexapod_pkg.hexapod_pkg.hw_config as cfg
 
 class SensorsReliableListener(Node):
     def __init__(self):

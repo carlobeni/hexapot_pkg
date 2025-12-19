@@ -1,9 +1,9 @@
 #!/usr/bin/env python3
+# dds_base.launch.py
 
 import os
 
 from ament_index_python.packages import get_package_share_directory
-
 from launch import LaunchDescription
 from launch_ros.actions import Node
 from launch.actions import ExecuteProcess, TimerAction
@@ -14,23 +14,22 @@ def generate_launch_description():
     package_name = "hexapod_pkg"
 
     # =====================================================
-    # LIMPIEZA PREVIA
+    # LIMPIEZA PREVIA (EVITA NODOS DUPLICADOS)
     # =====================================================
     cleanup = ExecuteProcess(
         cmd=[
             "bash", "-c",
-            "pkill -f sensors_fast_listener_node.py || true; "
-            "pkill -f sensors_reliable_listener_node.py || true; "
-            "pkill -f command_talker_node.py || true; "
-            "pkill -f monitor_node_pc.py || true; "
-            "pkill -f heading_estimator_node.py || true; "
+            "pkill -f dds_sensors_fast_listener.py || true; "
+            "pkill -f dds_sensors_reliable_listener.py || true; "
+            "pkill -f dds_cmd_talker.py || true; "
+            "pkill -f dds_monitor_pc.py || true; "
             "pkill -f twist_mux || true"
         ],
         output="screen"
     )
 
     # =====================================================
-    # TWIST_MUX
+    # TWIST_MUX (ARBÍTRO DE VELOCIDADES)
     # =====================================================
     twist_mux_params = os.path.join(
         get_package_share_directory(package_name),
@@ -47,21 +46,20 @@ def generate_launch_description():
             twist_mux_params,
             {"use_sim_time": False}
         ],
-        # 🔑 salida estándar del mux
         remappings=[
             ("/cmd_vel_out", "/cmd_vel_robot")
         ],
     )
 
     # =====================================================
-    # LAUNCH
+    # LAUNCH DESCRIPTION
     # =====================================================
     return LaunchDescription([
 
-        # ===== LIMPIEZA =====
+        # -------- LIMPIEZA --------
         cleanup,
 
-        # Espera corta (mantienes tu enfoque)
+        # -------- ESPERA CORTA --------
         TimerAction(
             period=1.0,
             actions=[
@@ -69,7 +67,7 @@ def generate_launch_description():
                 # ===== TWIST MUX =====
                 twist_mux,
 
-                # ===== FAST LISTENER =====
+                # ===== DDS FAST LISTENER =====
                 Node(
                     package="hexapod_pkg",
                     executable="dds_sensors_fast_listener.py",
@@ -82,7 +80,7 @@ def generate_launch_description():
                     }],
                 ),
 
-                # ===== RELIABLE LISTENER =====
+                # ===== DDS RELIABLE LISTENER =====
                 Node(
                     package="hexapod_pkg",
                     executable="dds_sensors_reliable_listener.py",
@@ -95,7 +93,7 @@ def generate_launch_description():
                     }],
                 ),
 
-                # ===== COMMAND TALKER =====
+                # ===== DDS COMMAND TALKER =====
                 Node(
                     package="hexapod_pkg",
                     executable="dds_cmd_talker.py",
@@ -108,19 +106,18 @@ def generate_launch_description():
                     }],
                 ),
 
-                # ===== KEYBOARD TELEOP =====
+                # ===== TELEOP TECLADO =====
                 Node(
                     package="teleop_twist_keyboard",
                     executable="teleop_twist_keyboard",
                     name="teleop",
                     output="screen",
                     prefix=["xterm -hold -e"],
-                    # sin remaps: teleop publica /cmd_vel
                 ),
 
                 # =====================================================
-                # RELAY: /cmd_vel  ->  /cmd_vel_robot  y  /diff_cont/cmd_vel_unstamped
-                # (ESTO ES LO QUE TE FALTABA: copiar datos realmente)
+                # CMD_VEL RELAY
+                # /cmd_vel → /cmd_vel_robot
                 # =====================================================
                 Node(
                     package="hexapod_pkg",
@@ -130,11 +127,10 @@ def generate_launch_description():
                     parameters=[{
                         "input_topic": "/cmd_vel",
                         "out_robot_topic": "/cmd_vel_robot",
-                        #"out_sim_topic": "/diff_cont/cmd_vel_unstamped",
                     }],
                 ),
 
-                # ===== MONITOR =====
+                # ===== MONITOR PC =====
                 Node(
                     package="hexapod_pkg",
                     executable="dds_monitor_pc.py",

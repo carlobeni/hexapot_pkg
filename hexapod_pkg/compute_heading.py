@@ -1,66 +1,103 @@
 #!/usr/bin/env python3
 # compute_heading.py
+
 import rclpy
 from rclpy.node import Node
 from rclpy.qos import qos_profile_sensor_data
 
 from sensor_msgs.msg import Imu, MagneticField
 from std_msgs.msg import Float32
-import random
+
 import math
+import random
 
 
 class HeadingEstimatorFast(Node):
 
     def __init__(self):
-        super().__init__('compute_heading')
+        super().__init__("compute_heading")
 
-        # ================= PARÁMETROS =================
-        self.declination_deg = -15.5       # declinación magnética
-        self.heading_gain   = 1.125        # corrección de escala
-        self.alpha          = 0.95         # 1=solo IMU, 0=solo MAG
+        # =====================================================
+        # PARÁMETROS (CONFIGURABLES DESDE EL LAUNCHER)
+        # =====================================================
+        self.declare_parameter("imu_topic", "/sensor/raw_data/imu")
+        self.declare_parameter("mag_topic", "/sensor/raw_data/magnetometer")
+        self.declare_parameter("output_topic", "/localization/heading_deg")
 
-        self.swap_xy        = False
-        self.invert_mag_x   = False
-        self.invert_mag_y   = False
+        self.declare_parameter("declination_deg", -15.5)
+        self.declare_parameter("heading_gain", 1.125)
+        self.declare_parameter("alpha", 0.95)
 
+        self.declare_parameter("swap_xy", False)
+        self.declare_parameter("invert_mag_x", False)
+        self.declare_parameter("invert_mag_y", False)
+
+        self.declare_parameter("heading_noise_deg", 1.5)
+
+        # =====================================================
+        # LECTURA DE PARÁMETROS
+        # =====================================================
+        imu_topic = self.get_parameter("imu_topic").value
+        mag_topic = self.get_parameter("mag_topic").value
+        output_topic = self.get_parameter("output_topic").value
+
+        self.declination_deg = self.get_parameter("declination_deg").value
+        self.heading_gain = self.get_parameter("heading_gain").value
+        self.alpha = self.get_parameter("alpha").value
+
+        self.swap_xy = self.get_parameter("swap_xy").value
+        self.invert_mag_x = self.get_parameter("invert_mag_x").value
+        self.invert_mag_y = self.get_parameter("invert_mag_y").value
+
+        heading_noise_deg = self.get_parameter("heading_noise_deg").value
+
+        # =====================================================
+        # CONSTANTES DERIVADAS
+        # =====================================================
         self.declination_rad = math.radians(self.declination_deg)
+        self.heading_noise_rad = math.radians(heading_noise_deg)
 
-        # ================= RUIDO ARTIFICIAL =================
-        self.heading_noise_deg = 1.5
-        self.heading_noise_rad = math.radians(self.heading_noise_deg)
-
-        # ================= ESTADO =====================
+        # =====================================================
+        # ESTADO
+        # =====================================================
         self.last_mag = None
 
-        # ================= ROS ========================
+        # =====================================================
+        # ROS I/O
+        # =====================================================
         self.create_subscription(
             Imu,
-            'sensor/raw_data/imu',
+            imu_topic,
             self.imu_cb,
-            qos_profile_sensor_data
+            qos_profile_sensor_data,
         )
 
         self.create_subscription(
             MagneticField,
-            'sensor/raw_data/magnetometer',
+            mag_topic,
             self.mag_cb,
-            qos_profile_sensor_data
+            qos_profile_sensor_data,
         )
 
         self.pub = self.create_publisher(
             Float32,
-            '/localization/heading_deg',
-            qos_profile_sensor_data
+            output_topic,
+            qos_profile_sensor_data,
         )
 
+        # =====================================================
+        # LOG
+        # =====================================================
         self.get_logger().info(
-            f"Heading FAST | decl={self.declination_deg}° alpha={self.alpha}"
+            f"Heading FAST READY | imu={imu_topic} mag={mag_topic} → {output_topic}"
+        )
+        self.get_logger().info(
+            f"decl={self.declination_deg}° alpha={self.alpha} gain={self.heading_gain}"
         )
 
-    # =================================================
-    #                     CALLBACKS
-    # =================================================
+    # =====================================================
+    # CALLBACKS
+    # =====================================================
     def mag_cb(self, msg: MagneticField):
         self.last_mag = msg.magnetic_field
 
@@ -75,7 +112,7 @@ class HeadingEstimatorFast(Node):
             q.x, q.y, q.z, q.w,
             self.last_mag.x,
             self.last_mag.y,
-            self.last_mag.z
+            self.last_mag.z,
         )
 
         # ---- FUSIÓN COMPLEMENTARIA ----
@@ -86,23 +123,23 @@ class HeadingEstimatorFast(Node):
         fused *= self.heading_gain
         fused = self.normalize(fused)
 
-        # ---- RUIDO ARTIFICIAL DE HEADING ----
+        # ---- RUIDO ARTIFICIAL ----
         noise = random.gauss(0.0, self.heading_noise_rad)
         fused += noise
         fused = self.normalize(fused)
 
-        # ---- A GRADOS ----
+        # ---- A GRADOS [0, 360) ----
         deg = math.degrees(fused)
-        if deg < 0:
+        if deg < 0.0:
             deg += 360.0
 
         out = Float32()
         out.data = float(deg)
         self.pub.publish(out)
 
-    # =================================================
-    #               MAGNETIC HEADING
-    # =================================================
+    # =====================================================
+    # MAGNETIC HEADING
+    # =====================================================
     def compute_mag_heading(self, qx, qy, qz, qw, mx, my, mz):
 
         # --- Correcciones de ejes ---
@@ -113,11 +150,11 @@ class HeadingEstimatorFast(Node):
         if self.invert_mag_y:
             my = -my
 
-        # --- Rotación cuerpo → mundo (solo XY) ---
-        r00 = 1 - 2*(qy*qy + qz*qz)
-        r01 = 2*(qx*qy - qz*qw)
-        r10 = 2*(qx*qy + qz*qw)
-        r11 = 1 - 2*(qx*qx + qz*qz)
+        # --- Rotación cuerpo → mundo (plano XY) ---
+        r00 = 1 - 2 * (qy*qy + qz*qz)
+        r01 = 2 * (qx*qy - qz*qw)
+        r10 = 2 * (qx*qy + qz*qw)
+        r11 = 1 - 2 * (qx*qx + qz*qz)
 
         mwx = r00 * mx + r01 * my
         mwy = r10 * mx + r11 * my
@@ -125,13 +162,12 @@ class HeadingEstimatorFast(Node):
         heading = math.atan2(mwy, mwx)
         heading = self.normalize(heading)
 
-        # declinación
         heading += self.declination_rad
         return self.normalize(heading)
 
-    # =================================================
-    #                 UTILIDADES
-    # =================================================
+    # =====================================================
+    # UTILIDADES
+    # =====================================================
     @staticmethod
     def quaternion_to_yaw(x, y, z, w):
         siny_cosp = 2.0 * (w*z + x*y)
@@ -141,9 +177,9 @@ class HeadingEstimatorFast(Node):
     @staticmethod
     def normalize(a):
         if a > math.pi:
-            a -= 2*math.pi
+            a -= 2 * math.pi
         elif a < -math.pi:
-            a += 2*math.pi
+            a += 2 * math.pi
         return a
 
 
@@ -162,4 +198,3 @@ def main(args=None):
 
 if __name__ == "__main__":
     main()
-

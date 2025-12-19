@@ -14,7 +14,7 @@ from rclpy.qos import (
     DurabilityPolicy
 )
 
-import hw_config as cfg
+import hexapod_pkg.launch.hw_config as cfg
 
 
 class CommandTalker(Node):

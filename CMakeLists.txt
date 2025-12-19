@@ -76,6 +76,7 @@ install(PROGRAMS
 
   # Nodos utils
   hexapod_pkg/utils/cmd_vel_relay_node.py # nodo para difusion de robot+gazebo
+  hexapod_pkg/utils/twist_to_cmd_robot.py
 
   # Files utils
   hexapod_pkg/utils/test2.py

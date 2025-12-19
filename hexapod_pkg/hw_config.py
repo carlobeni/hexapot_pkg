@@ -39,7 +39,8 @@ TOPIC_HEADING_COMPASS    = "/pc/internal/heading_mag"     # heading solo magnet√
 TOPIC_HEADING_COMPASS_KALMAN = "/pc/internal/heading_kalman"  # heading fusionado (PC)
 
 # ================= COMMAND =================
-TOPIC_CMD_SERIAL_MEGA = "/cmd_serial"
-TOPIC_CMD_VEL_ROBOT = "/cmd_vel_robot"
-TOPIC_CMD_SERIAL = "/cmd_serial"
+TOPIC_CMD_REAL_ROBOT = "/real_cmd" 
+TOPIC_CMD_GZ_ROBOT = "/hl_cmd"
+# TOPIC CMD SERIAL DE SALIDA
+TOPIC_CMD_SERIAL = "/pc/out/cmd_serial"
 

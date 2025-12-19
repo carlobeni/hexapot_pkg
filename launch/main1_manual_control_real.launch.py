@@ -5,10 +5,9 @@ import os
 
 from launch import LaunchDescription
 from launch_ros.actions import Node
-from launch.actions import IncludeLaunchDescription
+from launch.actions import IncludeLaunchDescription, TimerAction
 from launch.launch_description_sources import PythonLaunchDescriptionSource
 from ament_index_python.packages import get_package_share_directory
-
 
 from hexapod_pkg import hw_config as cfg
 
@@ -18,7 +17,7 @@ def generate_launch_description():
     package_name = "hexapod_pkg"
 
     # =====================================================
-    # BASE DE COMUNICACION DDS
+    # BASE DDS
     # =====================================================
     real_base = IncludeLaunchDescription(
         PythonLaunchDescriptionSource(
@@ -30,11 +29,32 @@ def generate_launch_description():
         )
     )
 
-    # =====================================================
-    # NODOS DE CÓMPUTO (USAN TOPICS DE LA PI)
-    # =====================================================
+    # =================================================
+    # TELEOP TECLADO
+    # =================================================
+    key_teleop = Node(
+        package="teleop_twist_keyboard",
+        executable="teleop_twist_keyboard",
+        name="teleop",
+        output="screen",
+        prefix=["xterm -hold -e"],
+    )
 
-    # ---- HEADING ----
+    twist_to_cmd_robot = Node(
+        package="hexapod_pkg",
+        executable="twist_to_cmd_robot.py",
+        name="twist_to_cmd_robot",
+        output="screen",
+        parameters=[{
+            "twist_topic": "/cmd_vel",
+            "cmd_robot_topic": cfg.TOPIC_CMD_REAL_ROBOT,
+            "deadzone": 0.05,
+        }],
+    )
+
+    # =================================================
+    # COMPUTE
+    # =================================================
     compute_heading = Node(
         package=package_name,
         executable="compute_heading.py",
@@ -47,7 +67,6 @@ def generate_launch_description():
         }],
     )
 
-    # ---- GPS → LOCAL XY ----
     compute_gps_to_local_xy = Node(
         package=package_name,
         executable="compute_gps_to_local_xy.py",
@@ -56,14 +75,11 @@ def generate_launch_description():
         parameters=[{
             "gps_topic": cfg.TOPIC_PI_GPS,
             "output_topic": "/localization/gps/local_xy",
-
-            # Origen fijo
             "origin_lat_deg": -25.330480,
             "origin_lon_deg": -57.518124,
         }],
     )
 
-    # ---- ESTIMADOR DE POSICION ----
     compute_stimate_xy = Node(
         package=package_name,
         executable="compute_stimate_xy.py",
@@ -74,7 +90,6 @@ def generate_launch_description():
             "heading_topic": cfg.TOPIC_HEADING_COMPASS,
             "hl_cmd_topic": "/hl_cmd",
             "output_topic": "/localization/local_stimate_xy",
-
             "velocity": 0.06,
             "alpha": 1.0,
             "update_rate": 20.0,
@@ -82,11 +97,20 @@ def generate_launch_description():
     )
 
     # =====================================================
-    # LAUNCH DESCRIPTION
+    # LAUNCH
     # =====================================================
     return LaunchDescription([
         real_base,
-        compute_heading,
-        compute_gps_to_local_xy,
-        compute_stimate_xy,
+
+        # Espera a que DDS esté listo
+        TimerAction(
+            period=1.0,
+            actions=[
+                key_teleop,
+                twist_to_cmd_robot,
+                compute_heading,
+                compute_gps_to_local_xy,
+                compute_stimate_xy,
+            ]
+        ),
     ])

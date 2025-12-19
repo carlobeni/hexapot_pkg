@@ -1,4 +1,6 @@
 #!/usr/bin/env python3
+# gazebo_base.launch.py
+
 import os
 
 from ament_index_python.packages import get_package_share_directory
@@ -33,7 +35,7 @@ def generate_launch_description():
     )
 
     # =====================================================
-    # ROBOT STATE + JOYSTICK (SIM TIME)
+    # ROBOT STATE
     # =====================================================
     rsp = IncludeLaunchDescription(
         PythonLaunchDescriptionSource(
@@ -47,36 +49,6 @@ def generate_launch_description():
             "use_sim_time": "true",
             "use_ros2_control": "true",
         }.items(),
-    )
-
-    joystick = IncludeLaunchDescription(
-        PythonLaunchDescriptionSource(
-            os.path.join(
-                get_package_share_directory(package_name),
-                "launch",
-                "joystick.launch.py",
-            )
-        ),
-        launch_arguments={"use_sim_time": "true"}.items(),
-    )
-
-    # =====================================================
-    # TWIST MUX
-    # =====================================================
-    twist_mux_params = os.path.join(
-        get_package_share_directory(package_name),
-        "config",
-        "twist_mux.yaml",
-    )
-
-    twist_mux = Node(
-        package="twist_mux",
-        executable="twist_mux",
-        parameters=[twist_mux_params, {"use_sim_time": True}],
-        remappings=[
-            ("/cmd_vel_out", "/diff_cont/cmd_vel_unstamped")
-        ],
-        output="screen",
     )
 
     # =====================================================
@@ -162,7 +134,8 @@ def generate_launch_description():
     )
 
     # =====================================================
-    # CINEMÁTICA INVERSA (SIM)
+    # CINEMÁTICA INVERSA
+    # OBS: este nodo aguarda que se publique en cfg.TOPIC_CMD_GZ_ROBOT para mover el robot
     # =====================================================
     gz_hexapod_inverse_kinematics = Node(
         package="hexapod_pkg",
@@ -178,8 +151,6 @@ def generate_launch_description():
         [
             world_arg,
             rsp,
-            joystick,
-            twist_mux,
             gazebo,
             spawn_entity,
             joint_state_broadcaster_spawner,

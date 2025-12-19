@@ -2,11 +2,12 @@
 # dds_base.launch.py
 
 import os
-
 from ament_index_python.packages import get_package_share_directory
 from launch import LaunchDescription
 from launch_ros.actions import Node
 from launch.actions import ExecuteProcess, TimerAction
+
+from hexapod_pkg import hw_config as cfg
 
 
 def generate_launch_description():
@@ -14,123 +15,77 @@ def generate_launch_description():
     package_name = "hexapod_pkg"
 
     # =====================================================
-    # LIMPIEZA PREVIA (EVITA NODOS DUPLICADOS)
+    # LIMPIEZA PREVIA (solo nodos de esta base)
     # =====================================================
     cleanup = ExecuteProcess(
         cmd=[
             "bash", "-c",
             "pkill -f dds_sensors_fast_listener.py || true; "
             "pkill -f dds_sensors_reliable_listener.py || true; "
-            "pkill -f dds_cmd_talker.py || true; "
-            "pkill -f dds_monitor_pc.py || true; "
-            "pkill -f twist_mux || true"
+            "pkill -f dds_cmd_talker.py || true"
         ],
         output="screen"
     )
 
-    # =====================================================
-    # TWIST_MUX (ARBÍTRO DE VELOCIDADES)
-    # =====================================================
-    twist_mux_params = os.path.join(
-        get_package_share_directory(package_name),
-        "config",
-        "twist_mux.yaml"
-    )
-
-    twist_mux = Node(
-        package="twist_mux",
-        executable="twist_mux",
-        name="twist_mux",
-        output="screen",
-        parameters=[
-            twist_mux_params,
-            {"use_sim_time": False}
-        ],
-        remappings=[
-            ("/cmd_vel_out", "/cmd_vel_robot")
-        ],
-    )
-
-    # =====================================================
-    # LAUNCH DESCRIPTION
-    # =====================================================
     return LaunchDescription([
-
-        # -------- LIMPIEZA --------
         cleanup,
 
-        # -------- ESPERA CORTA --------
+        # -------- ESPERA CORTA PARA DDS --------
         TimerAction(
             period=1.0,
             actions=[
 
-                # ===== TWIST MUX =====
-                twist_mux,
-
-                # ===== DDS FAST LISTENER =====
+                # =================================================
+                # DDS FAST LISTENER (sensores rápidos)
+                # =================================================
                 Node(
                     package="hexapod_pkg",
                     executable="dds_sensors_fast_listener.py",
                     name="dds_sensors_fast_listener",
                     output="screen",
                     parameters=[{
-                        "qos_reliability": "best_effort",
-                        "qos_history": "keep_last",
-                        "qos_depth": 10,
+                        "imu_topic": cfg.TOPIC_PI_IMU_GIR_ACC,
+                        "mag_topic": cfg.TOPIC_PI_IMU_MAG,
+                        "ultrasonic_topic": cfg.TOPIC_PI_ULTRASONIC,
+                        "ir1_topic": cfg.TOPIC_PI_IR1,
+                        "ir2_topic": cfg.TOPIC_PI_IR2,
+                        "camera_topic": cfg.TOPIC_PI_CAMERA,
                     }],
                 ),
 
-                # ===== DDS RELIABLE LISTENER =====
+                # =================================================
+                # DDS RELIABLE LISTENER (sensores críticos)
+                # =================================================
                 Node(
                     package="hexapod_pkg",
                     executable="dds_sensors_reliable_listener.py",
                     name="dds_sensors_reliable_listener",
                     output="screen",
                     parameters=[{
-                        "qos_reliability": "reliable",
-                        "qos_history": "keep_last",
-                        "qos_depth": 10,
+                        "gps_topic": cfg.TOPIC_PI_GPS,
                     }],
                 ),
 
-                # ===== DDS COMMAND TALKER =====
+                # =================================================
+                # DDS COMMAND TALKER (cmd_robot → cmd_serial)
+                # =================================================
                 Node(
                     package="hexapod_pkg",
                     executable="dds_cmd_talker.py",
                     name="dds_cmd_talker",
                     output="screen",
                     parameters=[{
-                        "qos_reliability": "reliable",
-                        "qos_history": "keep_last",
-                        "qos_depth": 10,
+                        "cmd_robot_topic": cfg.TOPIC_CMD_REAL_ROBOT,
+                        "cmd_serial_topic": cfg.TOPIC_CMD_SERIAL,
+                        "linear_speed": 60,
+                        "angular_speed": 5,
+                        "walk_yaw_trim": 0,
                     }],
                 ),
 
-                # ===== TELEOP TECLADO =====
-                Node(
-                    package="teleop_twist_keyboard",
-                    executable="teleop_twist_keyboard",
-                    name="teleop",
-                    output="screen",
-                    prefix=["xterm -hold -e"],
-                ),
-
-                # =====================================================
-                # CMD_VEL RELAY
-                # /cmd_vel → /cmd_vel_robot
-                # =====================================================
-                Node(
-                    package="hexapod_pkg",
-                    executable="cmd_vel_relay_node.py",
-                    name="cmd_vel_relay",
-                    output="screen",
-                    parameters=[{
-                        "input_topic": "/cmd_vel",
-                        "out_robot_topic": "/cmd_vel_robot",
-                    }],
-                ),
-
-                # ===== MONITOR PC =====
+                # =================================================
+                # DDS MONITOR PC
+                # =================================================
                 Node(
                     package="hexapod_pkg",
                     executable="dds_monitor_pc.py",
@@ -138,15 +93,14 @@ def generate_launch_description():
                     output="screen",
                     prefix=["xterm -hold -e"],
                     parameters=[{
-                        "qos_reliability": "best_effort",
-                        "qos_history": "keep_last",
-                        "qos_depth": 10,
-
-                        "monitor_imu_accel": True,
-                        "monitor_imu_mag": True,
-                        "monitor_imu_compass": True,
-                        "monitor_gps": True,
-                        "monitor_cmd_serial": True,
+                        "topic_imu": cfg.TOPIC_PI_IMU_GIR_ACC,
+                        "topic_mag": cfg.TOPIC_PI_IMU_MAG,
+                        "topic_gps": cfg.TOPIC_PI_GPS,
+                        "topic_ultrasonic": cfg.TOPIC_PI_ULTRASONIC,
+                        "topic_ir1": cfg.TOPIC_PI_IR1,
+                        "topic_ir2": cfg.TOPIC_PI_IR2,
+                        "topic_camera": cfg.TOPIC_PI_CAMERA,
+                        "topic_cmd_serial": cfg.TOPIC_CMD_SERIAL,
                     }],
                 ),
             ]

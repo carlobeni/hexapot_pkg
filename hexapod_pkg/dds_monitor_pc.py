@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-# monitor_node.py  (CONTROL DEVICE)
+# dds_monitor_pc.py
 
 import rclpy
 from rclpy.node import Node
@@ -26,7 +26,7 @@ import hw_config as cfg
 class MonitorNode(Node):
 
     def __init__(self):
-        super().__init__("monitor_node")
+        super().__init__("dds_monitor_pc")
         cfg.check_domain_id(self.get_logger())
 
         # =====================================================

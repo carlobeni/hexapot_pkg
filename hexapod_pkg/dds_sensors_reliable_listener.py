@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-# sensors_reliable_listener_node.py
+# dds_sensors_reliable_listener.py
 
 import rclpy
 from rclpy.node import Node
@@ -10,7 +10,7 @@ import hw_config as cfg
 
 class SensorsReliableListener(Node):
     def __init__(self):
-        super().__init__("sensors_reliable_listener")
+        super().__init__("dds_sensors_reliable_listener")
         cfg.check_domain_id(self.get_logger())
 
         qos = QoSProfile(

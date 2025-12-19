@@ -287,3 +287,5 @@ def generate_launch_description():
 
         start_comm_after_spawn,
     ])
+
+Ademas te anexare todos los codigos de mis nodos

@@ -93,9 +93,6 @@ install(PROGRAMS
   hexapod_pkg/compute_heading_kalman.py #by for implementation (by Carlos)
   hexapod_pkg/compute_stimate_xy.py
 
-
-
-
   #hexapod_pkg/utils/cmd_vel_relay_node.py
   #hexapod_pkg/test2.py
   #hexapod_pkg/localization_nodes/gps_to_local_xy.py

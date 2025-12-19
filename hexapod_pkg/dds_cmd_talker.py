@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-# command_talker_node.py
+# dds_cmd_talker.py
 
 import rclpy
 from rclpy.node import Node
@@ -24,7 +24,7 @@ class CommandTalker(Node):
     """
 
     def __init__(self):
-        super().__init__("command_talker")
+        super().__init__("dds_cmd_talker")
         cfg.check_domain_id(self.get_logger())
 
         # ===== QoS por parámetros =====

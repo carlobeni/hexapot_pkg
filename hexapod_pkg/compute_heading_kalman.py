@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+# compute_heading_kalman.py
 import math
 import rclpy
 from rclpy.node import Node
@@ -73,7 +74,7 @@ def kalman_heading(mag_angle, gyro_rate, dt):
 class HeadingEstimator(Node):
 
     def __init__(self):
-        super().__init__("heading_estimator")
+        super().__init__("compute_heading_kalman")
 
         self.qos_sensors = QoSProfile(
             reliability=ReliabilityPolicy.BEST_EFFORT,

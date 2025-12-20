@@ -1,19 +1,22 @@
 #!/usr/bin/env python3
-# manager_goal_free_navigation.py
 
 import math
+import csv
+import os
+
 import rclpy
 from rclpy.node import Node
 
-from geometry_msgs.msg import PointStamped, Point
+from geometry_msgs.msg import PointStamped
 from std_msgs.msg import Float32, String
-from visualization_msgs.msg import Marker
 from rclpy.qos import qos_profile_sensor_data
 
 
-def normalize_angle_deg(a):
-    while a > 180: a -= 360
-    while a < -180: a += 360
+def wrap_360(angle_deg: float) -> float:
+    """Normaliza ángulo a [0, 360)."""
+    a = angle_deg % 360.0
+    if a < 0.0:
+        a += 360.0
     return a
 
 
@@ -29,9 +32,12 @@ class ManagerGoalFreeNavigation(Node):
         self.declare_parameter("goal_lat", -25.330300)
         self.declare_parameter("goal_lon", -57.518000)
 
-        self.declare_parameter("epsilon", 0.5)
-        self.declare_parameter("heading_tol", 6.0)
+        self.declare_parameter("epsilon", 0.5)        # [m]
+        self.declare_parameter("heading_tol", 6.0)    # [deg]
+        self.declare_parameter("time_forward", 0.8)  # [s]
 
+        self.declare_parameter("current_position_xy", "/pc/internal/xy_odom_current_position")
+        self.declare_parameter("heading_deg_topic", "/pc/internal/heading_mag")
         self.declare_parameter("cmd_robot_topic", "/cmd_robot")
 
         # ================= LECTURA =================
@@ -43,149 +49,176 @@ class ManagerGoalFreeNavigation(Node):
 
         self.epsilon = float(self.get_parameter("epsilon").value)
         self.heading_tol = float(self.get_parameter("heading_tol").value)
+        self.time_forward = float(self.get_parameter("time_forward").value)
 
-        self.cmd_robot_topic = self.get_parameter("cmd_robot_topic").value
+        self.pos_topic = self.get_parameter("current_position_xy").value
+        self.heading_topic = self.get_parameter("heading_deg_topic").value
+        self.cmd_topic = self.get_parameter("cmd_robot_topic").value
 
-        self.R = 6378137.0
+        self.R = 6378137.0  # WGS84
 
         # ================= ESTADO =================
-        self.x = None
-        self.y = None
-        self.heading = None
+        self.x = None           # NORTE
+        self.y = None           # ESTE
+        self.heading = None     # [0,360)
 
         self.start_x = None
         self.start_y = None
+        self.desired_heading = None  # ABSOLUTO respecto al Norte
+
         self.gps_ready = False
 
-        self.ref_x, self.ref_y = self.latlon_to_xy(self.ref_lat, self.ref_lon)
+        self.forward_locked = False
+        self.forward_start_time = 0.0
+
+        # Conversión del objetivo
         self.goal_x, self.goal_y = self.latlon_to_xy(self.goal_lat, self.goal_lon)
 
         # ================= ROS =================
-        self.sub_pos = self.create_subscription(
+        self.create_subscription(
             PointStamped,
-            "/localization/local_stimate_xy",
+            self.pos_topic,
             self.cb_position,
             10
         )
 
-        self.sub_heading = self.create_subscription(
+        self.create_subscription(
             Float32,
-            "/localization/heading_deg",
+            self.heading_topic,
             self.cb_heading,
             qos_profile_sensor_data
         )
 
         self.cmd_pub = self.create_publisher(
             String,
-            self.cmd_robot_topic,
+            self.cmd_topic,
             10
         )
 
-        self.marker_pub = self.create_publisher(
-            Marker,
-            "/goal_nav/markers",
-            10
+        # ================= CSV =================
+        log_dir = os.path.expanduser(
+            "~/ros2_projects/ros2_hex_ws/src/hexapod_pkg/logs"
         )
+        os.makedirs(log_dir, exist_ok=True)
+
+        self.csv_path = os.path.join(log_dir, "goal_nav_log.csv")
+
+        self.csv_file = open(self.csv_path, "w", newline="")
+        self.csv_writer = csv.writer(self.csv_file)
+
+        self.csv_writer.writerow([
+            "time_s",
+            "x_north", "y_east",
+            "goal_x", "goal_y",
+            "desired_heading_deg",
+            "heading_deg",
+            "heading_error_deg",
+            "dist",
+            "forward_locked",
+            "cmd"
+        ])
+
+        self.start_time = self.get_clock().now().nanoseconds * 1e-9
+
+        self.get_logger().info("ManagerGoalFreeNavigation READY")
+        self.get_logger().info("Convención: X=NORTE, Y=ESTE | Heading 0–360° horario")
+        self.get_logger().info(f"CSV → {self.csv_path}")
 
         self.timer = self.create_timer(0.05, self.loop)
 
-        self.get_logger().info(
-            f"Manager READY → cmd_topic={self.cmd_robot_topic}"
-        )
-
     # ================= GEO → XY =================
     def latlon_to_xy(self, lat, lon):
-        x = self.R * (lon - self.ref_lon) * math.cos(self.ref_lat)
-        y = self.R * (lat - self.ref_lat)
-        return x, y
+        """
+        Conversión local:
+        x = Norte
+        y = Este
+        """
+        x_north = self.R * (lat - self.ref_lat)
+        y_east  = self.R * (lon - self.ref_lon) * math.cos(self.ref_lat)
+        return x_north, y_east
 
     # ================= CALLBACKS =================
-    def cb_position(self, msg):
+    def cb_position(self, msg: PointStamped):
         self.x = msg.point.x
         self.y = msg.point.y
 
+        # Inicialización UNA SOLA VEZ
         if not self.gps_ready:
             self.start_x = self.x
             self.start_y = self.y
+
+            dx = self.goal_x - self.start_x
+            dy = self.goal_y - self.start_y
+
+            self.desired_heading = wrap_360(math.degrees(math.atan2(dy, dx)))
             self.gps_ready = True
 
-    def cb_heading(self, msg):
-        self.heading = msg.data
+            self.get_logger().info(
+                f"Inicio → desired_heading = {self.desired_heading:.2f}°"
+            )
+
+    def cb_heading(self, msg: Float32):
+        self.heading = wrap_360(float(msg.data))
 
     # ================= LOOP =================
     def loop(self):
         if not self.gps_ready or self.heading is None:
             return
 
+        now = self.get_clock().now().nanoseconds * 1e-9
+
         dx = self.goal_x - self.x
         dy = self.goal_y - self.y
         dist = math.hypot(dx, dy)
 
-        desired = math.degrees(math.atan2(dy, dx))
-        err = normalize_angle_deg(desired - self.heading)
+        # Error angular absoluto [0,360)
+        err = wrap_360(self.desired_heading - self.heading)
 
-        cmd = String()
-
+        # ================= CONTROL =================
         if dist <= self.epsilon:
-            cmd.data = "stop"
-        elif err > self.heading_tol:
-            cmd.data = "turn_left"
-        elif err < -self.heading_tol:
-            cmd.data = "turn_right"
+            cmd = "stop"
+            self.forward_locked = False
+
+        elif self.forward_locked:
+            if now - self.forward_start_time < self.time_forward:
+                cmd = "forward"
+            else:
+                self.forward_locked = False
+                cmd = "forward"
+
         else:
-            cmd.data = "forward"
+            # Giro mínimo
+            if err > self.heading_tol and err <= 180.0:
+                cmd = "turn_left"
+            elif err > 180.0 and (360.0 - err) > self.heading_tol:
+                cmd = "turn_right"
+            else:
+                cmd = "forward"
+                self.forward_locked = True
+                self.forward_start_time = now
 
-        self.cmd_pub.publish(cmd)
-        self.publish_markers(dist)
+        self.cmd_pub.publish(String(data=cmd))
 
-    # ================= RVIZ MARKERS =================
-    def publish_markers(self, dist):
-        t = self.get_clock().now().to_msg()
+        # ================= CSV =================
+        t = now - self.start_time
 
-        def sphere(mid, x, y, r, color):
-            m = Marker()
-            m.header.frame_id = "map"
-            m.header.stamp = t
-            m.ns = "goal_nav"
-            m.id = mid
-            m.type = Marker.SPHERE
-            m.action = Marker.ADD
-            m.pose.position.x = x
-            m.pose.position.y = y
-            m.pose.position.z = 0.0
-            m.scale.x = r
-            m.scale.y = r
-            m.scale.z = r
-            m.color.r, m.color.g, m.color.b, m.color.a = (*color, 1.0)
-            return m
+        self.csv_writer.writerow([
+            f"{t:.3f}",
+            f"{self.x:.3f}", f"{self.y:.3f}",
+            f"{self.goal_x:.3f}", f"{self.goal_y:.3f}",
+            f"{self.desired_heading:.2f}",
+            f"{self.heading:.2f}",
+            f"{err:.2f}",
+            f"{dist:.3f}",
+            int(self.forward_locked),
+            cmd
+        ])
 
-        # Reference
-        self.marker_pub.publish(sphere(0, self.ref_x, self.ref_y, 0.2, (0,0,0)))
-        # Start
-        self.marker_pub.publish(sphere(1, self.start_x, self.start_y, 0.2, (0,1,0)))
-        # Goal
-        self.marker_pub.publish(sphere(2, self.goal_x, self.goal_y, 0.2, (1,0,0)))
-        # Current
-        self.marker_pub.publish(sphere(3, self.x, self.y, 0.2, (0,0,1)))
+        self.csv_file.flush()
 
-        # Epsilon circle
-        circle = Marker()
-        circle.header.frame_id = "map"
-        circle.header.stamp = t
-        circle.ns = "goal_nav"
-        circle.id = 4
-        circle.type = Marker.LINE_STRIP
-        circle.scale.x = 0.03
-        circle.color.r = 1.0
-        circle.color.a = 1.0
-
-        for i in range(0, 361, 5):
-            p = Point()
-            p.x = self.goal_x + self.epsilon * math.cos(math.radians(i))
-            p.y = self.goal_y + self.epsilon * math.sin(math.radians(i))
-            circle.points.append(p)
-
-        self.marker_pub.publish(circle)
+    def destroy_node(self):
+        self.csv_file.close()
+        super().destroy_node()
 
 
 def main(args=None):

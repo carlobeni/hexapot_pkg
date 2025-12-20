@@ -37,8 +37,9 @@ def generate_launch_description():
         executable="teleop_twist_keyboard",
         name="teleop",
         output="screen",
-        prefix=["xterm -hold -e"],
+        prefix="xterm -hold -e",
     )
+
 
     twist_to_cmd_robot = Node(
         package="hexapod_pkg",
@@ -75,8 +76,8 @@ def generate_launch_description():
         parameters=[{
             "gps_topic": cfg.TOPIC_PI_GPS,
             "output_topic": "/localization/gps/local_xy",
-            "origin_lat_deg": -25.330480,
-            "origin_lon_deg": -57.518124,
+            "origin_lat_deg": -25.33057356422622,
+            "origin_lon_deg": -57.518128840272304,
         }],
     )
 

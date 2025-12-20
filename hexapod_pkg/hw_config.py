@@ -35,6 +35,9 @@ TOPIC_GZ_ULTRASONIC = "/gz/sensor/ultrasonic_read"
 
 # ================= TOPICS (just for PC) =================
 TOPIC_MONITOR = "/pc/system/monitor"  
+
+TOPIC_XY_BY_GPS_CURRENT_POSITION = "/pc/internal/xy_gps_current_position"
+TOPIC_XY_ODM_CURRENT_POSITION = "/pc/internal/xy_odom_current_position"
 TOPIC_HEADING_COMPASS    = "/pc/internal/heading_mag"     # heading solo magnetómetro
 TOPIC_HEADING_COMPASS_KALMAN = "/pc/internal/heading_kalman"  # heading fusionado (PC)
 
@@ -42,5 +45,5 @@ TOPIC_HEADING_COMPASS_KALMAN = "/pc/internal/heading_kalman"  # heading fusionad
 TOPIC_CMD_REAL_ROBOT = "/real_cmd" 
 TOPIC_CMD_GZ_ROBOT = "/hl_cmd"
 # TOPIC CMD SERIAL DE SALIDA
-TOPIC_CMD_SERIAL = "/pc/out/cmd_serial"
+TOPIC_CMD_SERIAL = "/cmd_serial"
 

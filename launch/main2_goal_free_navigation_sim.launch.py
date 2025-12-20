@@ -1,15 +1,10 @@
 #!/usr/bin/env python3
-# main2_goal_free_navigation_sim.launch.py
 
 import os
 
 from ament_index_python.packages import get_package_share_directory
 from launch import LaunchDescription
-from launch.actions import (
-    IncludeLaunchDescription,
-    DeclareLaunchArgument,
-    TimerAction,
-)
+from launch.actions import IncludeLaunchDescription, DeclareLaunchArgument, TimerAction
 from launch.launch_description_sources import PythonLaunchDescriptionSource
 from launch.substitutions import LaunchConfiguration
 from launch_ros.actions import Node
@@ -22,13 +17,10 @@ def generate_launch_description():
     package_name = "hexapod_pkg"
     world = LaunchConfiguration("world")
 
-    # =====================================================
-    # WORLD ARG
-    # =====================================================
     default_world = os.path.join(
         get_package_share_directory(package_name),
         "worlds",
-        "obstacles3.world",
+        "goal_nav_world.world",
     )
 
     world_arg = DeclareLaunchArgument(
@@ -37,9 +29,6 @@ def generate_launch_description():
         description="Gazebo world for goal free navigation (simulation)",
     )
 
-    # =====================================================
-    # GAZEBO BASE
-    # =====================================================
     gazebo_base = IncludeLaunchDescription(
         PythonLaunchDescriptionSource(
             os.path.join(
@@ -48,40 +37,32 @@ def generate_launch_description():
                 "gazebo_base.launch.py",
             )
         ),
-        launch_arguments={
-            "world": world
-        }.items(),
+        launch_arguments={"world": world}.items(),
     )
 
-    # =====================================================
-    # MANAGER DE NAVEGACIÓN A OBJETIVO
-    # =====================================================
     manager_goal_free_navigation = Node(
         package="hexapod_pkg",
         executable="manager_goal_free_navigation.py",
         name="manager_goal_free_navigation",
         output="screen",
         parameters=[{
-            # ---------- REFERENCIA ----------
-            "reference_lat": -25.330480,
-            "reference_lon": -57.518124,
+            "current_position_xy": cfg.TOPIC_XY_ODM_CURRENT_POSITION,
+            "heading_deg_topic": cfg.TOPIC_HEADING_COMPASS,
+            # Referencia (esquina de la cancha): -25.33057356422622, -57.518128840272304
+            "reference_lat": -25.33057356422622,
+            "reference_lon": -57.518128840272304,
+            #Centro de la cancha de bascket -25.330587999442308, -57.51791576777312
+            "goal_lat": -25.330587999442308,
+            "goal_lon": -57.51791576777312,
 
-            # ---------- OBJETIVO ----------
-            "goal_lat": -40.330300,
-            "goal_lon": -3.518000,
+            "time_forward": 0.3,
+            "epsilon": 1.0,
+            "heading_tol": 6.0,
 
-            # ---------- TOLERANCIAS ----------
-            "epsilon": 0.5,          # [m]
-            "heading_tol": 6.0,      # [deg]
-
-            # ---------- COMANDOS ----------
             "cmd_robot_topic": cfg.TOPIC_CMD_GZ_ROBOT,
         }],
     )
 
-    # =====================================================
-    # COMPUTE (SIM)
-    # =====================================================
     compute_heading = Node(
         package=package_name,
         executable="compute_heading.py",
@@ -101,9 +82,9 @@ def generate_launch_description():
         output="screen",
         parameters=[{
             "gps_topic": cfg.TOPIC_GZ_GPS,
-            "output_topic": "/localization/gps/local_xy",
-            "origin_lat_deg": -25.330480,
-            "origin_lon_deg": -57.518124,
+            "output_topic": cfg.TOPIC_XY_BY_GPS_CURRENT_POSITION,
+            "origin_lat_deg": -25.33057356422622,
+            "origin_lon_deg": -57.518128840272304,
         }],
     )
 
@@ -113,24 +94,22 @@ def generate_launch_description():
         name="compute_stimate_xy",
         output="screen",
         parameters=[{
-            "gps_xy_topic": "/localization/gps/local_xy",
+            "gps_xy_topic": cfg.TOPIC_XY_BY_GPS_CURRENT_POSITION,
             "heading_topic": cfg.TOPIC_HEADING_COMPASS,
             "hl_cmd_topic": "/hl_cmd",
-            "output_topic": "/localization/local_stimate_xy",
-            "velocity": 0.06,
-            "alpha": 1.0,
-            "update_rate": 20.0,
+            "output_topic": cfg.TOPIC_XY_ODM_CURRENT_POSITION,
+
+            "fixed_dt": 0.1,
+            "velocity": 0.02,
+
+            "alpha": 0.9,
+            "update_rate": 10.0,
         }],
     )
 
-    # =====================================================
-    # LAUNCH
-    # =====================================================
     return LaunchDescription([
         world_arg,
         gazebo_base,
-
-        # Esperar a que Gazebo publique sensores
         TimerAction(
             period=1.0,
             actions=[

@@ -101,10 +101,12 @@ class CommandTalker(Node):
 
         # ---- ROTACIÓN ----
         elif cmd == "turn_left":
-            serial_cmd = f"WALK 0 0 {(self.v_ang+self.walk_yaw_trim)}"
+            #serial_cmd = f"WALK 0 0 {(self.v_ang+self.walk_yaw_trim)}"
+            serial_cmd = f"ROT 0 {self.v_ang} 0 0"
 
         elif cmd == "turn_right":
-            serial_cmd = f"WALK 0 0 {-(self.v_ang+self.walk_yaw_trim)}"
+            #serial_cmd = f"WALK 0 0 {-(self.v_ang+self.walk_yaw_trim)}"
+            serial_cmd = f"ROT 0 {-self.v_ang} 0 0"
 
         # ---- STOP ----
         elif cmd == "stop":

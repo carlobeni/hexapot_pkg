@@ -12,6 +12,7 @@ class TwistToCmdRobot(Node):
     def __init__(self):
         super().__init__("twist_to_cmd_robot")
 
+        # ================= PARÁMETROS =================
         self.declare_parameter("twist_topic", "/cmd_vel")
         self.declare_parameter("cmd_robot_topic", "/cmd_robot")
         self.declare_parameter("deadzone", 0.01)
@@ -20,37 +21,47 @@ class TwistToCmdRobot(Node):
         self.cmd_robot_topic = self.get_parameter("cmd_robot_topic").value
         self.deadzone = float(self.get_parameter("deadzone").value)
 
-        self.pub = self.create_publisher(String, self.cmd_robot_topic, 10)
-        self.sub = self.create_subscription(
-            Twist, self.twist_topic, self.cb, 10
+        # ================= ROS =================
+        self.pub = self.create_publisher(
+            String,
+            self.cmd_robot_topic,
+            10
         )
 
-        self.last_cmd = None
+        self.sub = self.create_subscription(
+            Twist,
+            self.twist_topic,
+            self.cb,
+            10
+        )
 
         self.get_logger().info(
             "Twist → cmd_robot READY\n"
             f"  SUB ← {self.twist_topic}\n"
-            f"  PUB → {self.cmd_robot_topic}"
+            f"  PUB → {self.cmd_robot_topic}\n"
+            f"  deadzone = {self.deadzone}"
         )
 
+    # =================================================
     def cb(self, msg: Twist):
-
-        cmd = None
 
         # ---- LINEAL ----
         if msg.linear.x > self.deadzone:
             cmd = "forward"
+
         elif msg.linear.x < -self.deadzone:
             cmd = "backward"
 
         elif msg.linear.y > self.deadzone:
             cmd = "lateral_left"
+
         elif msg.linear.y < -self.deadzone:
             cmd = "lateral_right"
 
         # ---- ROTACIÓN ----
         elif msg.angular.z > self.deadzone:
             cmd = "turn_left"
+
         elif msg.angular.z < -self.deadzone:
             cmd = "turn_right"
 
@@ -58,14 +69,13 @@ class TwistToCmdRobot(Node):
         else:
             cmd = "stop"
 
-        # Evita spam
-        if cmd != self.last_cmd:
-            out = String()
-            out.data = cmd
-            self.pub.publish(out)
+        out = String()
+        out.data = cmd
+        self.pub.publish(out)
 
-            self.get_logger().info(f"[MAP] Twist → cmd_robot = '{cmd}'")
-            self.last_cmd = cmd
+        self.get_logger().debug(
+            f"[MAP] Twist → cmd_robot = '{cmd}'"
+        )
 
 
 def main(args=None):

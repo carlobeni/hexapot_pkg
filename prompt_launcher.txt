@@ -426,3 +426,8 @@ TOPIC_CMD_SERIAL_MEGA = "/cmd_serial"
 TOPIC_CMD_VEL_ROBOT = "/cmd_vel_robot"
 TOPIC_CMD_SERIAL = "/cmd_serial"
 
+
+
+# Para el control manual
+dds_base
+teleop

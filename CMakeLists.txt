@@ -53,6 +53,7 @@ install(
     launch
     worlds
     meshes
+    #launch_sim?
   DESTINATION share/${PROJECT_NAME}
 )
 
@@ -85,7 +86,7 @@ install(PROGRAMS
 
   # Nodos de gazebo
   hexapod_pkg/gz_ir_emulator.py
-  hexapod_pkg/gz_hexapod_inv_kinematics.py
+  hexapod_pkg/gz_hexapod_low_level_control.py #(add LPv1) 
 
   # Nodos de gestion de sensores
   hexapod_pkg/sensor_ultrasonic.py
@@ -95,6 +96,13 @@ install(PROGRAMS
   hexapod_pkg/compute_heading.py  #for simulations (by Lucas)
   hexapod_pkg/compute_heading_kalman.py #by for implementation (by Carlos)
   hexapod_pkg/compute_stimate_xy.py
+
+  # Nodos de vision 
+  hexapod_pkg/teleop_hexapod.py #(add LPv1)
+  hexapod_pkg/web_camera_node.py #(add LPv1)
+  hexapod_pkg/green_cube_viewer2.py #(add LPv1)
+  hexapod_pkg/yolo_obstacle_node_best.py #(add LPv1)
+  hexapod_pkg/best_custom.pt #(add LPv1)
 
   # Nodos manager
 

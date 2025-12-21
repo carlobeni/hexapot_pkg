@@ -128,7 +128,7 @@ class MonitorNode(Node):
             return str(msg.data)
 
         if isinstance(msg, Range):
-            return f"{msg.range:.3f} m"
+            return f"{msg.range:.3f}"
 
         if isinstance(msg, NavSatFix):
             return f"{msg.latitude:.6f}, {msg.longitude:.6f}"

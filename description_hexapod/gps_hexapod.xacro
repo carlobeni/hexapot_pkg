@@ -17,7 +17,6 @@
         </visual>
     </link>
 
-
     <gazebo reference="gps_link">
       <selfCollide>false</selfCollide>
     </gazebo>
@@ -30,8 +29,8 @@
         <update_rate>10</update_rate>
 
         <navsat>
-            <reference_latitude>-25.330480</reference_latitude>
-            <reference_longitude>-57.518124</reference_longitude>
+            <reference_latitude>-25.33074682110693</reference_latitude>
+            <reference_longitude>-57.517799631180665</reference_longitude>
             <reference_altitude>80.0</reference_altitude>
             <velocity_smoothing>true</velocity_smoothing>
           <noise>

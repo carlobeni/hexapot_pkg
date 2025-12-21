@@ -33,6 +33,17 @@ TOPIC_GZ_IR1 = "/gz/sensor/IR_measure1"
 TOPIC_GZ_IR2 = "/gz/sensor/IR_measure2"
 TOPIC_GZ_ULTRASONIC = "/gz/sensor/ultrasonic_read"
 
+# ================= LOCALIZATION NODES =================
+TOPIC_GPS_TO_XY = "/localization/gps_to_xy"
+TOPIC_ESTIMATE_TO_XY = "/localization/estimate_xy"
+TOPIC_STIMATE_HEADING = "/localization/heading"
+
+# ================= ULTRASONIC MANAGER =================
+TOPIC_ULTRASONIC_RANGE = "/ultrasonic_range"
+
+# ================= IMAGE RECOGNITION =================
+
+
 # ================= TOPICS (just for PC) =================
 TOPIC_MONITOR = "/pc/system/monitor"  
 
@@ -42,7 +53,7 @@ TOPIC_HEADING_COMPASS    = "/pc/internal/heading_mag"     # heading solo magnet√
 TOPIC_HEADING_COMPASS_KALMAN = "/pc/internal/heading_kalman"  # heading fusionado (PC)
 
 # ================= COMMAND =================
-TOPIC_CMD_REAL_ROBOT = "/real_cmd" 
+TOPIC_CMD_REAL_ROBOT = "/hl_cmd" 
 TOPIC_CMD_GZ_ROBOT = "/hl_cmd"
 # TOPIC CMD SERIAL DE SALIDA
 TOPIC_CMD_SERIAL = "/cmd_serial"

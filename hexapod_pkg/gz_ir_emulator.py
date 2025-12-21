@@ -6,12 +6,19 @@ from sensor_msgs.msg import Range
 from std_msgs.msg import Bool
 import math
 import time
-
+from rclpy.qos import QoSProfile, ReliabilityPolicy, HistoryPolicy
+from hexapod_pkg import hw_config as cfg
 
 class IREmulator(Node):
 
     def __init__(self):
         super().__init__("gz_ir_emulator")
+
+        qos = QoSProfile(
+            reliability=ReliabilityPolicy.BEST_EFFORT,
+            history=HistoryPolicy.KEEP_LAST,
+            depth=10
+        )
 
         # ==============================
         # Parámetros del sensor IR
@@ -34,14 +41,14 @@ class IREmulator(Node):
         # ==============================
         self.sub_left = self.create_subscription(
             Range,
-            "sensor/simulation/raw_data/ir_left_sensor",
+            "/gz/sensor_sim/ir_left",
             self.left_callback,
             10
         )
 
         self.sub_right = self.create_subscription(
             Range,
-            "sensor/simulation/raw_data/ir_right_sensor",
+            "/gz/sensor_sim/ir_right",
             self.right_callback,
             10
         )
@@ -51,14 +58,14 @@ class IREmulator(Node):
         # ==============================
         self.pub_left = self.create_publisher(
             Bool,
-            "sensor/raw_data/ir_left_sensor",
-            10
+            cfg.TOPIC_GZ_IR1,
+            qos
         )
 
         self.pub_right = self.create_publisher(
             Bool,
-            "sensor/raw_data/ir_right_sensor",
-            10
+            cfg.TOPIC_GZ_IR2,
+            qos
         )
 
         self.get_logger().info("IR JS40F emulator (LEFT + RIGHT) started")

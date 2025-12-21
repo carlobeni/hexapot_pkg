@@ -77,14 +77,14 @@
   direction: GZ_TO_ROS
 
 # IR left sensor 
-- ros_topic_name: "/gz/sensor/IR_measure1"
+- ros_topic_name: "/gz/sensor_sim/ir_left"
   gz_topic_name: "/sensor/gazebo_ir_left_sensor"
   ros_type_name: "sensor_msgs/msg/Range"
   gz_type_name: "gz.msgs.LaserScan"
   direction: GZ_TO_ROS
 
 # IR right sensor 
-- ros_topic_name: "/gz/sensor/IR_measure2"
+- ros_topic_name: "/gz/sensor_sim/ir_right"
   gz_topic_name: "/sensor/gazebo_ir_right_sensor"
   ros_type_name: "sensor_msgs/msg/Range"
   gz_type_name: "gz.msgs.LaserScan"

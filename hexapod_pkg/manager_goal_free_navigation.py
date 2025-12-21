@@ -95,37 +95,6 @@ class ManagerGoalFreeNavigation(Node):
             10
         )
 
-        # ================= CSV =================
-        log_dir = os.path.expanduser(
-            "~/ros2_projects/ros2_hex_ws/src/hexapod_pkg/logs"
-        )
-        os.makedirs(log_dir, exist_ok=True)
-
-        self.csv_path = os.path.join(log_dir, "goal_nav_log.csv")
-
-        self.csv_file = open(self.csv_path, "w", newline="")
-        self.csv_writer = csv.writer(self.csv_file)
-
-        self.csv_writer.writerow([
-            "time_s",
-            "x_north", "y_east",
-            "goal_x", "goal_y",
-            "desired_heading_deg",
-            "heading_deg",
-            "heading_error_deg",
-            "dist",
-            "forward_locked",
-            "cmd"
-        ])
-
-        self.start_time = self.get_clock().now().nanoseconds * 1e-9
-
-        self.get_logger().info("ManagerGoalFreeNavigation READY")
-        self.get_logger().info("Convención: X=NORTE, Y=ESTE | Heading 0–360° horario")
-        self.get_logger().info(f"CSV → {self.csv_path}")
-
-        self.timer = self.create_timer(0.05, self.loop)
-
     # ================= GEO → XY =================
     def latlon_to_xy(self, lat, lon):
         """

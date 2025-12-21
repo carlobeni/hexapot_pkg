@@ -53,7 +53,6 @@ install(
     launch
     worlds
     meshes
-    #launch_sim?
   DESTINATION share/${PROJECT_NAME}
 )
 
@@ -76,13 +75,15 @@ install(PROGRAMS
   hexapod_pkg/dds_sensors_reliable_listener.py
 
   # Nodos utils
-  hexapod_pkg/utils/cmd_vel_relay_node.py # nodo para difusion de robot+gazebo
-  hexapod_pkg/utils/twist_to_cmd_robot.py
+  #hexapod_pkg/utils/cmd_vel_relay_node.py # nodo para difusion de robot+gazebo
+  #hexapod_pkg/utils/twist_to_cmd_robot.py
 
   # Files utils
-  hexapod_pkg/utils/test2.py
-  hexapod_pkg/utils/hand_landmarker.task
-  hexapod_pkg/utils/best.pt
+  #hexapod_pkg/utils/test2.py
+  #hexapod_pkg/utils/hand_landmarker.task
+  #hexapod_pkg/utils/best.pt
+  #hexapod_pkg/utils/best_custom.pt
+
 
   # Nodos de gazebo
   hexapod_pkg/gz_ir_emulator.py
@@ -102,7 +103,7 @@ install(PROGRAMS
   hexapod_pkg/web_camera_node.py #(add LPv1)
   hexapod_pkg/green_cube_viewer2.py #(add LPv1)
   hexapod_pkg/yolo_obstacle_node_best.py #(add LPv1)
-  hexapod_pkg/best_custom.pt #(add LPv1)
+  #hexapod_pkg/best_custom.pt #(add LPv1)
 
   # Nodos manager
 

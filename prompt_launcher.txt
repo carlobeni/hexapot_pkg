@@ -431,3 +431,7 @@ TOPIC_CMD_SERIAL = "/cmd_serial"
 # Para el control manual
 dds_base
 teleop
+
+# Para usar la navegacion con vision
+web_camera_node
+green_cube_viewer2 / yolo_obstacle_node_best

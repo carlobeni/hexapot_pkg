@@ -1,70 +1,96 @@
 #!/usr/bin/env python3
+import sys
+import termios
+import tty
+import select
 import threading
+import time
+
 import rclpy
 from rclpy.node import Node
-
 from std_msgs.msg import String
 
+
 class TeleOpHexapod(Node):
+
     def __init__(self):
         super().__init__("tele_op_hexapod")
 
-        # Publicador
         self.cmd_pub = self.create_publisher(String, "/hl_cmd", 10)
 
-        # Comando actual (manual)
-        self.current_cmd = "stop"
+        self.active_cmd = None
+        self.last_key_time = 0.0
+        self.key_timeout = 0.15  # s
+        self.stop_requested = False
 
-        # Timer de publicación
         self.timer = self.create_timer(0.05, self.loop)
 
-        # Hilo para leer teclado
         self.input_thread = threading.Thread(
-            target=self.console_input_loop, daemon=True)
+            target=self.keyboard_loop, daemon=True
+        )
         self.input_thread.start()
 
         self.get_logger().info(
-            "Control manual activo:\n"
-            " w = forward\n"
-            " a = turn_left\n"
-            " d = turn_right\n"
-            " s = backward\n"
-            " q = lateral_left\n"
-            " e = lateral_right\n"
-            " x = stop\n"
+            "TeleOp activo (mantener tecla): w = forward; a = turn_left; d = turn_right; s = backward; q = lateral_left; e = lateral_right; x = STOP"
         )
 
+    # ---------- Teclado raw ----------
+    def keyboard_loop(self):
+        fd = sys.stdin.fileno()
+        old_settings = termios.tcgetattr(fd)
 
-    # ---------- Lectura de consola ----------
-    def console_input_loop(self):
-        while rclpy.ok():
-            try:
-                key = input().strip().lower()
+        try:
+            tty.setraw(fd)
+            while rclpy.ok():
+                if select.select([sys.stdin], [], [], 0.05)[0]:
+                    key = sys.stdin.read(1).lower()
+                    self.last_key_time = time.time()
 
-                if key == "w":
-                    self.current_cmd = "forward"
-                elif key == "a":
-                    self.current_cmd = "turn_left"
-                elif key == "d":
-                    self.current_cmd = "turn_right"
-                elif key == "s":
-                    self.current_cmd = "backward"
-                elif key == "q":
-                    self.current_cmd = "lateral_left"
-                elif key == "e":
-                    self.current_cmd = "lateral_right"
-                elif key == "x":
-                    self.current_cmd = "stop"
-                else:
-                    print("Comando inválido (w/a/d/s)")
-            except EOFError:
-                break
+                    if key == "x":
+                        self.stop_requested = True
+                        self.active_cmd = None
+                        continue
 
-    # ---------- Loop principal ----------
+                    self.stop_requested = False
+
+                    if key == "w":
+                        self.active_cmd = "forward"
+                    elif key == "a":
+                        self.active_cmd = "turn_left"
+                    elif key == "d":
+                        self.active_cmd = "turn_right"
+                    elif key == "s":
+                        self.active_cmd = "backward"
+                    elif key == "q":
+                        self.active_cmd = "lateral_left"
+                    elif key == "e":
+                        self.active_cmd = "lateral_right"
+                    else:
+                        self.active_cmd = None
+        finally:
+            termios.tcsetattr(fd, termios.TCSADRAIN, old_settings)
+
+    # ---------- Loop ----------
     def loop(self):
-        cmd = String()
-        cmd.data = self.current_cmd
-        self.cmd_pub.publish(cmd)
+        # STOP tiene prioridad
+        if self.stop_requested:
+            msg = String()
+            msg.data = "stop"
+            self.cmd_pub.publish(msg)
+            self.stop_requested = False
+            return
+
+        # Si se soltó la tecla → no publicar
+        if self.active_cmd is None:
+            return
+
+        if (time.time() - self.last_key_time) > self.key_timeout:
+            self.active_cmd = None
+            return
+
+        msg = String()
+        msg.data = self.active_cmd
+        self.cmd_pub.publish(msg)
 
 
 def main(args=None):
@@ -73,7 +99,11 @@ def main(args=None):
     node = TeleOpHexapod()
     executor = rclpy.executors.MultiThreadedExecutor()
     executor.add_node(node)
-    executor.spin()
+
+    try:
+        executor.spin()
+    except KeyboardInterrupt:
+        pass
 
     node.destroy_node()
     rclpy.shutdown()

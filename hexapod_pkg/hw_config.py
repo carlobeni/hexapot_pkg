@@ -17,13 +17,26 @@ def check_domain_id(logger=None):
 
 # ================= DDS TOPICS =================
 # TOPICS (From Pi)
-TOPIC_PI_IMU_GIR_ACC = "/pi/sensor/imu_data" 
-TOPIC_PI_IMU_MAG = "/pi/sensor/imu_mag"
-TOPIC_PI_GPS = "/pi/sensor/gps_fix"
-TOPIC_PI_CAMERA = "/pi/camera/image_raw"
+# == Read on PI directly ==
+# Ready to use
+TOPIC_PI_ULTRASONIC = "/pi/sensor/ultrasonic_read"
 TOPIC_PI_IR1 = "/pi/sensor/IR_measure1"
 TOPIC_PI_IR2 = "/pi/sensor/IR_measure2"
-TOPIC_PI_ULTRASONIC = "/pi/sensor/ultrasonic_read"
+# In development (Do not use)
+TOPIC_PI_GPS = "/pi/sensor/gps_fix"
+TOPIC_PI_CAMERA = "/pi/camera/image_raw"
+TOPIC_PI_IMU_GIR_ACC = "/pi/sensor/imu_data"
+TOPIC_PI_IMU_MAG = "/pi/sensor/imu_mag"
+
+# == Read by Phone to Pi == 
+# Ready to use
+TOPIC_PI_PHONE_HEADING = "/pi/phone/sensor/heading" # Topic type: Float32
+TOPIC_PI_PHONE_CAMERA = "/pi/phone/camera/image_raw" # Topic type: Image
+TOPIC_PI_PHONE_GPS = "/pi/phone/sensor/gps_fix" # Topic type: NavSatFix
+# In development
+TOPIC_PI_PHONE_IMU_GIR_ACC = "/pi/phone/sensor/imu_data" # Topic type: Imu
+TOPIC_PI_PHONE_MAG = "/pi/phone/sensor/imu_mag" # Topic type: MagneticField
+
 # TOPICS (From Gazebo)
 TOPIC_GZ_IMU_GIR_ACC = "/gz/sensor/imu_data"
 TOPIC_GZ_IMU_MAG = "/gz/sensor/imu_mag"

@@ -44,12 +44,12 @@ def generate_launch_description():
                     name="dds_sensors_fast_listener",
                     output="screen",
                     parameters=[{
-                        "imu_topic": cfg.TOPIC_PI_IMU_GIR_ACC,
-                        "mag_topic": cfg.TOPIC_PI_IMU_MAG,
+                        "imu_topic": cfg.TOPIC_PI_PHONE_IMU_GIR_ACC,
+                        "mag_topic": cfg.TOPIC_PI_PHONE_MAG,
                         "ultrasonic_topic": cfg.TOPIC_PI_ULTRASONIC,
                         "ir1_topic": cfg.TOPIC_PI_IR1,
                         "ir2_topic": cfg.TOPIC_PI_IR2,
-                        "camera_topic": cfg.TOPIC_PI_CAMERA,
+                        "camera_topic": cfg.TOPIC_PI_PHONE_CAMERA,
                     }],
                 ),
 
@@ -62,7 +62,7 @@ def generate_launch_description():
                     name="dds_sensors_reliable_listener",
                     output="screen",
                     parameters=[{
-                        "gps_topic": cfg.TOPIC_PI_GPS,
+                        "gps_topic": cfg.TOPIC_PI_PHONE_GPS,
                     }],
                 ),
 
@@ -83,26 +83,26 @@ def generate_launch_description():
                     }],
                 ),
 
-                # =================================================
-                # DDS MONITOR PC
-                # =================================================
-                Node(
-                    package="hexapod_pkg",
-                    executable="dds_monitor_pc.py",
-                    name="dds_monitor_pc",
-                    output="screen",
-                    prefix=["xterm -hold -e"],
-                    parameters=[{
-                        "topic_imu": cfg.TOPIC_PI_IMU_GIR_ACC,
-                        "topic_mag": cfg.TOPIC_PI_IMU_MAG,
-                        "topic_gps": cfg.TOPIC_PI_GPS,
-                        "topic_ultrasonic": cfg.TOPIC_PI_ULTRASONIC,
-                        "topic_ir1": cfg.TOPIC_PI_IR1,
-                        "topic_ir2": cfg.TOPIC_PI_IR2,
-                        "topic_camera": cfg.TOPIC_PI_CAMERA,
-                        "topic_cmd_serial": cfg.TOPIC_CMD_SERIAL,
-                    }],
-                ),
+                # # =================================================
+                # # DDS MONITOR PC
+                # # =================================================
+                # Node(
+                #     package="hexapod_pkg",
+                #     executable="dds_monitor_pc.py",
+                #     name="dds_monitor_pc",
+                #     output="screen",
+                #     prefix=["xterm -hold -e"],
+                #     parameters=[{
+                #         "topic_imu": cfg.TOPIC_PI_IMU_GIR_ACC,
+                #         "topic_mag": cfg.TOPIC_PI_IMU_MAG,
+                #         "topic_gps": cfg.TOPIC_PI_GPS,
+                #         "topic_ultrasonic": cfg.TOPIC_PI_ULTRASONIC,
+                #         "topic_ir1": cfg.TOPIC_PI_IR1,
+                #         "topic_ir2": cfg.TOPIC_PI_IR2,
+                #         "topic_camera": cfg.TOPIC_PI_CAMERA,
+                #         "topic_cmd_serial": cfg.TOPIC_CMD_SERIAL,
+                #     }],
+                # ),
             ]
         ),
     ])

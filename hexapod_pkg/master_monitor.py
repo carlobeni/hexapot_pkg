@@ -31,6 +31,8 @@ class RobotHealthMonitor(Node):
         self.declare_parameter("topic_ultrasonic_range", cfg.TOPIC_ULTRASONIC_RANGE)
         self.declare_parameter("topic_estimate_xy", cfg.TOPIC_ESTIMATE_XY)
 
+        # topic de comando
+        self.declare_parameter("cmd_serial_topic", cfg.TOPIC_CMD_SERIAL)
 
         topic_gps = self.get_parameter("topic_gps").value
         topic_imu = self.get_parameter("topic_imu").value
@@ -43,6 +45,9 @@ class RobotHealthMonitor(Node):
         topic_estimate_heading = self.get_parameter("topic_estimate_heading").value
         topic_ultrasonic_range = self.get_parameter("topic_ultrasonic_range").value
         topic_estimate_xy = self.get_parameter("topic_estimate_xy").value
+
+        cmd_robot_topic = self.get_parameter("cmd_robot_topic").value
+        cmd_serial_topic = self.get_parameter("cmd_serial_topic").value
 
 
 
@@ -62,6 +67,8 @@ class RobotHealthMonitor(Node):
             topic_ir_right: "IR Right",
             topic_mag: "Magnetometer",
             topic_ultrasonic: "Ultrasonic",
+            cmd_robot_topic: "Robot Command",
+            cmd_serial_topic: "Serial Command",
         }
 
         # ==============================

@@ -11,6 +11,7 @@ from ament_index_python.packages import get_package_share_directory
 
 from hexapod_pkg import hw_config as cfg
 
+# AGREGAR PARAMETROS PARA CAMBIAR TOPICS AL LANZAR CON PARAMETROS POR DEFECTO DE GZ
 
 def generate_launch_description():
 

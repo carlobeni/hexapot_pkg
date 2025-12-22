@@ -46,9 +46,6 @@ TOPIC_GPS_TO_XY = "/localization/gps_to_xy"
 TOPIC_ESTIMATE_XY = "/localization/estimate_xy"
 TOPIC_ESTIMATE_HEADING = "/localization/heading"
 
-# ================= ULTRASONIC MANAGER =================
-TOPIC_ULTRASONIC_RANGE = "/ultrasonic_range"
-
 # ================= IMAGE RECOGNITION =================
 
 
@@ -59,9 +56,11 @@ TOPIC_XY_BY_GPS_CURRENT_POSITION = "/pc/internal/xy_gps_current_position"
 TOPIC_XY_ODM_CURRENT_POSITION = "/pc/internal/xy_odom_current_position"
 TOPIC_HEADING_COMPASS    = "/pc/internal/heading_mag"     # heading solo magnetómetro
 TOPIC_HEADING_COMPASS_KALMAN = "/pc/internal/heading_kalman"  # heading fusionado (PC)
+TOPIC_ULTRASONIC_RANGE = "/ultrasonic_range"
+
 
 # ================= COMMAND =================
-TOPIC_CMD_REAL_ROBOT = "/hl_cmd" 
+TOPIC_CMD_REAL_ROBOT = "/hl_robot_cmd" 
 TOPIC_CMD_GZ_ROBOT = "/hl_cmd"
 # TOPIC CMD SERIAL DE SALIDA
 TOPIC_CMD_SERIAL = "/cmd_serial"

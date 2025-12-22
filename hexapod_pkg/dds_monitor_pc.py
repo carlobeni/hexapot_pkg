@@ -20,6 +20,7 @@ from rclpy.qos import (
     DurabilityPolicy
 )
 
+from hexapod_pkg import hw_config as cfg
 
 class MonitorNode(Node):
 
@@ -29,14 +30,14 @@ class MonitorNode(Node):
         # =====================================================
         # DECLARACIÓN DE PARÁMETROS (SOLO TIPOS ROS VÁLIDOS)
         # =====================================================
-        self.declare_parameter("topic_imu", "")
-        self.declare_parameter("topic_mag", "")
-        self.declare_parameter("topic_gps", "")
-        self.declare_parameter("topic_ultrasonic", "")
-        self.declare_parameter("topic_ir1", "")
-        self.declare_parameter("topic_ir2", "")
-        self.declare_parameter("topic_camera", "")
-        self.declare_parameter("topic_cmd_serial", "")
+        self.declare_parameter("topic_imu", cfg.TOPIC_PI_PHONE_IMU_GIR_ACC)
+        self.declare_parameter("topic_mag", cfg.TOPIC_PI_PHONE_IMU_MAG)
+        self.declare_parameter("topic_gps", cfg.TOPIC_PI_PHONE_GPS)
+        self.declare_parameter("topic_ultrasonic", cfg.TOPIC_PI_ULTRASONIC)
+        self.declare_parameter("topic_ir1", cfg.TOPIC_PI_IR1)
+        self.declare_parameter("topic_ir2", cfg.TOPIC_PI_IR2)
+        self.declare_parameter("topic_camera", cfg.TOPIC_PI_PHONE_CAMERA)
+        self.declare_parameter("topic_cmd_serial", cfg.TOPIC_CMD_SERIAL)
 
         # =====================================================
         # LEER PARÁMETROS

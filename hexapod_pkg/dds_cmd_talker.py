@@ -25,9 +25,10 @@ class CommandTalker(Node):
         self.declare_parameter("cmd_serial_topic", cfg.TOPIC_CMD_GZ_SERIAL)
 
         # valores por defecto, de hecho son establecidos en dds_base.launch.py
-        self.declare_parameter("linear_speed", 60) # velocidad lineal
-        self.declare_parameter("angular_speed", 5) # velocidad angular
+        self.declare_parameter("linear_speed", 90) # velocidad lineal
+        self.declare_parameter("angular_speed", 70) # velocidad angular
         self.declare_parameter("walk_yaw_trim", -3) # commpensation de movimiento lateral y lineal
+        #self.declare_parameter("roll_pitch_ang", 10) # velocidad angular
 
         self.declare_parameter("qos_depth", 10)
 
@@ -38,6 +39,7 @@ class CommandTalker(Node):
         self.v_lin = int(self.get_parameter("linear_speed").value)
         self.v_ang = int(self.get_parameter("angular_speed").value)
         self.walk_yaw_trim = int(self.get_parameter("walk_yaw_trim").value)
+        self.roll_pitch_ang = int(self.get_parameter("roll_pitch_ang").value)
 
         qos = QoSProfile(
             reliability=ReliabilityPolicy.RELIABLE,
@@ -87,28 +89,40 @@ class CommandTalker(Node):
         cmd = msg.data.strip()
         serial_cmd = None
 
-        # ---- AVANCE ----
+        # ---- MOVIMIENTO ----
         if cmd == "forward":
             serial_cmd = f"WALK {self.v_lin} 0 {self.walk_yaw_trim}"
 
         elif cmd == "backward":
             serial_cmd = f"WALK {-self.v_lin} 0 {self.walk_yaw_trim}"
 
-        # ---- LATERAL ----
         elif cmd == "lateral_left":
             serial_cmd = f"WALK 0 {self.v_lin} {self.walk_yaw_trim}"
 
         elif cmd == "lateral_right":
             serial_cmd = f"WALK 0 {-self.v_lin} {self.walk_yaw_trim}"
 
-        # ---- ROTACIÓN ----
         elif cmd == "turn_left":
-            #serial_cmd = f"WALK 0 0 {(self.v_ang+self.walk_yaw_trim)}"
-            serial_cmd = f"ROT 0 {self.v_ang} 0 0"
+            serial_cmd = f"WALK 0 0 {(self.v_ang)}"
+            #serial_cmd = f"ROT 0 {self.v_ang} 0 0"
 
         elif cmd == "turn_right":
-            #serial_cmd = f"WALK 0 0 {-(self.v_ang+self.walk_yaw_trim)}"
-            serial_cmd = f"ROT 0 {-self.v_ang} 0 0"
+            serial_cmd = f"WALK 0 0 {-(self.v_ang)}"
+            #serial_cmd = f"ROT 0 {-self.v_ang} 0 0"
+
+        # ---- REVERENCIA ----
+        # elif cmd == "heat_up":
+        #     serial_cmd = f"ROT 0 {self.roll_pitch_ang} 0 0"
+        
+        # elif cmd == "heat_down":
+        #     serial_cmd = f"ROT 0 {-self.roll_pitch_ang} 0 0"
+
+        # elif cmd == "heat_right":
+        #     serial_cmd = f"ROT {self.roll_pitch_ang} 0 0 0"
+
+        # elif cmd == "heat_left":
+        #     serial_cmd = f"ROT {-self.roll_pitch_ang} 0 0 0"
+        
 
         # ---- STOP ----
         elif cmd == "stop":

@@ -15,7 +15,7 @@ class GPSToLocalXY(Node):
 
         # --- Declarar parametros ---
         self.declare_parameter("topic_gps_lat_lon_topic", cfg.TOPIC_GZ_GPS)
-        self.declare_parameter("topic_gps_to_xy", cfg.TOPIC_GPS_TO_XY)
+        self.declare_parameter("topic_gps_to_xy", cfg.TOPIC_XY_BY_GPS_CURRENT_POSITION)
 
         topic_gps_lat_lon_topic = self.get_parameter("topic_gps_lat_lon_topic").value
         topic_gps_to_xy = self.get_parameter("topic_gps_to_xy").value

@@ -41,22 +41,18 @@ TOPIC_GZ_IR1 = "/gz/sensor/IR_measure1"
 TOPIC_GZ_IR2 = "/gz/sensor/IR_measure2"
 TOPIC_GZ_ULTRASONIC = "/gz/sensor/ultrasonic_read"
 
-# ================= LOCALIZATION NODES =================
-TOPIC_GPS_TO_XY = "/localization/gps_to_xy"
-TOPIC_ESTIMATE_XY = "/localization/estimate_xy"
-TOPIC_ESTIMATE_HEADING = "/localization/heading"
-
-# ================= IMAGE RECOGNITION =================
-
 
 # ================= TOPICS (just for PC) =================
-TOPIC_MONITOR = "/pc/system/monitor"  
+# == Image Recognition ==
 
+# == Robot Location  ==
 TOPIC_XY_BY_GPS_CURRENT_POSITION = "/pc/internal/xy_gps_current_position"
 TOPIC_XY_ODOM_CURRENT_POSITION = "/pc/internal/xy_odom_current_position"
-TOPIC_HEADING_COMPASS    = "/pc/internal/heading_mag"     # heading solo magnetómetro
-TOPIC_HEADING_COMPASS_KALMAN = "/pc/internal/heading_kalman"  # heading fusionado (PC)
+TOPIC_HEADING_COMPASS    = "/pc/internal/heading_mag"    
+# == Sensor tranformation ==
 TOPIC_ULTRASONIC_RANGE = "/ultrasonic_range"
+# == System Monitor ==
+TOPIC_MONITOR = "/pc/system/monitor"  
 
 # ================= COMMAND =================
 TOPIC_CMD_REAL_ROBOT = "/hl_robot_cmd" 

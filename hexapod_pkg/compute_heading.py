@@ -17,7 +17,7 @@ class HeadingEstimatorFast(Node):
         # ================= PARÁMETROS =================
         self.declare_parameter("topic_imu", cfg.TOPIC_GZ_IMU_GIR_ACC)
         self.declare_parameter("topic_mag", cfg.TOPIC_GZ_IMU_MAG)
-        self.declare_parameter("topic_estimate_heading", cfg.TOPIC_ESTIMATE_HEADING)
+        self.declare_parameter("topic_estimate_heading", cfg.TOPIC_HEADING_COMPASS)
 
         topic_imu = self.get_parameter("topic_imu").value
         topic_mag = self.get_parameter("topic_mag").value

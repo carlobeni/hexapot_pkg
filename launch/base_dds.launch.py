@@ -45,7 +45,7 @@ def generate_launch_description():
                     output="screen",
                     parameters=[{
                         "imu_topic": cfg.TOPIC_PI_PHONE_IMU_GIR_ACC,
-                        "mag_topic": cfg.TOPIC_PI_PHONE_MAG,
+                        "mag_topic": cfg.TOPIC_PI_PHONE_IMU_MAG,
                         "ultrasonic_topic": cfg.TOPIC_PI_ULTRASONIC,
                         "ir1_topic": cfg.TOPIC_PI_IR1,
                         "ir2_topic": cfg.TOPIC_PI_IR2,

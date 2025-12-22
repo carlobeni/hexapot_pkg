@@ -26,10 +26,10 @@ class RobotHealthMonitor(Node):
         self.declare_parameter("topic_mag", cfg.TOPIC_GZ_IMU_MAG)
         self.declare_parameter("topic_ultrasonic", cfg.TOPIC_GZ_ULTRASONIC)
 
-        self.declare_parameter("topic_gps_to_xy", cfg.TOPIC_GPS_TO_XY)
-        self.declare_parameter("topic_estimate_heading", cfg.TOPIC_ESTIMATE_HEADING)
+        self.declare_parameter("topic_gps_to_xy", cfg.TOPIC_XY_BY_GPS_CURRENT_POSITION)
+        self.declare_parameter("topic_estimate_heading", cfg.TOPIC_HEADING_COMPASS)
         self.declare_parameter("topic_ultrasonic_range", cfg.TOPIC_ULTRASONIC_RANGE)
-        self.declare_parameter("topic_estimate_xy", cfg.TOPIC_ESTIMATE_XY)
+        self.declare_parameter("topic_estimate_xy", cfg.TOPIC_XY_ODOM_CURRENT_POSITION)
 
         # topic de comando 
         self.declare_parameter("topic_cmd_robot", cfg.TOPIC_CMD_GZ_ROBOT)

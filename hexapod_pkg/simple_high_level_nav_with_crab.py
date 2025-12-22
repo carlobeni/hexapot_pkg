@@ -39,9 +39,9 @@ class HighLevelNav(Node):
 
         self.declare_parameter("topic_ir_left", cfg.TOPIC_GZ_IR1)
         self.declare_parameter("topic_ir_right", cfg.TOPIC_GZ_IR2)
-        self.declare_parameter("topic_estimate_heading", cfg.TOPIC_ESTIMATE_HEADING)
+        self.declare_parameter("topic_estimate_heading", cfg.TOPIC_HEADING_COMPASS)
         self.declare_parameter("topic_ultrasonic_range", cfg.TOPIC_ULTRASONIC_RANGE)
-        self.declare_parameter("topic_estimate_xy", cfg.TOPIC_ESTIMATE_XY)
+        self.declare_parameter("topic_estimate_xy", cfg.TOPIC_XY_ODOM_CURRENT_POSITION)
 
         topic_ir_left = self.get_parameter("topic_ir_left").value
         topic_ir_right = self.get_parameter("topic_ir_right").value

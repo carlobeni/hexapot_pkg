@@ -28,7 +28,7 @@ def generate_launch_description():
         parameters=[{
             "topic_imu": cfg.TOPIC_GZ_IMU_GIR_ACC,
             "topic_mag": cfg.TOPIC_GZ_IMU_MAG,
-            "topic_estimate_heading": cfg.TOPIC_ESTIMATE_HEADING # publisher
+            "topic_estimate_heading": cfg.TOPIC_HEADING_COMPASS # publisher
         }],
     )
 
@@ -39,7 +39,7 @@ def generate_launch_description():
         output="screen",
         parameters=[{
             "topic_gps_lat_lon_topic": cfg.TOPIC_GZ_GPS,
-            "topic_gps_to_xy": cfg.TOPIC_GPS_TO_XY          # publisher
+            "topic_gps_to_xy": cfg.TOPIC_XY_BY_GPS_CURRENT_POSITION          # publisher
         }],
     )
 
@@ -49,9 +49,10 @@ def generate_launch_description():
         name="compute_estimate_xy",
         output="screen",
         parameters=[{
-            "topic_gps_to_xy": cfg.TOPIC_GZ_GPS,
-            "topic_estimate_heading": cfg.TOPIC_ESTIMATE_HEADING,    
-            "topic_estimate_xy": cfg.TOPIC_ESTIMATE_XY      
+            "topic_gps_to_xy": cfg.TOPIC_XY_BY_GPS_CURRENT_POSITION,
+            "topic_cmd_robot": cfg.TOPIC_CMD_GZ_ROBOT,
+            "topic_estimate_heading": cfg.TOPIC_HEADING_COMPASS,
+            "topic_estimate_xy": cfg.TOPIC_XY_ODOM_CURRENT_POSITION  # publisher      
         }],
     )
 
@@ -72,15 +73,18 @@ def generate_launch_description():
         name="master_monitor",
         output="screen",
         parameters=[{
+            # sensors
             "topic_gps": cfg.TOPIC_GZ_GPS,
             "topic_imu": cfg.TOPIC_GZ_IMU_GIR_ACC,
             "topic_ir_left":cfg.TOPIC_GZ_IR1,
             "topic_ir_right":cfg.TOPIC_GZ_IR2,
             "topic_mag":cfg.TOPIC_GZ_IMU_MAG,
             "topic_ultrasonic":cfg.TOPIC_GZ_ULTRASONIC,
-            "topic_gps_to_xy":cfg.TOPIC_GPS_TO_XY,
-            "topic_estimate_heading":cfg.TOPIC_ESTIMATE_HEADING,
+            # robot state
+            "topic_gps_to_xy":cfg.TOPIC_XY_BY_GPS_CURRENT_POSITION,
+            "topic_estimate_heading":cfg.TOPIC_HEADING_COMPASS,
             "topic_ultrasonic_range":cfg.TOPIC_ULTRASONIC_RANGE,
+            "topic_estimate_xy":cfg.TOPIC_XY_ODOM_CURRENT_POSITION,
             "topic_cmd_robot": cfg.TOPIC_CMD_GZ_ROBOT,
         }],
     )

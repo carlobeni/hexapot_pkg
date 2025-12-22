@@ -1,5 +1,7 @@
 #!/usr/bin/env python3
 import math
+import csv
+import os
 import rclpy
 from rclpy.node import Node
 
@@ -12,13 +14,15 @@ class PoseEstimator(Node):
     def __init__(self):
         super().__init__('pose_estimator')
 
-        self.declare_parameter("topic_gps_to_xy", cfg.TOPIC_GZ_GPS)
-        self.declare_parameter("topic_estimate_heading", cfg.TOPIC_ESTIMATE_HEADING)
-        self.declare_parameter("topic_estimate_xy", cfg.TOPIC_ESTIMATE_XY)
+        self.declare_parameter("topic_gps_to_xy", cfg.TOPIC_XY_BY_GPS_CURRENT_POSITION)
+        self.declare_parameter("topic_estimate_heading", cfg.TOPIC_HEADING_COMPASS)
+        self.declare_parameter("topic_estimate_xy", cfg.TOPIC_XY_ODOM_CURRENT_POSITION)
+        self.declare_parameter("topic_cmd_robot", cfg.TOPIC_CMD_GZ_ROBOT)
 
         topic_gps_to_xy = self.get_parameter("topic_gps_to_xy").value
         topic_estimate_heading = self.get_parameter("topic_estimate_heading").value
         topic_estimate_xy= self.get_parameter("topic_estimate_xy").value
+        topic_cmd_robot = self.get_parameter("topic_cmd_robot").value
 
         qos = QoSProfile(
             reliability=ReliabilityPolicy.BEST_EFFORT,
@@ -46,6 +50,7 @@ class PoseEstimator(Node):
         self.hl_cmd = "stop"
 
         self.last_time = self.get_clock().now()
+        self.start_time = self.last_time.nanoseconds * 1e-9
 
         # ======================
         # Subscriptores
@@ -64,10 +69,11 @@ class PoseEstimator(Node):
 
         self.create_subscription(
             String,
-            '/hl_cmd',
+            topic_cmd_robot,
             self.hl_cmd_cb,
             10
         )
+
 
         # ======================
         # Publisher
@@ -88,9 +94,31 @@ class PoseEstimator(Node):
 
         self.get_logger().info("Pose estimator iniciado")
 
+        # ======================
+        # Definir directorio formato y directorio para el csv
+        # ======================
+        log_dir = os.path.expanduser(
+            "~/ros2_projects/ros2_hex_ws/src/csv"
+        )
+        os.makedirs(log_dir, exist_ok=True)
+        self.csv_path = os.path.join(log_dir, "pose_estimator_log.csv")
+        self.csv_file = open(self.csv_path, "w", newline="")
+        self.csv_writer = csv.writer(self.csv_file)
+
+        self.csv_writer.writerow([
+            "time_s",
+            "gps_x", "gps_y",
+            "est_x", "est_y",
+            "heading_deg",
+            "cmd_robot"
+        ])
+
+        self.start_time = self.get_clock().now().nanoseconds * 1e-9
+
     # ======================
     # Callbacks
     # ======================
+
     def gps_cb(self, msg):
         self.gps_x = msg.point.x
         self.gps_y = msg.point.y
@@ -153,6 +181,19 @@ class PoseEstimator(Node):
 
         self.pub_pose.publish(msg)
 
+        # ---------------------
+        # Escribir en csv
+        # ---------------------
+        t = now.nanoseconds * 1e-9 - self.start_time
+        self.csv_writer.writerow([
+            f"{(now.nanoseconds * 1e-9 - self.start_time):.3f}",
+            f"{self.gps_x:.3f}" if self.gps_x is not None else "NaN",
+            f"{self.gps_y:.3f}" if self.gps_y is not None else "NaN",
+            f"{self.x:.3f}", 
+            f"{self.y:.3f}",
+            f"{self.heading_deg:.2f}",
+            self.hl_cmd
+        ])
 
 def main():
     rclpy.init()

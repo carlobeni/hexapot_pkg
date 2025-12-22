@@ -84,59 +84,27 @@ install(PROGRAMS
   # Nodos de computo
   hexapod_pkg/compute_gps_to_local_xy.py
   hexapod_pkg/compute_heading.py  #for simulations (by Lucas)
-  hexapod_pkg/compute_heading_kalman.py #by for implementation (by Carlos)
   hexapod_pkg/compute_estimate_xy.py
   hexapod_pkg/compute_ultrasonic_ranges.py
 
-  #/////////////////////
   hexapod_pkg/teleop_hexapod.py
   hexapod_pkg/web_camera_node.py 
   hexapod_pkg/master_monitor.py
   hexapod_pkg/green_cube_viewer2.py 
   hexapod_pkg/yolo_obstacle_node_best.py 
   hexapod_pkg/simple_high_level_nav_with_crab.py 
-  # Nodos manager
 
+  # Nodos manager
   # Modo 1: manual_control
   # SIN MANAGER
-
   # Modo 2: goal_free_navigation
   hexapod_pkg/manager_goal_free_navigation.py
-
   # Modo 3: goal_cube_navigation
   #hexapod_pkg/manager_goal_cube_navigation.py
-
   # Modo 4: follow_target_real
   #hexapod_pkg/manager_follow_target_real.py
-
   # Modo 5: swarm_aggregation_manager.py
   #hexapod_pkg/manager_swarm_aggregation_manager.py
-
-  #hexapod_pkg/utils/cmd_vel_relay_node.py
-  #hexapod_pkg/test2.py
-  #hexapod_pkg/localization_nodes/gps_to_local_xy.py
-  #hexapod_pkg/localization_nodes/compute_heading.py
-  #hexapod_pkg/navigation_nodes/simple_high_level_nav.py
-  #hexapod_pkg/navigation_nodes/high_level_A_planner.py
-  #hexapod_pkg/hexapod_movements_nodes/hexapod_low_level_control.py
-  #hexapod_pkg/localization_nodes/corrected_stimate_xy.py
-  #hexapod_pkg/navigation_nodes/local_nav_planner.py
-  #hexapod_pkg/image_recognition_nodes/yolo_obstacle_node.py
-  #hexapod_pkg/social_robot_nodes/hand_gesture_node.py
-  #hexapod_pkg/hand_landmarker.task
-  #hexapod_pkg/social_robot_nodes/social_pose_node.py
-  #hexapod_pkg/best.pt
-  #hexapod_pkg/image_recognition_nodes/obstacle_viewer.py
-  #hexapod_pkg/navigation_nodes/local_nav_planner2.py
-  #hexapod_pkg/navigation_nodes/global_nav_planner.py
-  #hexapod_pkg/collision_detector_nodes/ultrasonic_range.py
-  #hexapod_pkg/hexapod_movements_nodes/teleop_hexapod.py
-  #hexapod_pkg/simulation_utils/ir_gazebo_ros_emulator.py 
-  #hexapod_pkg/master_nodes/master_monitor.py
-  #worlds/textura-del-asfalto.jpg
-  #hexapod_pkg/master_nodes/control_master_hexapod.py 
-  #hexapod_pkg/localization_nodes/noise_compute_heading.py
-  #hexapod_pkg/localization_nodes/noise_gps_to_local_xy.py 
 
   DESTINATION lib/${PROJECT_NAME}
 )

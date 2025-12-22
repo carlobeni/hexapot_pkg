@@ -49,8 +49,9 @@ def generate_launch_description():
         name="compute_estimate_xy",
         output="screen",
         parameters=[{
-            "topic_gps_to_xy": cfg.TOPIC_PI_PHONE_GPS,
-            "topic_estimate_heading": cfg.TOPIC_PI_PHONE_HEADING,
+            "topic_gps_to_xy": cfg.TOPIC_XY_BY_GPS_CURRENT_POSITION,
+            "topic_cmd_robot": cfg.TOPIC_CMD_REAL_ROBOT,
+            "topic_estimate_heading": cfg.TOPIC_PI_PHONE_HEADING, # No se computa, viene directo de la PC
             "topic_estimate_xy": cfg.TOPIC_XY_ODOM_CURRENT_POSITION      
         }],
     )
@@ -72,15 +73,19 @@ def generate_launch_description():
         name="master_monitor",
         output="screen",
         parameters=[{
+            # sensors
             "topic_gps": cfg.TOPIC_PI_PHONE_GPS,
             "topic_imu": cfg.TOPIC_PI_PHONE_IMU_GIR_ACC,
             "topic_ir_left":cfg.TOPIC_PI_IR1,
             "topic_ir_right":cfg.TOPIC_PI_IR2,
             "topic_mag":cfg.TOPIC_PI_PHONE_IMU_MAG,
             "topic_ultrasonic":cfg.TOPIC_PI_ULTRASONIC,
+            # robot state
             "topic_gps_to_xy":cfg.TOPIC_XY_BY_GPS_CURRENT_POSITION,
-            "topic_estimate_heading":cfg.TOPIC_XY_ODOM_CURRENT_POSITION,
-            "topic_ultrasonic_range":cfg.TOPIC_ULTRASONIC_RANGE
+            "topic_estimate_heading":cfg.TOPIC_HEADING_COMPASS,
+            "topic_ultrasonic_range":cfg.TOPIC_ULTRASONIC_RANGE,
+            "topic_estimate_xy":cfg.TOPIC_XY_ODOM_CURRENT_POSITION,
+            "topic_cmd_robot": cfg.TOPIC_CMD_REAL_ROBOT,
         }],
     )
 

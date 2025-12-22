@@ -33,7 +33,7 @@ class TeleOpHexapod(Node):
         self.input_thread.start()
 
         self.get_logger().info(
-            "TeleOp activo (mantener tecla): w = forward; a = turn_left; d = turn_right; s = backward; q = lateral_left; e = lateral_right; x = STOP"
+            "TeleOp activo (mantener tecla): w = forward; a = turn_left; d = turn_right; s = backward; q = lateral_left; e = lateral_right; x = STOP; 1 = mode_1; 2 = mode_2; 3 = mode_3"   
         )
 
     # ---------- Teclado raw ----------
@@ -64,7 +64,7 @@ class TeleOpHexapod(Node):
                         self.active_cmd = "mode_3"
 
                     # ---- MOVIMIENTO ----
-                    if key == "w":
+                    elif key == "w":
                         self.active_cmd = "forward"
                     elif key == "a":
                         self.active_cmd = "turn_left"

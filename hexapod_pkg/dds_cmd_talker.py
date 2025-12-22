@@ -39,7 +39,7 @@ class CommandTalker(Node):
         self.v_lin = int(self.get_parameter("linear_speed").value)
         self.v_ang = int(self.get_parameter("angular_speed").value)
         self.walk_yaw_trim = int(self.get_parameter("walk_yaw_trim").value)
-        self.roll_pitch_ang = int(self.get_parameter("roll_pitch_ang").value)
+        #self.roll_pitch_ang = int(self.get_parameter("roll_pitch_ang").value)
 
         qos = QoSProfile(
             reliability=ReliabilityPolicy.RELIABLE,

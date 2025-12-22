@@ -98,7 +98,7 @@ class PoseEstimator(Node):
         # Definir directorio formato y directorio para el csv
         # ======================
         log_dir = os.path.expanduser(
-            "~/ros2_projects/ros2_hex_ws/src/csv"
+            "~/ros2_projects/ros2_hex_ws/src/hexapod_pkg/csv"
         )
         os.makedirs(log_dir, exist_ok=True)
         self.csv_path = os.path.join(log_dir, "pose_estimator_log.csv")

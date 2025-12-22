@@ -50,7 +50,7 @@ def generate_launch_description():
         output="screen",
         parameters=[{
             "topic_gps_to_xy": cfg.TOPIC_PI_PHONE_GPS,
-            "topic_estimate_heading": cfg.TOPIC_HEADING_COMPASS,    
+            "topic_estimate_heading": cfg.TOPIC_PI_PHONE_HEADING,
             "topic_estimate_xy": cfg.TOPIC_XY_ODOM_CURRENT_POSITION      
         }],
     )
@@ -92,7 +92,7 @@ def generate_launch_description():
         TimerAction(
             period=1.0,
             actions=[
-                compute_heading,
+                #compute_heading,
                 compute_gps_to_local_xy,
                 compute_estimate_xy,
                 compute_ultrasonic_ranges,

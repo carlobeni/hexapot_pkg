@@ -53,8 +53,9 @@ install(
     launch
     worlds
     meshes
-    launch_sim
-    hexapod_pkg
+    utils
+    #launch_sim
+    #hexapod_pkg
   DESTINATION share/${PROJECT_NAME}
 )
 

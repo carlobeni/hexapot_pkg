@@ -77,15 +77,6 @@ install(PROGRAMS
   hexapod_pkg/dds_sensors_fast_listener.py
   hexapod_pkg/dds_sensors_reliable_listener.py
 
-  # Nodos utils
-  hexapod_pkg/utils/cmd_vel_relay_node.py # nodo para difusion de robot+gazebo
-  hexapod_pkg/utils/twist_to_cmd_robot.py
-
-  # Files utils
-  hexapod_pkg/utils/test2.py
-  hexapod_pkg/utils/hand_landmarker.task
-  hexapod_pkg/utils/best.pt
-
   # Nodos de gazebo
   hexapod_pkg/gz_ir_emulator.py
   hexapod_pkg/gz_hexapod_low_level_control.py
@@ -103,8 +94,6 @@ install(PROGRAMS
   hexapod_pkg/master_monitor.py 
   hexapod_pkg/green_cube_viewer2.py 
   hexapod_pkg/yolo_obstacle_node_best.py 
-  hexapod_pkg/best_custom.pt 
-  hexapod_pkg/hand_landmarker.task 
   hexapod_pkg/simple_high_level_nav_with_crab.py 
   # Nodos manager
 

@@ -10,13 +10,14 @@ import rclpy
 from rclpy.node import Node
 from std_msgs.msg import String
 
+from hexapod_pkg import hw_config as cfg
 
 class TeleOpHexapod(Node):
 
     def __init__(self):
-        super().__init__("tele_op_hexapod")
+        super().__init__("tele_op_hexapod_sim")
 
-        self.cmd_pub = self.create_publisher(String, "/hl_cmd", 10)
+        self.cmd_pub = self.create_publisher(String,cfg.TOPIC_CMD_GZ_ROBOT, 10)
 
         self.active_cmd = None
         self.last_key_time = 0.0

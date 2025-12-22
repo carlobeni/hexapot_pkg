@@ -56,8 +56,8 @@ TOPIC_ULTRASONIC_RANGE = "/ultrasonic_range"
 TOPIC_MONITOR = "/pc/system/monitor"  
 
 # ================= COMMAND =================
-TOPIC_CMD_REAL_ROBOT = "/hl_robot_cmd" 
-TOPIC_CMD_GZ_ROBOT = "/hl_cmd"
+TOPIC_CMD_REAL_ROBOT = "/hl_real_cmd" 
+TOPIC_CMD_GZ_ROBOT = "/hl_gz_cmd"
 # TOPIC CMD SERIAL DE SALIDA
 TOPIC_CMD_SERIAL = "/cmd_serial"
 TOPIC_CMD_GZ_SERIAL = "/cmd_gz_serial"

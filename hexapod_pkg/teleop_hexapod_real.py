@@ -54,7 +54,16 @@ class TeleOpHexapod(Node):
                         continue
 
                     self.stop_requested = False
+                    
+                    # ---- MODOS ----
+                    if key == "1":
+                        self.active_cmd = "mode_1"
+                    elif key == "2":
+                        self.active_cmd = "mode_2"
+                    elif key == "3":
+                        self.active_cmd = "mode_3"
 
+                    # ---- MOVIMIENTO ----
                     if key == "w":
                         self.active_cmd = "forward"
                     elif key == "a":

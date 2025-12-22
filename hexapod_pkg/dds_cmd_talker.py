@@ -114,6 +114,16 @@ class CommandTalker(Node):
         elif cmd == "stop":
             serial_cmd = "WALK 0 0 0"
 
+        # ---- MODOS ----
+        elif cmd == "mode_1":
+            serial_cmd = f"MODE 1"
+        
+        elif cmd == "mode_2":
+            serial_cmd = f"MODE 2"
+
+        elif cmd == "mode_3":
+            serial_cmd = f"MODE 3"
+
         # ---- DESCONOCIDO ----
         else:
             self.get_logger().warn(f"[CMD ROBOT] desconocido: '{cmd}'")

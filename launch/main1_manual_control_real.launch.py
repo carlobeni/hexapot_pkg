@@ -89,7 +89,7 @@ def generate_launch_description():
         parameters=[{
             "gps_xy_topic": "/localization/gps/local_xy",
             "heading_topic": cfg.TOPIC_HEADING_COMPASS,
-            "hl_cmd_topic": "/hl_cmd",
+            "hl_cmd_topic": cfg.TOPIC_CMD_REAL_ROBOT,
             "output_topic": "/localization/local_stimate_xy",
             "velocity": 0.06,
             "alpha": 1.0,

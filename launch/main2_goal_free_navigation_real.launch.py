@@ -85,7 +85,7 @@ def generate_launch_description():
         parameters=[{
             "gps_xy_topic": cfg.TOPIC_XY_BY_GPS_CURRENT_POSITION,
             "heading_topic": cfg.TOPIC_HEADING_COMPASS,
-            "hl_cmd_topic": "/hl_cmd",
+            "hl_cmd_topic": cfg.TOPIC_CMD_REAL_ROBOT,
             "output_topic": cfg.TOPIC_XY_ODM_CURRENT_POSITION,
 
             "fixed_dt": 0.1,

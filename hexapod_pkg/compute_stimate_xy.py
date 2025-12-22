@@ -13,6 +13,8 @@ from geometry_msgs.msg import PointStamped
 from std_msgs.msg import Float32, String
 from rclpy.qos import qos_profile_sensor_data
 
+from hexapod_pkg import hw_config as cfg
+
 
 class PoseEstimator(Node):
 
@@ -22,7 +24,7 @@ class PoseEstimator(Node):
         # ================= PARÁMETROS =================
         self.declare_parameter("gps_xy_topic", "/localization/gps/local_xy")
         self.declare_parameter("heading_topic", "/localization/heading_deg")
-        self.declare_parameter("hl_cmd_topic", "/hl_cmd")
+        self.declare_parameter("hl_cmd_topic", cfg.TOPIC_CMD_REAL_ROBOT)
         self.declare_parameter("output_topic", "/localization/local_stimate_xy")
 
         self.declare_parameter("velocity", 0.06)     # [m/s]

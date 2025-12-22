@@ -49,6 +49,7 @@ class CommandTalker(Node):
         )
 
         self.cmd_id = 0
+        self.last_serial_cmd = None
 
         # ================= ROS =================
         self.pub = self.create_publisher(String, self.cmd_serial_topic, qos)
@@ -142,6 +143,11 @@ class CommandTalker(Node):
         else:
             self.get_logger().warn(f"[CMD ROBOT] desconocido: '{cmd}'")
             return
+        
+        if serial_cmd == self.last_serial_cmd:
+            return
+
+        self.last_serial_cmd = serial_cmd
 
         # ---- ENVIAR ----
         self.get_logger().info(

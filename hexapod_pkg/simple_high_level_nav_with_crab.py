@@ -7,8 +7,8 @@ from rclpy.node import Node
 from geometry_msgs.msg import PointStamped
 from std_msgs.msg import Float32, String, Int8MultiArray, Bool
 
-
 from rclpy.qos import QoSProfile, ReliabilityPolicy, HistoryPolicy
+
 from hexapod_pkg import hw_config as cfg
 
 # ==================================================
@@ -100,7 +100,7 @@ class HighLevelNav(Node):
         )
 
         # ================= PUB =================
-        self.cmd_pub = self.create_publisher(String, "/hl_cmd", 10)
+        self.cmd_pub = self.create_publisher(String,cfg.TOPIC_CMD_GZ_ROBOT, 10)
 
         # ================= OBJETIVO =================
         self.goal = self.read_goal_from_console()

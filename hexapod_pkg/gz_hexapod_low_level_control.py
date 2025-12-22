@@ -8,6 +8,7 @@ from trajectory_msgs.msg import JointTrajectory, JointTrajectoryPoint
 import math
 import time
 
+from hexapod_pkg import hw_config as cfg
 
 # ============================================================
 #     CLASE BASE DE GAIT (para evitar copiar 200 líneas)
@@ -343,7 +344,7 @@ class HLHexapodBridge(Node):
     def __init__(self):
         super().__init__("gz_hexapod_inv_kinematics")
 
-        self.create_subscription(String, "/hl_cmd", self.cb_cmd, 10)
+        self.create_subscription(String, cfg.TOPIC_CMD_GZ_ROBOT, self.cb_cmd, 10)
 
         # Instancia de gaits
         self.g_forward = TripodForwardGait(self)

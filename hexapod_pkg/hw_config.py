@@ -17,19 +17,14 @@ def check_domain_id(logger=None):
 
 # ================= DDS TOPICS =================
 # TOPICS (From Pi)
-# == Read on PI directly ==
-# Ready to use
-TOPIC_PI_ULTRASONIC = "/pi/sensor/ultrasonic_read"
-TOPIC_PI_IR1 = "/pi/sensor/IR_measure1"
-TOPIC_PI_IR2 = "/pi/sensor/IR_measure2"
-# In development (Do not use)
+TOPIC_PI_IMU_GIR_ACC = "/pi/sensor/imu_data" 
+TOPIC_PI_IMU_MAG = "/pi/sensor/imu_mag"
 TOPIC_PI_GPS = "/pi/sensor/gps_fix"
 TOPIC_PI_CAMERA = "/pi/camera/image_raw"
-TOPIC_PI_IMU_GIR_ACC = "/pi/sensor/imu_data"
-TOPIC_PI_IMU_MAG = "/pi/sensor/imu_mag"
+TOPIC_PI_IR1 = "/pi/sensor/IR_measure1"
+TOPIC_PI_IR2 = "/pi/sensor/IR_measure2"
+TOPIC_PI_ULTRASONIC = "/pi/sensor/ultrasonic_read"
 
-# == Read by Phone to Pi == 
-# Ready to use
 TOPIC_PI_PHONE_HEADING = "/pi/phone/sensor/heading" # Topic type: Float32
 TOPIC_PI_PHONE_CAMERA = "/pi/phone/camera/image_raw" # Topic type: Image
 TOPIC_PI_PHONE_GPS = "/pi/phone/sensor/gps_fix" # Topic type: NavSatFix
@@ -48,8 +43,8 @@ TOPIC_GZ_ULTRASONIC = "/gz/sensor/ultrasonic_read"
 
 # ================= LOCALIZATION NODES =================
 TOPIC_GPS_TO_XY = "/localization/gps_to_xy"
-TOPIC_ESTIMATE_TO_XY = "/localization/estimate_xy"
-TOPIC_STIMATE_HEADING = "/localization/heading"
+TOPIC_ESTIMATE_XY = "/localization/estimate_xy"
+TOPIC_ESTIMATE_HEADING = "/localization/heading"
 
 # ================= ULTRASONIC MANAGER =================
 TOPIC_ULTRASONIC_RANGE = "/ultrasonic_range"

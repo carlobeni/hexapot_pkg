@@ -7,10 +7,18 @@ import math
 
 import hw_config as cfg
 from rclpy.qos import QoSProfile, ReliabilityPolicy, HistoryPolicy
+from hexapod_pkg import hw_config as cfg
 
 class GPSToLocalXY(Node):
     def __init__(self):
         super().__init__("gps_to_local_xy")
+
+        # --- Declarar parametros ---
+        self.declare_parameter("topic_gps_lat_lon_topic", cfg.TOPIC_GZ_GPS)
+        self.declare_parameter("topic_gps_to_xy", cfg.TOPIC_GPS_TO_XY)
+
+        topic_gps_lat_lon_topic = self.get_parameter("topic_gps_lat_lon_topic").value
+        topic_gps_to_xy = self.get_parameter("topic_gps_to_xy").value
 
         # --- Origen (debe coincidir con tu world) ---
         self.lat0 = math.radians(-25.33074682110693)
@@ -27,11 +35,11 @@ class GPSToLocalXY(Node):
 
         self.sub = self.create_subscription(
             NavSatFix,
-            cfg.TOPIC_GZ_GPS,
+            topic_gps_lat_lon_topic,
             self.cb,
             10
         )
-        self.pub = self.create_publisher(PointStamped, cfg.TOPIC_GPS_TO_XY, 10)
+        self.pub = self.create_publisher(PointStamped, topic_gps_to_xy, 10)
 
         self.get_logger().info("GPS → Local XY node READY (Mercator local)")
 

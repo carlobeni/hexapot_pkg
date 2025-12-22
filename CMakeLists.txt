@@ -53,6 +53,8 @@ install(
     launch
     worlds
     meshes
+    launch_sim
+    hexapod_pkg
   DESTINATION share/${PROJECT_NAME}
 )
 
@@ -75,36 +77,34 @@ install(PROGRAMS
   hexapod_pkg/dds_sensors_reliable_listener.py
 
   # Nodos utils
-  #hexapod_pkg/utils/cmd_vel_relay_node.py # nodo para difusion de robot+gazebo
-  #hexapod_pkg/utils/twist_to_cmd_robot.py
+  hexapod_pkg/utils/cmd_vel_relay_node.py # nodo para difusion de robot+gazebo
+  hexapod_pkg/utils/twist_to_cmd_robot.py
 
   # Files utils
-  #hexapod_pkg/utils/test2.py
-  #hexapod_pkg/utils/hand_landmarker.task
-  #hexapod_pkg/utils/best.pt
-  #hexapod_pkg/utils/best_custom.pt
-
+  hexapod_pkg/utils/test2.py
+  hexapod_pkg/utils/hand_landmarker.task
+  hexapod_pkg/utils/best.pt
 
   # Nodos de gazebo
   hexapod_pkg/gz_ir_emulator.py
-  hexapod_pkg/gz_hexapod_low_level_control.py #(add LPv1) 
-
-  # Nodos de gestion de sensores
-  hexapod_pkg/sensor_ultrasonic.py
+  hexapod_pkg/gz_hexapod_low_level_control.py
 
   # Nodos de computo
   hexapod_pkg/compute_gps_to_local_xy.py
   hexapod_pkg/compute_heading.py  #for simulations (by Lucas)
   hexapod_pkg/compute_heading_kalman.py #by for implementation (by Carlos)
-  hexapod_pkg/compute_stimate_xy.py
+  hexapod_pkg/compute_estimate_xy.py
+  hexapod_pkg/compute_ultrasonic_ranges.py
 
-  # Nodos de vision 
-  hexapod_pkg/teleop_hexapod.py #(add LPv1)
-  hexapod_pkg/web_camera_node.py #(add LPv1)
-  hexapod_pkg/green_cube_viewer2.py #(add LPv1)
-  hexapod_pkg/yolo_obstacle_node_best.py #(add LPv1)
-  #hexapod_pkg/best_custom.pt #(add LPv1)
-
+  #/////////////////////
+  hexapod_pkg/teleop_hexapod.py
+  hexapod_pkg/web_camera_node.py 
+  hexapod_pkg/master_monitor.py 
+  hexapod_pkg/green_cube_viewer2.py 
+  hexapod_pkg/yolo_obstacle_node_best.py 
+  hexapod_pkg/best_custom.pt 
+  hexapod_pkg/hand_landmarker.task 
+  hexapod_pkg/simple_high_level_nav_with_crab.py 
   # Nodos manager
 
   # Modo 1: manual_control

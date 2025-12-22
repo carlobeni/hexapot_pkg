@@ -1,88 +1,76 @@
 #!/usr/bin/env python3
-# compute_heading.py
-
 import rclpy
 from rclpy.node import Node
-from rclpy.qos import qos_profile_sensor_data
-
+from rclpy.qos import QoSProfile, ReliabilityPolicy, HistoryPolicy
+from hexapod_pkg import hw_config as cfg
 from sensor_msgs.msg import Imu, MagneticField
 from std_msgs.msg import Float32
 
 import math
-import random
-import csv
-import os
-from datetime import datetime
 
 
 class HeadingEstimatorFast(Node):
 
     def __init__(self):
-        super().__init__("compute_heading")
+        super().__init__('heading_estimator_fast')
 
         # ================= PARÁMETROS =================
-        self.declare_parameter("imu_topic", "/sensor/raw_data/imu")
-        self.declare_parameter("mag_topic", "/sensor/raw_data/magnetometer")
-        self.declare_parameter("output_topic", "/localization/heading_deg")
+        self.declare_parameter("topic_imu", cfg.TOPIC_GZ_IMU_GIR_ACC)
+        self.declare_parameter("topic_mag", cfg.TOPIC_GZ_IMU_MAG)
+        self.declare_parameter("topic_estimate_heading", cfg.TOPIC_ESTIMATE_HEADING)
 
-        self.declare_parameter("declination_deg", -15.5)
-        self.declare_parameter("alpha", 0.95)
-        self.declare_parameter("heading_noise_deg", 0.0)
+        topic_imu = self.get_parameter("topic_imu").value
+        topic_mag = self.get_parameter("topic_mag").value
+        topic_estimate_heading = self.get_parameter("topic_estimate_heading").value
 
-        imu_topic = self.get_parameter("imu_topic").value
-        mag_topic = self.get_parameter("mag_topic").value
-        output_topic = self.get_parameter("output_topic").value
-
-        self.declination_rad = math.radians(
-            self.get_parameter("declination_deg").value
+        qos = QoSProfile(
+            reliability=ReliabilityPolicy.BEST_EFFORT,
+            history=HistoryPolicy.KEEP_LAST,
+            depth=10
         )
-        self.alpha = float(self.get_parameter("alpha").value)
 
-        noise_deg = self.get_parameter("heading_noise_deg").value
-        self.heading_noise_rad = math.radians(noise_deg)
 
-        # ================= ESTADO =================
+        # ================= PARÁMETROS =================
+        self.declination_deg = -15.5       # declinación magnética
+        self.heading_gain   = 1.125        # corrección de escala
+        self.alpha          = 0.95         # 1=solo IMU, 0=solo MAG
+
+        self.swap_xy        = False
+        self.invert_mag_x   = False
+        self.invert_mag_y   = False
+
+        self.declination_rad = math.radians(self.declination_deg)
+        # ================= ESTADO =====================
         self.last_mag = None
 
-        # ================= ROS =================
+        # ================= ROS ========================
         self.create_subscription(
-            Imu, imu_topic, self.imu_cb, qos_profile_sensor_data
+            Imu,
+            topic_imu,
+            self.imu_cb,
+            qos
         )
+
         self.create_subscription(
-            MagneticField, mag_topic, self.mag_cb, qos_profile_sensor_data
+            MagneticField,
+            topic_mag,
+            self.mag_cb,
+            qos
         )
 
         self.pub = self.create_publisher(
-            Float32, output_topic, qos_profile_sensor_data
+            Float32,
+            topic_estimate_heading,
+            qos
         )
 
-        # ================= CSV =================
-        log_dir = os.path.expanduser(
-            "~/ros2_projects/ros2_hex_ws/src/hexapod_pkg/logs"
-        )
-        os.makedirs(log_dir, exist_ok=True)
-
-        ts = datetime.now().strftime("%Y-%m-%d_%H-%M-%S")
-        self.csv_path = os.path.join(log_dir, f"heading_log.csv")
-
-        self.csv_file = open(self.csv_path, "w", newline="")
-        self.csv_writer = csv.writer(self.csv_file)
-        self.csv_writer.writerow([
-            "time_s",
-            "yaw_imu_deg",
-            "mag_heading_deg",
-            "fused_heading_deg"
-        ])
-
-        self.start_time = self.get_clock().now().nanoseconds * 1e-9
-
-        self.get_logger().info("HeadingEstimator READY")
         self.get_logger().info(
-            "Convención: X=NORTE, Y=ESTE | CCW positivo | yaw sobre +Z"
+            f"Heading FAST | decl={self.declination_deg}° alpha={self.alpha}"
         )
-        self.get_logger().info(f"CSV → {self.csv_path}")
 
-    # ================= CALLBACKS =================
+    # =================================================
+    #                     CALLBACKS
+    # =================================================
     def mag_cb(self, msg: MagneticField):
         self.last_mag = msg.magnetic_field
 
@@ -90,55 +78,65 @@ class HeadingEstimatorFast(Node):
         if self.last_mag is None:
             return
 
-        now = self.get_clock().now()
-        t = now.nanoseconds * 1e-9 - self.start_time
+        q = msg.orientation
+        yaw_imu = self.quaternion_to_yaw(q.x, q.y, q.z, q.w)
 
-        # --------- YAW IMU (rad, CCW +Z) ---------
-        yaw_imu = self.quaternion_to_yaw(
-            msg.orientation.x,
-            msg.orientation.y,
-            msg.orientation.z,
-            msg.orientation.w,
+        mag_heading = self.compute_mag_heading(
+            q.x, q.y, q.z, q.w,
+            self.last_mag.x,
+            self.last_mag.y,
+            self.last_mag.z
         )
 
-        # --------- HEADING MAGNÉTICO ---------
-        mag_heading = self.compute_mag_heading(self.last_mag)
+        # ---- FUSIÓN COMPLEMENTARIA ----
+        fused = self.alpha * yaw_imu + (1.0 - self.alpha) * mag_heading
+        fused = self.normalize(fused)
 
-        # --------- FUSIÓN ---------
-        heading = self.alpha * yaw_imu + (1.0 - self.alpha) * mag_heading
+        # ---- GANANCIA ----
+        fused *= self.heading_gain
+        fused = self.normalize(fused)
+
+        # ---- A GRADOS ----
+        deg = math.degrees(fused)
+        if deg < 0:
+            deg += 360.0
+
+        out = Float32()
+        out.data = float(deg)
+        self.pub.publish(out)
+
+    # =================================================
+    #               MAGNETIC HEADING
+    # =================================================
+    def compute_mag_heading(self, qx, qy, qz, qw, mx, my, mz):
+
+        # --- Correcciones de ejes ---
+        if self.swap_xy:
+            mx, my = my, mx
+        if self.invert_mag_x:
+            mx = -mx
+        if self.invert_mag_y:
+            my = -my
+
+        # --- Rotación cuerpo → mundo (solo XY) ---
+        r00 = 1 - 2*(qy*qy + qz*qz)
+        r01 = 2*(qx*qy - qz*qw)
+        r10 = 2*(qx*qy + qz*qw)
+        r11 = 1 - 2*(qx*qx + qz*qz)
+
+        mwx = r00 * mx + r01 * my
+        mwy = r10 * mx + r11 * my
+
+        heading = math.atan2(mwy, mwx)
+        heading = self.normalize(heading)
+
+        # declinación
         heading += self.declination_rad
-        heading += random.gauss(0.0, self.heading_noise_rad)
-        heading = self.wrap_pi(heading)
+        return self.normalize(heading)
 
-        # --------- A GRADOS [-180,180] ---------
-        yaw_imu_deg = math.degrees(yaw_imu)
-        mag_heading_deg = math.degrees(mag_heading)
-        fused_deg = math.degrees(heading)
-
-        self.pub.publish(Float32(data=float(fused_deg)))
-
-        # --------- CSV ---------
-        self.csv_writer.writerow([
-            f"{t:.3f}",
-            f"{yaw_imu_deg:.2f}",
-            f"{mag_heading_deg:.2f}",
-            f"{fused_deg:.2f}",
-        ])
-        self.csv_file.flush()
-
-    # ================= MAG HEADING =================
-    def compute_mag_heading(self, mag):
-        """
-        Heading absoluto:
-        X = Norte
-        Y = Este
-        CCW positivo (yaw estándar)
-        """
-        north = mag.x
-        east = mag.y
-        return math.atan2(east, north)
-
-    # ================= UTILIDADES =================
+    # =================================================
+    #                 UTILIDADES
+    # =================================================
     @staticmethod
     def quaternion_to_yaw(x, y, z, w):
         siny_cosp = 2.0 * (w*z + x*y)
@@ -146,25 +144,28 @@ class HeadingEstimatorFast(Node):
         return math.atan2(siny_cosp, cosy_cosp)
 
     @staticmethod
-    def wrap_pi(a):
-        while a > math.pi:
-            a -= 2 * math.pi
-        while a < -math.pi:
-            a += 2 * math.pi
+    def normalize(a):
+        if a > math.pi:
+            a -= 2*math.pi
+        elif a < -math.pi:
+            a += 2*math.pi
         return a
 
-    def destroy_node(self):
-        self.csv_file.close()
-        super().destroy_node()
 
-
+# =====================================================
 def main(args=None):
     rclpy.init(args=args)
     node = HeadingEstimatorFast()
-    rclpy.spin(node)
+
+    executor = rclpy.executors.MultiThreadedExecutor(num_threads=2)
+    executor.add_node(node)
+    executor.spin()
+
     node.destroy_node()
     rclpy.shutdown()
 
 
 if __name__ == "__main__":
     main()
+
+

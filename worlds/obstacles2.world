@@ -8,7 +8,7 @@
 
     <plugin filename="gz-sim-user-commands-system"
             name="gz::sim::systems::UserCommands"/>
-
+            
     <plugin filename="gz-sim-scene-broadcaster-system"
             name="gz::sim::systems::SceneBroadcaster"/>
 
@@ -29,8 +29,8 @@
     <!-- ============ COORDENADAS GEOGRÁFICAS ============ -->
     <spherical_coordinates>
       <surface_model>EARTH_WGS84</surface_model>
-      <latitude_deg>-25.330480</latitude_deg>
-      <longitude_deg>-57.518124</longitude_deg>
+      <latitude_deg>-25.33074682110693</latitude_deg>
+      <longitude_deg>-57.517799631180665</longitude_deg>
       <elevation>80.0</elevation>
       <heading_deg>0</heading_deg>
     </spherical_coordinates>
@@ -77,10 +77,43 @@
       </link>
     </model>
 
+  <model name="gps_rectangle">
+    <static>true</static>
+
+    <link name="link">
+
+      <!-- SOLO visual: sin colisión -->
+      <visual name="visual">
+        <geometry>
+          <polyline>
+            <!-- Altura casi nula = sin anchura visible -->
+            <height>0.001</height>
+            <point>-33.127 19.229</point>
+            <point>0.000 0.000</point>
+            <point>9.513 16.732</point>
+            <point>-23.479 35.421</point>
+            <point>-33.127 19.229</point> <!-- cerrar figura -->
+          </polyline>
+        </geometry>
+
+        <material>
+          <!-- Gris difuso -->
+          <diffuse>0.6 0.6 0.6 0.6</diffuse>
+          <ambient>0.6 0.6 0.6 0.6</ambient>
+          <specular>0.0 0.0 0.0 1.0</specular>
+        </material>
+      </visual>
+
+    </link>
+</model>
+
     <!-- ================================================= -->
-    <!-- =============== CAJAS VARIADAS ================== -->
-    <!-- alturas: 0.10 – 0.40 m                           -->
+    <!-- PARÁMETROS GLOBALES DE CAJAS                     -->
+    <!-- Tamaño fijo: 0.30 x 0.30 x 0.30 m                -->
+    <!-- Color fijo: VERDE                                -->
     <!-- ================================================= -->
+
+    <!-- ================= CAJAS ================= -->
 
     <!-- Caja A -->
     <model name="box_A">
@@ -88,11 +121,11 @@
       <pose>-3 2 0.15 0 0 0</pose>
       <link name="link">
         <collision name="collision">
-          <geometry><box><size>0.5 0.5 0.3</size></box></geometry>
+          <geometry><box><size>0.3 0.3 0.3</size></box></geometry>
         </collision>
         <visual name="visual">
-          <geometry><box><size>0.5 0.5 0.3</size></box></geometry>
-          <material><diffuse>1 0 0 1</diffuse></material>
+          <geometry><box><size>0.3 0.3 0.3</size></box></geometry>
+          <material><diffuse>0 0.8 0 1</diffuse></material>
         </visual>
       </link>
     </model>
@@ -100,14 +133,14 @@
     <!-- Caja B -->
     <model name="box_B">
       <static>true</static>
-      <pose>-1.2 -2.5 0.20 0 0 0</pose>
+      <pose>-1.2 -2.5 0.15 0 0 0</pose>
       <link name="link">
         <collision name="collision">
-          <geometry><box><size>0.4 0.4 0.4</size></box></geometry>
+          <geometry><box><size>0.3 0.3 0.3</size></box></geometry>
         </collision>
         <visual name="visual">
-          <geometry><box><size>0.4 0.4 0.4</size></box></geometry>
-          <material><diffuse>0 1 0 1</diffuse></material>
+          <geometry><box><size>0.3 0.3 0.3</size></box></geometry>
+          <material><diffuse>0 0.8 0 1</diffuse></material>
         </visual>
       </link>
     </model>
@@ -115,14 +148,14 @@
     <!-- Caja C -->
     <model name="box_C">
       <static>true</static>
-      <pose>2.6 -1.8 0.10 0 0 0</pose>
+      <pose>2.6 -1.8 0.15 0 0 0</pose>
       <link name="link">
         <collision name="collision">
-          <geometry><box><size>0.6 0.6 0.2</size></box></geometry>
+          <geometry><box><size>0.3 0.3 0.3</size></box></geometry>
         </collision>
         <visual name="visual">
-          <geometry><box><size>0.6 0.6 0.2</size></box></geometry>
-          <material><diffuse>0 0 1 1</diffuse></material>
+          <geometry><box><size>0.3 0.3 0.3</size></box></geometry>
+          <material><diffuse>0 0.8 0 1</diffuse></material>
         </visual>
       </link>
     </model>
@@ -130,14 +163,14 @@
     <!-- Caja D -->
     <model name="box_D">
       <static>true</static>
-      <pose>3.8 2.9 0.18 0 0 0</pose>
+      <pose>3.8 2.9 0.15 0 0 0</pose>
       <link name="link">
         <collision name="collision">
-          <geometry><box><size>0.45 0.45 0.36</size></box></geometry>
+          <geometry><box><size>0.3 0.3 0.3</size></box></geometry>
         </collision>
         <visual name="visual">
-          <geometry><box><size>0.45 0.45 0.36</size></box></geometry>
-          <material><diffuse>1 1 0 1</diffuse></material>
+          <geometry><box><size>0.3 0.3 0.3</size></box></geometry>
+          <material><diffuse>0 0.8 0 1</diffuse></material>
         </visual>
       </link>
     </model>
@@ -145,29 +178,29 @@
     <!-- Caja E -->
     <model name="box_E">
       <static>true</static>
-      <pose>0.8 3.6 0.12 0 0 0</pose>
+      <pose>0.8 3.6 0.15 0 0 0</pose>
       <link name="link">
         <collision name="collision">
-          <geometry><box><size>0.3 0.3 0.24</size></box></geometry>
+          <geometry><box><size>0.3 0.3 0.3</size></box></geometry>
         </collision>
         <visual name="visual">
-          <geometry><box><size>0.3 0.3 0.24</size></box></geometry>
-          <material><diffuse>1 0 1 1</diffuse></material>
+          <geometry><box><size>0.3 0.3 0.3</size></box></geometry>
+          <material><diffuse>0 0.8 0 1</diffuse></material>
         </visual>
       </link>
     </model>
 
-        <!-- Caja F -->
+    <!-- Caja F -->
     <model name="box_F">
       <static>true</static>
-      <pose>-4.5 -1.0 0.17 0 0 0</pose>
+      <pose>-4.5 -1.0 0.15 0 0 0</pose>
       <link name="link">
         <collision name="collision">
-          <geometry><box><size>0.45 0.45 0.34</size></box></geometry>
+          <geometry><box><size>0.3 0.3 0.3</size></box></geometry>
         </collision>
         <visual name="visual">
-          <geometry><box><size>0.45 0.45 0.34</size></box></geometry>
-          <material><diffuse>0 1 1 1</diffuse></material>
+          <geometry><box><size>0.3 0.3 0.3</size></box></geometry>
+          <material><diffuse>0 0.8 0 1</diffuse></material>
         </visual>
       </link>
     </model>
@@ -175,14 +208,14 @@
     <!-- Caja G -->
     <model name="box_G">
       <static>true</static>
-      <pose>-2.2 4.1 0.11 0 0 0</pose>
+      <pose>-2.2 4.1 0.15 0 0 0</pose>
       <link name="link">
         <collision name="collision">
-          <geometry><box><size>0.35 0.35 0.22</size></box></geometry>
+          <geometry><box><size>0.3 0.3 0.3</size></box></geometry>
         </collision>
         <visual name="visual">
-          <geometry><box><size>0.35 0.35 0.22</size></box></geometry>
-          <material><diffuse>0.6 0.3 0 1</diffuse></material>
+          <geometry><box><size>0.3 0.3 0.3</size></box></geometry>
+          <material><diffuse>0 0.8 0 1</diffuse></material>
         </visual>
       </link>
     </model>
@@ -190,14 +223,14 @@
     <!-- Caja H -->
     <model name="box_H">
       <static>true</static>
-      <pose>1.9 4.4 0.19 0 0 0</pose>
+      <pose>1.9 4.4 0.15 0 0 0</pose>
       <link name="link">
         <collision name="collision">
-          <geometry><box><size>0.5 0.4 0.38</size></box></geometry>
+          <geometry><box><size>0.3 0.3 0.3</size></box></geometry>
         </collision>
         <visual name="visual">
-          <geometry><box><size>0.5 0.4 0.38</size></box></geometry>
-          <material><diffuse>0.4 0.4 0.4 1</diffuse></material>
+          <geometry><box><size>0.3 0.3 0.3</size></box></geometry>
+          <material><diffuse>0 0.8 0 1</diffuse></material>
         </visual>
       </link>
     </model>
@@ -205,14 +238,14 @@
     <!-- Caja I -->
     <model name="box_I">
       <static>true</static>
-      <pose>4.6 -0.8 0.13 0 0 0</pose>
+      <pose>4.6 -0.8 0.15 0 0 0</pose>
       <link name="link">
         <collision name="collision">
-          <geometry><box><size>0.3 0.3 0.26</size></box></geometry>
+          <geometry><box><size>0.3 0.3 0.3</size></box></geometry>
         </collision>
         <visual name="visual">
-          <geometry><box><size>0.3 0.3 0.26</size></box></geometry>
-          <material><diffuse>0.8 0.2 0.2 1</diffuse></material>
+          <geometry><box><size>0.3 0.3 0.3</size></box></geometry>
+          <material><diffuse>0 0.8 0 1</diffuse></material>
         </visual>
       </link>
     </model>
@@ -220,34 +253,35 @@
     <!-- Caja J -->
     <model name="box_J">
       <static>true</static>
-      <pose>3.1 -3.9 0.16 0 0 0</pose>
+      <pose>3.1 -3.9 0.15 0 0 0</pose>
       <link name="link">
         <collision name="collision">
-          <geometry><box><size>0.4 0.5 0.32</size></box></geometry>
+          <geometry><box><size>0.3 0.3 0.3</size></box></geometry>
         </collision>
         <visual name="visual">
-          <geometry><box><size>0.4 0.5 0.32</size></box></geometry>
-          <material><diffuse>0.2 0.6 0.9 1</diffuse></material>
+          <geometry><box><size>0.3 0.3 0.3</size></box></geometry>
+          <material><diffuse>0 0.8 0 1</diffuse></material>
         </visual>
       </link>
     </model>
 
-    <!-- Caja k -->
-    <model name="box_k">
+    <!-- Caja K -->
+    <model name="box_K">
       <static>true</static>
-      <pose>2 0.5 0.16 0 0 0</pose>
+      <pose>2 0.5 0.15 0 0 0</pose>
       <link name="link">
         <collision name="collision">
-          <geometry><box><size>0.4 0.5 0.32</size></box></geometry>
+          <geometry><box><size>0.3 0.3 0.3</size></box></geometry>
         </collision>
         <visual name="visual">
-          <geometry><box><size>0.6 0.6 0.32</size></box></geometry>
-          <material><diffuse>0.2 0.6 0.9 1</diffuse></material>
+          <geometry><box><size>0.3 0.3 0.3</size></box></geometry>
+          <material><diffuse>0 0.8 0 1</diffuse></material>
         </visual>
       </link>
     </model>
 
-    <!-- Marcador circular en el origen -->
+    <!-- ================= MARCADORES Y SOL ================= -->
+
     <model name="origin_marker">
       <static>true</static>
       <pose>0 0 0.001 0 0 0</pose>
@@ -266,42 +300,23 @@
       </link>
     </model>
 
-    <!-- Marcador X en (5,2) -->
     <model name="x_marker">
       <static>true</static>
       <pose>8 6 0.01 0 0 0</pose>
       <link name="link">
-
-        <!-- Barra 1 -->
         <visual name="bar_1">
           <pose>0 0 0 0 0 0.785398</pose>
-          <geometry>
-            <box>
-              <size>0.5 0.1 0.02</size>
-            </box>
-          </geometry>
-          <material>
-            <diffuse>1 1 0 1</diffuse>
-          </material>
+          <geometry><box><size>0.5 0.1 0.002</size></box></geometry>
+          <material><diffuse>1 1 0 1</diffuse></material>
         </visual>
-
-        <!-- Barra 2 -->
         <visual name="bar_2">
           <pose>0 0 0 0 0 -0.785398</pose>
-          <geometry>
-            <box>
-              <size>0.5 0.1 0.02</size>
-            </box>
-          </geometry>
-          <material>
-            <diffuse>1 1 0 1</diffuse>
-          </material>
+          <geometry><box><size>0.5 0.1 0.002</size></box></geometry>
+          <material><diffuse>1 1 0 1</diffuse></material>
         </visual>
-
       </link>
     </model>
 
-    <!-- ================= SOL ================= -->
     <light name="sun" type="directional">
       <pose>0 0 10 0 0 0</pose>
       <cast_shadows>true</cast_shadows>

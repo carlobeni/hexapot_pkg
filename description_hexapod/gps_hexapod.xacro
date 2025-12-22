@@ -21,7 +21,6 @@
       <selfCollide>false</selfCollide>
     </gazebo>
 
-
     <gazebo reference="gps_link">
         <material>Gazebo/Red</material>
         <sensor name="gps_sensor" type="navsat">

@@ -8,7 +8,7 @@ from sensor_msgs.msg import Imu, MagneticField
 from std_msgs.msg import Float64
 from rclpy.qos import QoSProfile, ReliabilityPolicy, HistoryPolicy
 
-import hexapod_pkg.launch.hw_config as cfg
+from hexapod_pkg import hw_config as cfg
 
 # =============================
 # CONSTANTES

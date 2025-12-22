@@ -24,6 +24,7 @@ TOPIC_PI_ULTRASONIC = "/pi/sensor/ultrasonic_read"
 TOPIC_PI_PHONE_HEADING = "/pi/phone/sensor/heading" # Topic type: Float32
 TOPIC_PI_PHONE_CAMERA = "/pi/phone/camera/image_raw" # Topic type: Image
 TOPIC_PI_PHONE_GPS = "/pi/phone/sensor/gps_fix" # Topic type: NavSatFix
+TOPIC_PI_IS_PI_MANAGER_ACTIVE = "/pi/manager/is_pi_manager_active" # Topic type: Bool
 # In development
 TOPIC_PI_PHONE_IMU_GIR_ACC = "/pi/phone/sensor/imu_data" # Topic type: Imu
 TOPIC_PI_PHONE_IMU_MAG = "/pi/phone/sensor/imu_mag" # Topic type: MagneticField
@@ -59,4 +60,5 @@ TOPIC_CMD_REAL_ROBOT = "/hl_robot_cmd"
 TOPIC_CMD_GZ_ROBOT = "/hl_cmd"
 # TOPIC CMD SERIAL DE SALIDA
 TOPIC_CMD_SERIAL = "/cmd_serial"
+TOPIC_CMD_GZ_SERIAL = "/cmd_gz_serial"
 

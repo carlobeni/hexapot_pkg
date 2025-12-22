@@ -12,6 +12,8 @@ from rclpy.qos import (
     DurabilityPolicy,
 )
 
+from hexapod_pkg import hw_config as cfg
+
 
 class CommandTalker(Node):
 
@@ -19,8 +21,8 @@ class CommandTalker(Node):
         super().__init__("dds_cmd_talker")
 
         # ================= PARÁMETROS =================
-        self.declare_parameter("cmd_robot_topic", "/cmd_robot")
-        self.declare_parameter("cmd_serial_topic", "/cmd_serial")
+        self.declare_parameter("cmd_robot_topic", cfg.TOPIC_CMD_GZ_ROBOT)
+        self.declare_parameter("cmd_serial_topic", cfg.TOPIC_CMD_GZ_SERIAL)
 
         # valores por defecto, de hecho son establecidos en dds_base.launch.py
         self.declare_parameter("linear_speed", 60) # velocidad lineal

@@ -80,7 +80,8 @@ def generate_launch_description():
             "topic_ultrasonic":cfg.TOPIC_GZ_ULTRASONIC,
             "topic_gps_to_xy":cfg.TOPIC_GPS_TO_XY,
             "topic_estimate_heading":cfg.TOPIC_ESTIMATE_HEADING,
-            "topic_ultrasonic_range":cfg.TOPIC_ULTRASONIC_RANGE
+            "topic_ultrasonic_range":cfg.TOPIC_ULTRASONIC_RANGE,
+            "topic_cmd_robot": cfg.TOPIC_CMD_GZ_ROBOT,
         }],
     )
 

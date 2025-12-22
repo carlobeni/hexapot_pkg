@@ -91,7 +91,7 @@ install(PROGRAMS
   #/////////////////////
   hexapod_pkg/teleop_hexapod.py
   hexapod_pkg/web_camera_node.py 
-  hexapod_pkg/master_monitor.py 
+  hexapod_pkg/master_monitor.py
   hexapod_pkg/green_cube_viewer2.py 
   hexapod_pkg/yolo_obstacle_node_best.py 
   hexapod_pkg/simple_high_level_nav_with_crab.py 

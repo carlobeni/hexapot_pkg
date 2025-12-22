@@ -31,8 +31,8 @@ class RobotHealthMonitor(Node):
         self.declare_parameter("topic_ultrasonic_range", cfg.TOPIC_ULTRASONIC_RANGE)
         self.declare_parameter("topic_estimate_xy", cfg.TOPIC_ESTIMATE_XY)
 
-        # topic de comando
-        self.declare_parameter("cmd_serial_topic", cfg.TOPIC_CMD_SERIAL)
+        # topic de comando 
+        self.declare_parameter("topic_cmd_robot", cfg.TOPIC_CMD_GZ_ROBOT)
 
         topic_gps = self.get_parameter("topic_gps").value
         topic_imu = self.get_parameter("topic_imu").value
@@ -46,10 +46,7 @@ class RobotHealthMonitor(Node):
         topic_ultrasonic_range = self.get_parameter("topic_ultrasonic_range").value
         topic_estimate_xy = self.get_parameter("topic_estimate_xy").value
 
-        cmd_robot_topic = self.get_parameter("cmd_robot_topic").value
-        cmd_serial_topic = self.get_parameter("cmd_serial_topic").value
-
-
+        topic_cmd_robot = self.get_parameter("topic_cmd_robot").value
 
         qos = QoSProfile(
             reliability=ReliabilityPolicy.BEST_EFFORT,
@@ -67,8 +64,6 @@ class RobotHealthMonitor(Node):
             topic_ir_right: "IR Right",
             topic_mag: "Magnetometer",
             topic_ultrasonic: "Ultrasonic",
-            cmd_robot_topic: "Robot Command",
-            cmd_serial_topic: "Serial Command",
         }
 
         # ==============================
@@ -81,7 +76,7 @@ class RobotHealthMonitor(Node):
             "ultrasonic": None,
             "ir_left": None,
             "ir_right": None,
-            "hl_cmd": None,
+            "cmd_robot": None,
         }
 
         # ==============================
@@ -144,8 +139,8 @@ class RobotHealthMonitor(Node):
 
         self.create_subscription(
             String,
-            "/hl_cmd",
-            self.cb_hl_cmd,
+            topic_cmd_robot,
+            self.cb_cmd_robot,
             10
         )
 
@@ -183,8 +178,8 @@ class RobotHealthMonitor(Node):
     def cb_ir_right(self, msg):
         self.state["ir_right"] = msg.data
 
-    def cb_hl_cmd(self, msg):
-        self.state["hl_cmd"] = msg.data
+    def cb_cmd_robot(self, msg):
+        self.state["cmd_robot"] = msg.data
 
     # ==============================
     # CONTROL MASTER
@@ -233,9 +228,7 @@ class RobotHealthMonitor(Node):
         # -------- HL CMD --------
         section("HIGH LEVEL COMMAND")
         self.hl_label = ttk.Label(
-            self.root,
-            text="hl_cmd            : ---",
-            font=("Courier", 10)
+            self.root, text=f"{'cmd_robot':<18}: ---", font=("Courier", 10)
         )
         self.hl_label.pack(anchor="w", padx=20)
 
@@ -306,7 +299,7 @@ class RobotHealthMonitor(Node):
         )
 
         self.hl_label.config(
-            text=f"{'hl_cmd':<18}: {fmt(self.state['hl_cmd'])}",
+            text=f"{'hl_cmd':<18}: {fmt(self.state['cmd_robot'])}",
             foreground="black"
         )
 

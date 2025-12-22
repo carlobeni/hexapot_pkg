@@ -26,7 +26,7 @@ TOPIC_PI_PHONE_CAMERA = "/pi/phone/camera/image_raw" # Topic type: Image
 TOPIC_PI_PHONE_GPS = "/pi/phone/sensor/gps_fix" # Topic type: NavSatFix
 # In development
 TOPIC_PI_PHONE_IMU_GIR_ACC = "/pi/phone/sensor/imu_data" # Topic type: Imu
-TOPIC_PI_PHONE_MAG = "/pi/phone/sensor/imu_mag" # Topic type: MagneticField
+TOPIC_PI_PHONE_IMU_MAG = "/pi/phone/sensor/imu_mag" # Topic type: MagneticField
 TOPIC_PI_IMU_GIR_ACC = "/pi/sensor/imu_data" 
 TOPIC_PI_IMU_MAG = "/pi/sensor/imu_mag"
 TOPIC_PI_GPS = "/pi/sensor/gps_fix"
@@ -53,11 +53,10 @@ TOPIC_ESTIMATE_HEADING = "/localization/heading"
 TOPIC_MONITOR = "/pc/system/monitor"  
 
 TOPIC_XY_BY_GPS_CURRENT_POSITION = "/pc/internal/xy_gps_current_position"
-TOPIC_XY_ODM_CURRENT_POSITION = "/pc/internal/xy_odom_current_position"
+TOPIC_XY_ODOM_CURRENT_POSITION = "/pc/internal/xy_odom_current_position"
 TOPIC_HEADING_COMPASS    = "/pc/internal/heading_mag"     # heading solo magnetómetro
 TOPIC_HEADING_COMPASS_KALMAN = "/pc/internal/heading_kalman"  # heading fusionado (PC)
 TOPIC_ULTRASONIC_RANGE = "/ultrasonic_range"
-
 
 # ================= COMMAND =================
 TOPIC_CMD_REAL_ROBOT = "/hl_robot_cmd" 

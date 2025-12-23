@@ -50,12 +50,11 @@ install(
     config 
     description 
     description_hexapod
-    launch
     worlds
     meshes
     utils
-    #launch_sim
-    #hexapod_pkg
+    launch_sim
+    launch_real 
   DESTINATION share/${PROJECT_NAME}
 )
 
@@ -71,44 +70,43 @@ install(
 # Install Python nodes (EXACT FILENAMES)
 # =====================================================
 install(PROGRAMS
-  # Nodos de comunicacion
-  hexapod_pkg/dds_cmd_talker.py
-  hexapod_pkg/dds_monitor_pc.py
-  hexapod_pkg/dds_sensors_fast_listener.py
-  hexapod_pkg/dds_sensors_reliable_listener.py
 
-  # Nodos de gazebo
-  hexapod_pkg/gz_ir_emulator.py
-  hexapod_pkg/gz_hexapod_low_level_control.py
+  # Nodos de la camara
+  hexapod_pkg/camera_nodes/web_camera_node.py
 
-  # Nodos de computo
-  hexapod_pkg/compute_gps_to_local_xy.py
-  hexapod_pkg/compute_heading.py  #for simulations (by Lucas)
-  hexapod_pkg/compute_estimate_xy.py
-  hexapod_pkg/compute_ultrasonic_ranges.py
+  # Nodos dds
+  hexapod_pkg/dds_nodes/dds_cmd_talker.py
+  hexapod_pkg/dds_nodes/dds_monitor_pc.py
+  hexapod_pkg/dds_nodes/dds_sensors_fast_listener.py
+  hexapod_pkg/dds_nodes/dds_sensors_reliable_listener.py
 
-  # Nodos de perifericos
-  hexapod_pkg/teleop_hexapod_sim.py
-  hexapod_pkg/teleop_hexapod_real.py
-  hexapod_pkg/master_monitor.py
+  # Nodos gz
+  hexapod_pkg/gazebo_nodes/gz_ir_emulator.py
+  hexapod_pkg/gazebo_nodes/gz_hexapod_low_level_control.py
 
-  # Nodos de vision
-  hexapod_pkg/web_camera_node.py 
-  hexapod_pkg/green_cube_viewer2.py 
-  hexapod_pkg/yolo_obstacle_node_best.py 
-  hexapod_pkg/simple_high_level_nav_with_crab.py 
+  # Nodos location and orientation
+  hexapod_pkg/localization_and_orientation_nodes/compute_gps_to_local_xy.py
+  hexapod_pkg/localization_and_orientation_nodes/compute_heading.py 
+  hexapod_pkg/localization_and_orientation_nodes/compute_estimate_xy.py
 
-  # Nodos manager
-  # Modo 1: manual_control
-  # SIN MANAGER
-  # Modo 2: goal_free_navigation
-  hexapod_pkg/manager_goal_free_navigation.py
-  # Modo 3: goal_cube_navigation
-  #hexapod_pkg/manager_goal_cube_navigation.py
-  # Modo 4: follow_target_real
-  #hexapod_pkg/manager_follow_target_real.py
-  # Modo 5: swarm_aggregation_manager.py
-  #hexapod_pkg/manager_swarm_aggregation_manager.py
+  # Nodos sensor
+  hexapod_pkg/sensors_interfaces_nodes/compute_ultrasonic_ranges.py
+
+  # Nodos monitor
+  hexapod_pkg/monitor_nodes/master_monitor.py
+
+  # Nodos Image Recognition
+  hexapod_pkg/image_recognition_nodes/cube_viewer_classic_vision.py
+  hexapod_pkg/image_recognition_nodes/cube_viewer_yolo.py
+  hexapod_pkg/image_recognition_nodes/yolo_obstacle_node_best.py 
+  hexapod_pkg/image_recognition_nodes/ball_viewer_yolo.py 
+
+  # Nodos TeleOP
+  hexapod_pkg/teleop_nodes/teleop_hexapod.py
+
+  # Nodos Navigation
+  hexapod_pkg/navigation_nodes/target_navigation_with_obstacle_avoidance.py
+  hexapod_pkg/navigation_nodes/follower_navigation_node.py 
 
   DESTINATION lib/${PROJECT_NAME}
 )

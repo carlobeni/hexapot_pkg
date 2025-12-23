@@ -102,7 +102,9 @@ install(PROGRAMS
   hexapod_pkg/image_recognition_nodes/ball_viewer_yolo.py 
 
   # Nodos TeleOP
-  hexapod_pkg/teleop_nodes/teleop_hexapod.py
+  hexapod_pkg/teleop_nodes/teleop_hexapod_sim.py
+  hexapod_pkg/teleop_nodes/teleop_hexapod_real.py
+  hexapod_pkg/teleop_nodes/teleop_hexapod_real_cont.py
 
   # Nodos Navigation
   hexapod_pkg/navigation_nodes/target_navigation_with_obstacle_avoidance.py

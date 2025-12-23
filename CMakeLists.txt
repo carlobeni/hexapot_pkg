@@ -109,6 +109,7 @@ install(PROGRAMS
   # Nodos Navigation
   hexapod_pkg/navigation_nodes/target_navigation_with_obstacle_avoidance.py
   hexapod_pkg/navigation_nodes/follower_navigation_node.py 
+  hexapod_pkg/navigation_nodes/swarm_navigation_with_obstacle_avoidance.py
 
   DESTINATION lib/${PROJECT_NAME}
 )

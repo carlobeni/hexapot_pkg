@@ -1,329 +1,156 @@
 #!/usr/bin/env python3
-import math
-import time
 import rclpy
 from rclpy.node import Node
-
-from geometry_msgs.msg import PointStamped
-from std_msgs.msg import Float32, String, Int8MultiArray, Bool
+from std_msgs.msg import Int8MultiArray, String
 from rclpy.qos import QoSProfile, ReliabilityPolicy, HistoryPolicy
 from hexapod_pkg import hw_config as cfg
 
-# ==================================================
-# GPS → XY LOCAL (LOCAL ENU)
-# ==================================================
-def gps_to_local_xy(lat, lon, lat_ref, lon_ref):
-    meters_per_deg = 111320.0
-    dlat = lat - lat_ref
-    dlon = lon - lon_ref
+import csv
+import os
+from datetime import datetime
 
-    x = dlon * meters_per_deg * math.cos(math.radians(lat_ref))
-    y = dlat * meters_per_deg
-    return x, y
-
-
-def normalize_angle(a):
-    while a > 180:
-        a -= 360
-    while a < -180:
-        a += 360
-    return a
-
-
-class HighLevelNav(Node):
+class SwarmNav(Node):
     def __init__(self):
-        super().__init__("high_level_nav")
-
+        super().__init__("swarm_nav")
 
         # ================= PARÁMETROS =================
-        self.declare_parameter("topic_ir_left", cfg.TOPIC_GZ_IR1)
-        self.declare_parameter("topic_ir_right", cfg.TOPIC_GZ_IR2)
-        self.declare_parameter("topic_estimate_heading", cfg.TOPIC_HEADING_COMPASS)
-        self.declare_parameter("topic_ultrasonic_range", cfg.TOPIC_ULTRASONIC_RANGE)
-        self.declare_parameter("topic_estimate_xy", cfg.TOPIC_XY_ODOM_CURRENT_POSITION)
-        self.declare_parameter("topic_cmd_robot", cfg.TOPIC_CMD_GZ_ROBOT)
         self.declare_parameter("topic_obstacle_occupation_grid", cfg.TOPIC_OBSTACLE_OCCUPATION_GRID)
+        self.declare_parameter("topic_cmd_robot", cfg.TOPIC_CMD_GZ_ROBOT)
+        self.declare_parameter("center_tol_cols", 1)
+        self.declare_parameter("search_cmd", "turn_left")
+        
+        # Parámetros de Seguridad y Evasión
+        self.declare_parameter("danger_rows_count", 10)
+        self.declare_parameter("min_active_cells_proximity", 10)
+        # Tiempo de giro forzado al encontrar una pelota (en ciclos de 0.05s)
+        # 20 ciclos = 1 segundo de giro ignorando detecciones
+        self.declare_parameter("evasion_duration_cycles", 20) 
 
-        self.declare_parameter("LAT0", -25.33074682110693)
-        self.declare_parameter("LON0", -57.517799631180665)
+        topic_grid = self.get_parameter("topic_obstacle_occupation_grid").value
+        topic_cmd = self.get_parameter("topic_cmd_robot").value
+        
+        self.center_tol = self.get_parameter("center_tol_cols").value
+        self.search_cmd = self.get_parameter("search_cmd").value
+        self.danger_rows = self.get_parameter("danger_rows_count").value
+        self.min_prox_cells = self.get_parameter("min_active_cells_proximity").value
+        self.evasion_limit = self.get_parameter("evasion_duration_cycles").value
 
-        topic_ir_left = self.get_parameter("topic_ir_left").value
-        topic_ir_right = self.get_parameter("topic_ir_right").value
-        topic_estimate_heading = self.get_parameter("topic_estimate_heading").value
-        topic_ultrasonic_range = self.get_parameter("topic_ultrasonic_range").value
-        topic_estimate_xy = self.get_parameter("topic_estimate_xy").value
-        topic_cmd_robot = self.get_parameter("topic_cmd_robot").value
-        topic_obstacle_occupation_grid = self.get_parameter("topic_obstacle_occupation_grid").value
+        qos = QoSProfile(reliability=ReliabilityPolicy.BEST_EFFORT, history=HistoryPolicy.KEEP_LAST, depth=10)
 
-        self.LAT0 = self.get_parameter("LAT0").value
-        self.LON0 = self.get_parameter("LON0").value
+        # ================= CONFIGURACIÓN CSV =================
+        home = os.path.expanduser("~")
+        self.csv_dir = os.path.join(home, "csv_logs")
+        if not os.path.exists(self.csv_dir):
+            os.makedirs(self.csv_dir)
 
-        qos = QoSProfile(
-            reliability=ReliabilityPolicy.BEST_EFFORT,
-            history=HistoryPolicy.KEEP_LAST,
-            depth=10
-        )
+        timestamp_str = datetime.now().strftime("%Y%m%d_%H%M%S")
+        self.csv_file = os.path.join(self.csv_dir, f"swarm_log_{timestamp_str}.csv")
+        self.init_csv()
 
-        # ================= SUBS =================
-        self.create_subscription(
-            PointStamped,
-            topic_estimate_xy,
-            self.cb_gps,
-            qos
-        )
-
-        self.create_subscription(
-            Float32,
-            topic_estimate_heading,
-            self.cb_heading,
-            qos
-        )
-
-        self.create_subscription(
-            Int8MultiArray,
-            topic_obstacle_occupation_grid,
-            self.cb_grid,
-            10
-        )
-
-        self.create_subscription(
-            Float32,
-            topic_ultrasonic_range,
-            self.cb_ultra,
-            qos
-        )
-
-        # -------- IR LATERALES --------
-        self.create_subscription(
-            Bool,
-            topic_ir_left,
-            self.cb_ir_left,
-            qos
-        )
-
-        self.create_subscription(
-            Bool,
-            topic_ir_right,
-            self.cb_ir_right,
-            qos
-        )
-
-        # ================= PUB =================
-        self.cmd_pub = self.create_publisher(String, topic_cmd_robot, 10)
-
-        # ================= OBJETIVO =================
-        #self.goal = (8.0, 6.0)
-        self.goal = self.read_goal_from_console()
+        # ================= SUBS / PUB =================
+        self.create_subscription(Int8MultiArray, topic_grid, self.cb_grid, qos)
+        self.cmd_pub = self.create_publisher(String, topic_cmd, 10)
 
         # ================= ESTADO =================
-        self.x = self.y = self.heading = None
         self.grid = None
         self.N = None
-        self.ultra_dist = None
-
-        self.ir_left = False
-        self.ir_right = False
-
-        self.state = "NAV"
-        self.prev_state = "NAV"
-        self.heading_ref = None
-        self.last_recover_time = 0.0
-
-        # ================= PARÁMETROS =================
-        self.heading_tol = 6.0
-        self.dist_tol = 0.5
-
-        self.heading_step = 2.0
-        self.recover_period = 0.4
-
-        self.ultra_clear_dist = 0.8
-
-        self.clearance_angle = 25.0
-        self.inflate_rows = 3
-        self.inflate_cols = 3
+        self.is_object_near = False
+        self.evasion_timer = 0  # Contador para el giro forzado
 
         self.timer = self.create_timer(0.05, self.loop)
+        self.get_logger().info("SwarmNav con Modo Evasión iniciado.")
 
-        self.get_logger().info("HighLevelNav con reflejo IR lateral (cangrejo) activo")
-
-    # ==================================================
-    # OBJETIVO POR CONSOLA
-    # ==================================================
-    def read_goal_from_console(self):
-        while True:
-            try:
-                raw = input("\nIngrese objetivo GPS (lat, lon): ")
-                lat_str, lon_str = raw.split(",")
-                lat = float(lat_str.strip())
-                lon = float(lon_str.strip())
-
-                gx, gy = gps_to_local_xy(
-                    lat, lon,
-                    self.LAT0,
-                    self.LON0
-                )
-
-                self.get_logger().info(f"Objetivo GPS recibido: ({lat}, {lon})")
-                self.get_logger().info(f"Convertido a XY local: ({gx:.2f}, {gy:.2f})")
-                return gx, gy
-
-            except Exception:
-                print("Formato inválido. Use: lat, lon")
-
-    # ================= CALLBACKS =================
-    def cb_gps(self, msg):
-        self.x = msg.point.x
-        self.y = msg.point.y
-
-    def cb_heading(self, msg):
-        self.heading = float(msg.data)
+    def init_csv(self):
+        with open(self.csv_file, 'w', newline='') as f:
+            writer = csv.writer(f)
+            writer.writerow(['time_stamp', 'target_col', 'object_near', 'evading'])
 
     def cb_grid(self, msg):
         self.N = msg.layout.dim[0].size
         self.grid = list(msg.data)
 
-    def cb_ultra(self, msg):
-        self.ultra_dist = float(msg.data)
-
-    def cb_ir_left(self, msg):
-        self.ir_left = bool(msg.data)
-
-    def cb_ir_right(self, msg):
-        self.ir_right = bool(msg.data)
-
-    # ================= PERCEPCIÓN =================
-    def obstacle_detected(self):
-        if self.grid is None:
-            return False
-
+    def find_centroid_column(self):
+        if self.grid is None: return None
         N = self.N
-        mid = N // 2
+        total_weight = 0
+        weighted_sum_cols = 0
+        
+        # 1. Centroide
+        for c in range(N):
+            col_density = sum(1 for r in range(N) if self.grid[r * N + c] == 1)
+            if col_density > 0:
+                weighted_sum_cols += c * col_density
+                total_weight += col_density
 
-        for r in range(N - self.inflate_rows, N):
-            for c in range(mid - self.inflate_cols, mid + self.inflate_cols + 1):
-                if 0 <= r < N and 0 <= c < N:
-                    if self.grid[r * N + c] == 1:
-                        return True
+        # 2. Zona de Peligro (Proximidad)
+        active_near_cells = 0
+        for r in range(N - self.danger_rows, N):
+            for c in range(N):
+                if self.grid[r * N + c] == 1:
+                    active_near_cells += 1
+        
+        self.is_object_near = active_near_cells >= self.min_prox_cells
+        target_col = int(weighted_sum_cols / total_weight) if total_weight > 0 else None
+        
+        # Log CSV reducido
+        with open(self.csv_file, 'a', newline='') as f:
+            writer = csv.writer(f)
+            time_now = datetime.now().strftime("%H:%M:%S.%f")[:-3]
+            writer.writerow([time_now, target_col, self.is_object_near, self.evasion_timer > 0])
+            
+        return target_col
 
-        if self.ultra_dist is not None and self.ultra_dist > 0:
-            if self.ultra_dist < self.ultra_clear_dist:
-                return True
-
-        return False
-
-    def grid_density(self):
-        if self.grid is None:
-            return 0, 0
-
-        N = self.N
-        mid = N // 2
-
-        left = right = 0
-        for r in range(mid, N):
-            for c in range(0, mid):
-                left += self.grid[r * N + c]
-            for c in range(mid, N):
-                right += self.grid[r * N + c]
-
-        return left, right
-
-    # ================= LOOP =================
     def loop(self):
-        if None in (self.x, self.y, self.heading):
-            return
-
+        if self.grid is None: return
         cmd = String()
 
-        # ==================================================
-        # === REFLEJO IR LATERAL (PRIORIDAD ABSOLUTA) ===
-        # ==================================================
-        if self.ir_left or self.ir_right:
+        # --- LÓGICA DE EVASIÓN FORZADA ---
+        if self.evasion_timer > 0:
+            cmd.data = self.search_cmd
+            self.cmd_pub.publish(cmd)
+            self.evasion_timer -= 1
+            return
 
-            if self.state not in ("CRAB_LEFT", "CRAB_RIGHT"):
-                self.prev_state = self.state
+        # Si no estamos evadiendo, procesamos la matriz normalmente
+        col = self.find_centroid_column()
 
-            if self.ir_left:
-                self.state = "CRAB_RIGHT"
-                cmd.data = "lateral_right"
-            elif self.ir_right:
-                self.state = "CRAB_LEFT"
-                cmd.data = "lateral_left"
-
+        # --- DISPARADOR DE EVASIÓN ---
+        if self.is_object_near:
+            self.get_logger().info("¡Pelota alcanzada! Iniciando búsqueda de nueva pelota...")
+            self.evasion_timer = self.evasion_limit
+            cmd.data = self.search_cmd
             self.cmd_pub.publish(cmd)
             return
 
-        # ---- Salida de modo cangrejo ----
-        if self.state in ("CRAB_LEFT", "CRAB_RIGHT"):
-            self.state = self.prev_state
-
-        # ==================================================
-        # === NAVEGACIÓN ORIGINAL ===
-        # ==================================================
-        gx, gy = self.goal
-        dx = gx - self.x
-        dy = gy - self.y
-
-        dist = math.hypot(dx, dy)
-        if dist < self.dist_tol:
-            cmd.data = "stop"
+        # --- BUSQUEDA NORMAL (Sin detecciones) ---
+        if col is None:
+            cmd.data = self.search_cmd
             self.cmd_pub.publish(cmd)
             return
 
-        heading_goal = normalize_angle(
-            math.degrees(math.atan2(dy, dx))
-        )
+        # --- SEGUIMIENTO ---
+        center = self.N // 2
+        err = col - center
 
-        obstacle = self.obstacle_detected()
-        now = time.time()
+        if abs(err) <= self.center_tol:
+            cmd.data = "forward"
+        elif err < 0:
+            cmd.data = "turn_left"
+        else:
+            cmd.data = "turn_right"
 
-        # ====== EVASIÓN ======
-        if self.state in ("AVOID_LEFT", "AVOID_RIGHT"):
-            if obstacle:
-                cmd.data = "turn_left" if self.state == "AVOID_LEFT" else "turn_right"
-                self.cmd_pub.publish(cmd)
-                return
-            else:
-                offset = self.clearance_angle if self.state == "AVOID_LEFT" else -self.clearance_angle
-                self.heading_ref = normalize_angle(self.heading + offset)
-                self.state = "RECOVER"
-                self.last_recover_time = now
-
-        # ====== DETECCIÓN ======
-        if obstacle and self.state not in ("AVOID_LEFT", "AVOID_RIGHT"):
-            left, right = self.grid_density()
-            self.state = "AVOID_LEFT" if left <= right else "AVOID_RIGHT"
-            cmd.data = "turn_left" if self.state == "AVOID_LEFT" else "turn_right"
-            self.cmd_pub.publish(cmd)
-            return
-
-        # ====== RECUPERACIÓN ======
-        if self.state == "RECOVER":
-            err_goal = normalize_angle(heading_goal - self.heading_ref)
-
-            if abs(err_goal) <= self.heading_tol:
-                self.state = "NAV"
-            else:
-                if now - self.last_recover_time >= self.recover_period:
-                    step = self.heading_step if err_goal > 0 else -self.heading_step
-                    self.heading_ref = normalize_angle(self.heading_ref + step)
-                    self.last_recover_time = now
-
-            err = normalize_angle(self.heading_ref - self.heading)
-            cmd.data = "turn_left" if err > 0 else "turn_right" if abs(err) > self.heading_tol else "forward"
-            self.cmd_pub.publish(cmd)
-            return
-
-        # ====== NAV NORMAL ======
-        err = normalize_angle(heading_goal - self.heading)
-        cmd.data = "turn_left" if err > self.heading_tol else "turn_right" if err < -self.heading_tol else "forward"
         self.cmd_pub.publish(cmd)
-
 
 def main():
     rclpy.init()
-    rclpy.spin(HighLevelNav())
-    rclpy.shutdown()
-
+    node = SwarmNav()
+    try:
+        rclpy.spin(node)
+    except KeyboardInterrupt:
+        pass
+    finally:
+        node.destroy_node()
+        rclpy.shutdown()
 
 if __name__ == "__main__":
     main()

@@ -34,7 +34,6 @@ class HighLevelNav(Node):
     def __init__(self):
         super().__init__("high_level_nav")
 
-
         # ================= PARÁMETROS =================
         self.declare_parameter("topic_ir_left", cfg.TOPIC_GZ_IR1)
         self.declare_parameter("topic_ir_right", cfg.TOPIC_GZ_IR2)

@@ -20,16 +20,16 @@ def generate_launch_description():
     # =================================================
     # COMPUTE
     # =================================================
-    cube_viewer_classic_vission = Node(
-        package=package_name,
-        executable="cube_viewer_classic_vission.py",
-        name="cube_viewer_classic_vission",
-        output="screen",
-        parameters=[{
-            "topic_image": cfg.TOPIC_GZ_CAMERA,
-            "topic_obstacle_occupation_grid": cfg.TOPIC_OBSTACLE_OCCUPATION_GRID  # publisher
-        }],
-    )
+    # cube_viewer_classic_vission = Node(
+    #     package=package_name,
+    #     executable="cube_viewer_classic_vission.py",
+    #     name="cube_viewer_classic_vission",
+    #     output="screen",
+    #     parameters=[{
+    #         "topic_image": cfg.TOPIC_GZ_CAMERA,
+    #         "topic_obstacle_occupation_grid": cfg.TOPIC_OBSTACLE_OCCUPATION_GRID  # publisher
+    #     }],
+    # )
 
     cube_viewer_yolo = Node(
         package=package_name,
@@ -38,7 +38,7 @@ def generate_launch_description():
         output="screen",
         parameters=[{
             "topic_image": cfg.TOPIC_GZ_CAMERA,
-            "topic_obstacle_occupation_grid": cfg.TOPIC_OBSTACLE_OCCUPATION_GRID  # publisher
+            "topic_obstacle_occupation_grid": cfg.TOPIC_OBSTACLE_OCCUPATION_GRID,  # publishe
         }],
     )
 

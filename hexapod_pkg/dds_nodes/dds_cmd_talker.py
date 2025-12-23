@@ -25,9 +25,9 @@ class CommandTalker(Node):
         self.declare_parameter("cmd_serial_topic", cfg.TOPIC_CMD_GZ_SERIAL)
 
         # valores por defecto, de hecho son establecidos en dds_base.launch.py
-        self.declare_parameter("linear_speed", 90) # velocidad lineal
-        self.declare_parameter("angular_speed", 70) # velocidad angular
-        self.declare_parameter("walk_yaw_trim", -3) # commpensation de movimiento lateral y lineal
+        self.declare_parameter("linear_speed", 127) # velocidad lineal
+        self.declare_parameter("angular_speed", 127) # velocidad angular
+        self.declare_parameter("walk_yaw_trim", -6) # commpensation de movimiento lateral y lineal
         #self.declare_parameter("roll_pitch_ang", 10) # velocidad angular
 
         self.declare_parameter("qos_depth", 10)

@@ -21,10 +21,10 @@ class YoloGridNode(Node):
 
         # -------- PARÁMETROS --------
         self.declare_parameter('topic_image', 'camera/image_raw')
-        self.declare_parameter('conf_thresh', 0.6)
+        self.declare_parameter('conf_thresh', 0.55)
         self.declare_parameter('frame_skip', 2)
         self.declare_parameter('debug_view', True)
-        self.declare_parameter('grid_size', 15)
+        self.declare_parameter('grid_size', 20)
         self.declare_parameter(
             'topic_obstacle_occupation_grid',
             cfg.TOPIC_OBSTACLE_OCCUPATION_GRID
@@ -48,7 +48,7 @@ class YoloGridNode(Node):
 
         # -------- YOLO --------
         pkg_share = get_package_share_directory("hexapod_pkg")
-        model_path = os.path.join(pkg_share, "utils", "pelotitas.pt")
+        model_path = os.path.join(pkg_share, "utils", cfg.MODEL_YOLO_BALL)
 
         self.model = YOLO(model_path)
         self.model.to('cuda')
@@ -78,7 +78,8 @@ class YoloGridNode(Node):
                 img,
                 conf=self.get_parameter('conf_thresh').value,
                 device='cuda',
-                verbose=False
+                verbose=False,
+                half=True
             )[0]
 
         detections = []

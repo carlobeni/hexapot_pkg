@@ -16,7 +16,7 @@ from hexapod_pkg import hw_config as cfg
 class RobotHealthMonitor(Node):
 
     def __init__(self):
-        super().__init__("robot_health_monitor")
+        super().__init__("master_monitor")
 
         # ==============================
         # PARÁMETROS

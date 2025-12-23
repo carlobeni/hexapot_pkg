@@ -77,9 +77,9 @@ def generate_launch_description():
                     parameters=[{
                         "cmd_robot_topic": cfg.TOPIC_CMD_REAL_ROBOT,
                         "cmd_serial_topic": cfg.TOPIC_CMD_SERIAL,
-                        "linear_speed": 90,
-                        "angular_speed": 70,
-                        "walk_yaw_trim": -3,
+                        "linear_speed": 127,
+                        "angular_speed": 127,
+                        "walk_yaw_trim": -7,
                     }],
                 ),
 

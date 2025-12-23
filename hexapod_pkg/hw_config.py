@@ -66,3 +66,6 @@ TOPIC_CMD_GZ_SERIAL = "/cmd_gz_serial"
 # ================= CONSTANS =================
 LAT_REFERENCE = -25.33074682110693
 LON_REFERENCE = -57.517799631180665
+
+MODEL_YOLO_CUBE = "cubitos.pt"
+MODEL_YOLO_BALL = "ball_recognition_v8s_OPTIMIZED2.pt"

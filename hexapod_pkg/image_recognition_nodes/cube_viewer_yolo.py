@@ -13,6 +13,8 @@ from rclpy.qos import qos_profile_sensor_data
 from hexapod_pkg import hw_config as cfg
 import numpy as np
 
+from hexapod_pkg import hw_config as cfg
+
 class YoloGridNode(Node):
     def __init__(self):
         super().__init__('yolo_grid_node')
@@ -48,7 +50,7 @@ class YoloGridNode(Node):
 
         # -------- YOLO --------
         pkg_share = get_package_share_directory("hexapod_pkg")
-        model_path = os.path.join(pkg_share, "utils", "cubitos.pt")
+        model_path = os.path.join(pkg_share, "utils",cfg.MODEL_YOLO_CUBE)
 
         self.model = YOLO(model_path)
         self.model.to('cuda')
